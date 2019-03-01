@@ -1,0 +1,10 @@
+# ignore node modules 
+# these can be installed with npm installed
+*/node_modules/*
+
+
+#ignore contents of uploads
+uploads/*
+
+#ignore shortcuts doc
+shortcuts.txt
