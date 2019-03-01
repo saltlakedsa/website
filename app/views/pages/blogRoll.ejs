@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+	<% include ../partials/head %>
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    
+	<% include ../partials/nav %>
+
+    <!-- Page Content -->
+    <div id="page-top">
+	<section id="blog">
+	<div class="container" id ="list">
+	
+	
+	
+	</div>
+    </section>
+    
+	<% include ../partials/socialmedia %>
+	  
+    </div>
+    <!-- /.container -->
+
+    <% include ../partials/footer %>
+	<script>
+	
+		$(document).ready(function () {
+		console.log("Jer");
+		$.ajax({
+			url: '/getBlogList',
+			type: 'GET',
+			dataType: 'json',
+			timeout: 4000,
+			contentType: 'application/json',
+		
+			success: function (res) {
+				var str = "";
+				console.log(res.fn);
+				for(var i=0;i<res.fn.length;i++){
+					str += "<p>Created: <a href='/b?fn=" + res.fn[i] + "'>"+res.fn[i]+"</a>";
+					}
+				$("#list").html(str);
+				},
+			error: function (jqXHR, textStatus, errorThrown) {
+				console.log("error");
+				console.log(errorThrown);
+				console.log(textStatus);}
+		});
+		
+	});
+		
+	</script>
+	
+
+  </body>
+
+</html>

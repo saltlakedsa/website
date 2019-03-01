@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<!--<% include ../partials/head %>-->
+	</head>
+	<!--<% include ../partials/nav %>-->
+	
+
+	<body>
+	
+	
+		<div id="page-top">
+			<div class="modal" tabindex="-1" role="dialog" id="login" data-backdrop="static" data-keyboard=false>
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Login Information</h5>
+						</div>
+						<div class="modal-body">
+							<div id="alertPasswordIncorrect">
+							</div>
+							<div class="form-group">
+								<label for="title">Username:</label>
+								<input type="text" class="form-control" id="username"/>
+							</div>
+							<div class="form-group">
+								<label for="date">Password:</label>
+								<input type="text" class="form-control" id="password"/>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-primary" id="verifyUser">Submit</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<section id="New-Content">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-8">
+						<h1>Create New Blog Post</h1>
+						<hr>
+						<div id="newBlogForm">
+						<div class="form-group">
+							<label for="title">Post Title:</label>
+							<input type="text" class="form-control toJSON" id="title"/>
+						</div>
+						<div class="form-group">
+							<label for="date">Date:</label>
+							<input type="text" class="form-control toJSON" id="date" readonly/>
+						</div>
+						<div class="row">
+						<div class="col-sm-6">
+						<div class="form-group">
+							<label for="date">Upload Image for Post:</label>
+							<form enctype="multipart/form-data" id="uploadImage" action="/loadFile" method="POST">
+								<!--<input type="text" id="title">-->
+							
+
+								<input type="file" name="file-to-upload" class="">
+								<input type="submit" name="submit" value="Upload Image" class="">
+							</form>
+							
+							
+						</div>
+						</div>
+						<div class="col-sm-6">
+							<img src="" style="width:100%;" alt="Image For Post - None selected" id="putStuff">
+							<input type="text" class="form-control toJSON" id="imagePath" readonly/>
+							<label for="date">Image Caption:</label>
+							<input type="text" class="form-control toJSON" id="imageCaption"/>
+						</div>
+						</div>
+						<div class="form-group">
+							<label for="date">Tags:</label>
+							<input type="text" class="form-control toJSON" id="tags"/>
+						</div>
+						<div class="row">
+						<div class="col-sm-6">
+						<div class="form-group">
+							<label for="date">Author:</label>
+							<input type="text" class="form-control toJSON" id="author"/>
+						</div>
+						</div>
+						<div class="col-sm-6">
+						<div class="form-group">
+							<label for="date">About the Author:</label>
+							<input type="text" class="form-control toJSON" id="aboutTheAuthor"/>
+						</div>
+						</div>
+						</div>
+						<div class="form-group">
+							<label for="date">Lede:</label>
+							<input type="text" class="form-control toJSON" id="lede"/>
+						</div>
+						
+						<div class="form-group">
+							<label for="content">Content:</label>
+							<textarea type="text" class="form-control toJSON" id="content">
+							</textarea>
+						</div>
+						<button id="submitPost" class="btn btn-primary">Submit</button>
+						</div>
+					</div>
+					<div class="col-sm-4">
+					<h3>Edit Previous Posts</h3>
+					<div id="blogRoll"></div>
+					</div>
+				</div>
+
+			</div>
+		</section>
+		<!--<% include ../partials/socialmedia %>-->
+
+		<!--<% include ../partials/footer %>-->
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
+
+		<script>
+		$(document).ready(function () {
+		
+		$('#login').modal('show');
+		
+		//Function Get List of available detectors
+		$.ajax({
+			url: '/getBlogList',
+			type: 'GET',
+			dataType: 'json',
+			timeout: 4000,
+			contentType: 'application/json',
+			success: function (res) {
+				var str = "";
+				for(var i=0;i<res.fn.length;i++){
+					str += "<button class='btn btn-primary btn-block editBlogEntry'>"+res.fn[i]+"</button>";
+					}
+				$("#blogRoll").html(str);
+				$('.editBlogEntry').click(function (){
+					$.ajax({
+						url: '/getBlogData',
+						type: 'POST',
+						dataType: 'json',
+						timeout: 4000,
+						contentType: 'application/json',
+						data: JSON.stringify({"fn":$(this).html()}),
+						success: function(res){
+							for (var key in res){
+								$("#"+key).val(res[key]);
+							};
+							if(res.imagePath != null) $("#putStuff").attr("src",res.imagePath)
+							else $("#putStuff").attr("src","");
+						},
+						error: function (jqXHR, textStatus, errorThrown) {}
+					});							
+				});
+				
+				},
+			error: function (jqXHR, textStatus, errorThrown) {}
+		});
+		
+		
+		
+		
+		
+		
+		//Function verify users
+		$('#verifyUser').click(function (){
+			var tmp = $('#verifyUser').html();
+			$('#verifyUser').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
+			$.ajax({
+				url: '/isCredentials',
+				type: 'POST',
+				dataType: 'json',
+				timeout: 4000,
+				contentType: 'application/json',
+				data: JSON.stringify({"user":$("#username").val(),"password":$("#password").val()}),
+				success: function (res) {
+					if (res.isValid) $('#login').modal('hide');
+					else {
+					var alertHTML = '<div class="alert alert-danger" role="alert">' + 
+									'<strong>Login Incorrect!</strong> Please enter correct information.' +
+									'<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+									'<span aria-hidden="true">&times;</span>' +
+									'</button>' +
+									'</div>'; 
+						$("#alertPasswordIncorrect").html(alertHTML);
+						$("#username").focus();
+						$('#verifyUser').html(tmp);
+					}
+					
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					console.log("error");
+					console.log(errorThrown);
+					console.log(textStatus);
+				}
+			});
+		});
+		
+		
+		
+		////set date
+		var today = new Date();
+		var dd = today.getDate();
+		var mm = today.getMonth() + 1; //January is 0!
+		var yyyy = today.getFullYear();
+
+		if (dd < 10) {dd = '0' + dd;}
+		if (mm < 10) {  mm = '0' + mm;}
+		today = mm + '/' + dd + '/' + yyyy;
+
+		$("#date").val(today);
+		
+		
+		
+		
+		///Upload image
+		$('#uploadImage').submit(function(e){
+			e.preventDefault();
+     
+			var title = $('#Imagetitle').val(); 
+     
+			$(this).ajaxSubmit({
+				data: {title: title},
+				dataType: 'json',
+				contentType: 'application/json',
+				success: function(res){
+					console.log('image uploaded and form submitted: '+res.fn);  
+					$("#putStuff").attr("src", "/uploadedImages/"+res.fn);
+					$("#imagePath").val(res.fn);
+				}
+			});
+		return false;
+		});
+		
+		
+		
+		//Function Submit OiPost
+		$('#submitPost').click(function (){
+			var obj = {};
+			$('.toJSON').each(function(){
+				obj[$(this).attr('id')] = $(this).val();
+			});
+			
+			$.ajax({
+				url: '/createNew',
+				type: 'POST',
+				dataType: 'json',
+				timeout: 4000,
+				contentType: 'application/json',
+				data: JSON.stringify(obj),
+				success: function (res) {
+					console.log("success");
+					$("#newBlogForm").html("Created: <a href='/b/" + res.fn + "'>"+res.fn+"</a>");
+					},
+				error: function (jqXHR, textStatus, errorThrown) {
+					console.log("error");
+					console.log(errorThrown);
+					console.log(textStatus);}
+			});
+		});
+		});
+		</script>
+	</body>
+</html>

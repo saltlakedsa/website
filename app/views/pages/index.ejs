@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<% include ../partials/head %>
+</head>
+<body>
+    <!-- Navigation -->
+	<% include ../partials/nav %>
+ 
+<div id="page-top">
+	<header class="masthead text-center text-white d-flex">
+		<div class="container my-auto">
+			<div class="row">
+				<div class="col-lg-10 mx-auto">
+					<h1 class="text-uppercase text-faded">
+					<strong>Salt Lake<br>
+					Democratic Socialists of America</strong>
+					</h1>
+					<hr class="my-4">
+				</div>
+				<div class="col-lg-8 mx-auto">
+					<p class="text-faded mb-5">For a life worth living</p>
+					<a class="btn btn-primary btn-xl js-scroll-trigger" href="#logo">Build Socialism in Utah</a>
+				</div>
+			</div>
+		</div>
+    </header>
+		
+	<section id="logo">
+		<div class="container my-auto text-center">
+			<div class="row">
+				<div class="col-lg-10 mx-auto">
+					<h2 class="section-heading">Building Socialism in Utah</h2>
+					<hr class="my-4"> 
+					<p class="mb-5">Together we can turn the Beehive State RED.</p>
+				</div>
+			</div>
+		<div class="row">
+			<div class="col-lg-6 mx-auto">
+			<img class="mb-5" src="static/img/SLCDSA1.png" alt="DSA Logo" style="max-width: 320px;">
+			</div>
+		</div>
+		
+			<div class="col-lg-6 mx-auto">
+				<a class="btn btn-primary btn-xl sr-button js-scroll-trigger" href="#about">Learn More</a>
+			</div>
+			
+			<div class="row">
+				<div class="col-lg-10 mx-auto">
+					<h2 class="section-heading py-4">Latest News</h2>
+					<hr class="my-4"> 
+					<div class="card-deck" id="addNews">	
+					</div>
+					
+				</div>
+			</div>
+			
+			
+		</div> 
+	</section>
+	
+	
+	<section class="bg-primary" id="about">
+		<div class="container my-auto text-center">
+			<div class="row">
+				<div class="col-lg-8 mx-auto">
+					<h2 class="section-heading text-white">Welcome to SLDSA!</h2>
+					<hr class="light my-4">
+					<p class="text-faded mb-4">
+					Salt Lake Democratic Socialists is a local of Democratic Socialists of America, the largest socialist organization in the United States with about 49,000 members (as of August 2018). SLC DSA is run by its members and activists who are working together to build a democratic socialist organization in Utah.
+					</p>
+
+					<p class="text-faded mb-4">
+					We are socialists because we share a vision of a humane social order based on popular control of resources and production, economic planning, equitable distribution, feminism, racial equality, and non-oppressive relationships.
+					</p>
+
+					<p class="text-faded mb-4">
+					We are socialists because we are opposed to an economy organized for private profit that produces gross inequalities of wealth and power, discrimination based on race and sex, and brutality and violence in defense of the status quo.
+					</p>
+			
+					<p class="text-faded mb-4">
+					We are socialists because we want to work together to develop a concrete strategy for achieving that vision, for achieving a transition to democratic socialism in America. We believe that such a strategy must acknowledge the class structure of American society and that this class structure means that there is a basic conflict of interest between those sectors with enormous economic power and the vast majority of the population. And we believe that only democratic movements and socialist parties can lead the way to a better world.
+					</p>
+			
+					<p class="text-faded mb-4">
+					Build a better world with us!
+					</p>
+					
+					<a class="btn btn-light btn-xl sr-button js-scroll-trigger" href="#involved">Get Involved</a>
+				</div>
+			</div>
+		</div>
+    </section>
+	
+	
+	<section id="involved">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 text-center">
+					<h2 class="section-heading">Get Involved</h2>
+					<hr class="my-4">
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-3 col-md-6 text-center">
+					<div class="service-box mt-5 mx-auto">
+						<a class="js-scroll-trigger" href="/new-members">
+						<i class="fas fa-4x fa-gem text-primary mb-3 sr-icon-1"></i>
+						<h3 class="mb-3">New Members</h3>
+						<p class="text-muted mb-0">Learn about how our chapter is run, and how to help out with our New Members Handbook</p>
+						</a>
+					</div>
+				</div>
+				<div class="col-lg-3 col-md-6 text-center">
+					<div class="service-box mt-5 mx-auto">
+						<a href="/committees">
+						<i class="fas fa-4x fa-users text-primary mb-3 sr-icon-2"></i>
+						<h3 class="mb-3">Committees</h3>
+						<p class="text-muted mb-0">Committees are the best way to get involved.</p>
+			  </a>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 text-center">
+            <div class="service-box mt-5 mx-auto">
+				<a class="js-scroll-trigger" href="/calendar">
+              <i class="fas fa-4x fa-calendar-alt text-primary mb-3 sr-icon-3"></i>
+              <h3 class="mb-3">Calendar</h3>
+              <p class="text-muted mb-0">Never miss an event.</p>
+			  </a>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 text-center">
+            <div class="service-box mt-5 mx-auto">
+				<a class="js-scroll-trigger" href="/donate">
+              <i class="fas fa-4x fa-heart text-primary mb-3 sr-icon-4"></i>
+              <h3 class="mb-3">Donations</h3>
+              <p class="text-muted mb-0">Donations keep us running!</p>
+			  </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+      
+	
+	
+	
+	
+	<% include ../partials/socialmedia %>
+	
+		  
+    </div>
+    <!-- /.container -->
+
+    <% include ../partials/footer %>
+	<script>
+	$(document).ready(function () {
+	
+		//todo make them break better for smaller screens
+	
+		var links = ["Salt_Lake_DSA_Press_Release_in_Response_to_Anti-Socialist_Caucus",
+		"testing_another_one","Salt_Lake_DSA_Press_Release_in_Response_to_Anti-Socialist_Caucus",
+		"testing_another_one","Salt_Lake_DSA_Press_Release_in_Response_to_Anti-Socialist_Caucus",
+		"testing_another_one","Salt_Lake_DSA_Press_Release_in_Response_to_Anti-Socialist_Caucus",
+		"testing_another_one"];
+		
+		for (var i=0;i<links.length;i++){
+		var link = links[i];				
+		$.ajax({
+		url: '/getBlogData',
+		type: 'POST',
+		dataType: 'json',
+		timeout: 4000,
+		contentType: 'application/json',
+		data: JSON.stringify({"fn":link}),
+		success: function(res){
+			var cardstr = 	'<div class="card">'+
+							'<img class="card-img-top" src="/uploadedImages/'+res.imagePath+'" alt="Card Image" Path">'+
+							'<div class="card-body">'+
+							'<h5 class="card-title">'+res.title+'</h5>'+
+							'<p class="card-text">'+res.lede+'</p></div>'+
+							'<div class="card-footer">'+
+							'<a href="/b/'+res.fn+'" class="stretched-link">Read More</a></div></div>';
+			$("#addNews").append(cardstr);
+			},
+		error: function (jqXHR, textStatus, errorThrown) {}
+		});
+		}
+	});
+	</script>	
+
+  </body>
+
+</html>

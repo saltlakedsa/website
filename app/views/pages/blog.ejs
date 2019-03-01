@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+	<% include ../partials/head %>
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    
+	<% include ../partials/nav %>
+
+    <!-- Page Content -->
+    <div id="page-top">
+	<section id="blog">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-6">
+	
+				<h1 class="py-4"><%= (typeof title != "undefined") ? title : "Not Defined" %></h1>
+	
+				<p class="text-muted my-0">By</p>
+				<h4><%= author %></h4>
+	
+	
+				<p class="text-muted my-0"><%= date %></p>
+				
+				<h5 class="py-3"><small><%= lede %></small></h5>
+			</div>
+	
+			<div class="col-lg-6 py-4">
+			
+	
+				<img src="/<%= (typeof imagePath != "undefined") ? "uploadedImages/"+imagePath : "Not Defined" %>" style="width:100%;">
+				<h5><small><%= imageCaption %></small></h5>
+				
+			
+			</div>
+	
+		</div>
+	
+	<hr class="py-2" style="max-width:75%;">
+	
+	<div id="content"><%- content %></div>
+	
+	<hr class="py-2" style="max-width:75%;">
+	
+	<p class="text-muted my-2">ABOUT THE AUTHOR</p>
+				<h5><small><%= aboutTheAuthor %></small></h5>
+	
+	</div>
+    </section>
+    
+	<% include ../partials/socialmedia %>
+	  
+    </div>
+    <!-- /.container -->
+
+    <% include ../partials/footer %>
+	<script>
+	$("#content").html($("#content").html().replace(/(?:\r\n|\r|\n)/g, '<p>'));
+	</script>
+
+  </body>
+
+</html>
