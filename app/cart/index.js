@@ -113,7 +113,7 @@ router.post('/checkout', upload.array(), function(req, res, next) {
 	var uuid4 = require('uuid/v4');
 
 	stripe.charges.create({
-		amount: req.body.total * 100,
+		amount: req.body.total,
 		currency: 'usd',
 		description: req.session.cart.items[Object.keys(req.session.cart.items)[0]].item.title,
 		source: token
