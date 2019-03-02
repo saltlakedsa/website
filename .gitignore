@@ -8,3 +8,7 @@ uploads/*
 
 #ignore shortcuts doc
 shortcuts.txt
+
+#ignore environment variables
+.env
+*/.env

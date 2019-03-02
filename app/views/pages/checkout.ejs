@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+	<% include ../partials/head %>
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    
+	<% include ../partials/nav %>
+
+    <!-- Page Content -->
+    <div id="page-top">
+	<section id="donate">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 text-center">
+				<h2 class="section-heading">Check out</h2>
+				<hr>
+				<div id="card-errors" role="alert"></div>
+
+				<form enctype="multipart/form-data" action="/shop/checkout" method="POST" id="payment-form">
+					<label for="card-element">
+						Credit or debit card
+					</label>
+					<div id="card-element" style="background-color: rgb(256,251,214); padding: 20px; border:1px dotted black;"></div>
+						<div class="row">
+							<div class="col-sm-12 col-md-5">
+								<label for="name">
+									Name
+								</label>
+								<input class="required" id="name" type="text" name="name" placeholder="Your Name"></input>
+							</div>
+							<div class="col-sm-12 col-md-5">
+								<label for="address">
+									Address
+								</label>
+								<input class="required" id="adaddr" type="text" name="address" placeholder="Street Address" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-12 col-md-4">
+								<label for="city">
+									City
+								</label>
+								<input class="required" id="cityaddr" type="text" name="city" placeholder="Your City" />
+							</div>
+							<div class="col-sm-12 col-md-4">
+								<label for="state">
+									State
+								</label>
+								<input id="stateaddr" type="text" name="state" placeholder="XX" />
+							</div>
+							<div class="col-sm-12 col-md-4">
+								<label for="zip">
+									ZIP Code
+								</label>
+								<input class="required" id="zipaddr" type="text" name="zip" placeholder="XXXXX" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-12 col-md-4">
+								<label for="phone">
+									Phone Number
+								</label>
+								<input class="required" id="tel" type="tel" name="phone" placeholder="XXX-XXX-XXXX" />
+							</div>
+							<div class="col-sm-12 col-md-4">
+								<label for="email">
+									E-mail Address
+								</label>
+								<input class="required" id="email" type="email" name="email" title="Please provide a valid e-mail address to confirm your order" placeholder="example@address.com" required />
+							</div>
+						</div>
+						<input type="hidden" value='<%=total%>' name="total" />
+						<button class="btn btn-success" id="submitbutton" type="submit">
+							Submit payment
+						</button>
+						<a role="button" class="btn btn-primary" href="/cart" style="background-color: var(--primary); bottom: 0; float: right;">
+							Cancel
+						</a>
+				</form>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-6 mx-auto text-center">
+				<p class="text-muted mb-0">
+				The SLC DSA Chapter is an entirely member funded organization.  We currently do not receive any funding from the National DSA, and have relied on contributions from members like you to support all of our work and campaigns.  Thus far, we have raised money through fundraising events, but as our Chapter grows, and our members engage in ever larger and more ambitious campaigns, we can no longer sustain ourselves on events alone.
+				</p>
+				</div>
+			
+				<div class="col-lg-6 mx-auto">
+				<script src="https://donorbox.org/widget.js" paypalExpress="false"></script><iframe src="https://donorbox.org/embed/slc-dsa-dues" height="685px" width="100%" style="max-width:500px; min-width:310px; max-height:none!important" seamless="seamless" name="donorbox" frameborder="0" scrolling="no" allowpaymentrequest></iframe>
+				</div>
+			</div>
+		</div>
+    </section>
+    
+	<% include ../partials/socialmedia %>
+	  
+    </div>
+    <!-- /.container -->
+
+    <% include ../partials/footer %>
+
+		<script type="text/javascript">
+			var pk = '<%= locals.pk %>'
+			var stripe = Stripe(pk);
+			var elements = stripe.elements();
+			var style = {
+				base: {
+					fontSize: '16px',
+					color: '#777'
+				}
+			};
+			
+			var card = elements.create('card', {style: style});
+			
+			card.mount('#card-element');
+			
+			card.addEventListener('change', function(event) {
+				var displayError = document.getElementById('card-errors');
+				if (event.error) {
+					displayError.textContent = event.error.message;
+				} else {
+					displayError.textContent = '';
+				}
+			});
+			// Create a token or display an error when the form is submitted.
+			var form = document.getElementById('payment-form');
+			form.addEventListener('submit', function(event) {
+				event.preventDefault();
+				var displayError = document.getElementById('card-errors');
+				var error = null;
+				$('.required').each(function(i, item) {
+					
+					if ($(item).val() === '') {
+						displayError.textContent = 'All fields are required.';
+						error = true;
+					}
+					
+				})
+				if (error) {
+					return false;
+				}
+				$('#submitbutton').prop('disabled', true);
+				stripe.createToken(card).then(function(result) {
+					if (result.error) {
+						// Inform the customer that there was an error
+						var errorElement = document.getElementById('card-errors');
+						errorElement.textContent = result.error.message;
+						$('#submitbutton').prop('disabled', false);
+					} else {
+						// Send the token to your server
+						stripeTokenHandler(result.token);
+					}
+				});
+			});
+			//
+			function stripeTokenHandler(token) {
+				// Insert the token ID into the form so it gets submitted to the server
+				var form = document.getElementById('payment-form');
+				var hiddenInput = document.createElement('input');
+				// console.log(hiddenInput)
+				hiddenInput.setAttribute('type', 'hidden');
+				hiddenInput.setAttribute('name', 'stripeToken');
+				hiddenInput.setAttribute('value', token.id);
+				form.appendChild(hiddenInput);
+
+				// Submit the form
+				form.submit();
+			}
+		</script>
+  </body>
+
+</html>
