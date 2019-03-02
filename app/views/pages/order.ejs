@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+	<% include ../partials/head %>
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    
+	<% include ../partials/nav %>
+
+    <!-- Page Content -->
+    <div id="page-top">
+	<section id="donate">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 text-center">
+					<div class="col-sm-12">
+						<h3>
+							These items will be shipped to the address you provided:
+						</h3>
+						<h4>
+							<%= order.name %>
+						</h4>
+						<p>
+							<%= order.address %>
+						</p>
+						<p>
+							<%= order.city %>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</body>
+</html>
