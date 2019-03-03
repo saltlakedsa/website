@@ -1,0 +1,8 @@
+<% if (locals.cart.length) { %>
+	<div id="modal" style="pointer-events:all;" onclick="this.className === 'vis' ? this.className = '' : this.className = 'vis'">
+		<i class="fas fa-4x fa-cart-plus" style="pointer-events: none; color:#fff;"></i>
+			<% cart.forEach(function(item) { %>
+				<% include cartitem %>
+			<% }); %>
+	</div>
+<% } %>
