@@ -22,11 +22,11 @@
 				<h2 class="section-heading">Store inventory</h2>
 				<hr>
 				<% if (locals.content) { %>
-					<span class="tb-font-xl"
+					<span class="tb-font-xl">
 						<%= content.length %>
 					</span>
 					<span> </span>
-					<% if (locals.content.length > 1) { %>
+					<% if (content.length > 1) { %>
 						<span>
 							items for sale
 						</span>
@@ -48,7 +48,7 @@
 										Purchase
 									</a>
 								</div>
-								<div class="col-sm-8 col-md-6 shift-00">
+								<div class="col-sm-8 col-md-6 shift-00" style="text-align: left;">
 									<h3>
 										<%= item.title %>
 									</h3>
