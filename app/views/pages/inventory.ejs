@@ -15,13 +15,14 @@
 
     <!-- Page Content -->
     <div id="page-top">
-	<section id="donate">
+	<section id="store">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12 text-center">
-				<h2 class="section-heading">Store inventory</h2>
-				<hr>
-				<% if (locals.content) { %>
+					<h1 class="section-heading pb-5">Salt Lake DSA Official T-shirt</h1>
+				</div>
+				
+				<!--<% if (locals.content) { %>
 					<span class="tb-font-xl">
 						<%= content.length %>
 					</span>
@@ -34,74 +35,27 @@
 						<span>
 							item for sale
 						</span>
-					<% } %>
-					<div class="col-sm-12">
-						<% content.forEach(function(item) { %>
-							<h2><%= item.title %> $ <%= (item.price / 100).toFixed(2) %></h2>
-							<div class="row">
-								<div class="col-sm-4 col-lg-3">
-									<div class="crop" style="height: 200px; width: 100%; position: relative; overflow:hidden;margin: 0 auto;">
-										<img style="width: auto; height: 110%; transform:translate(-50%,0); position: absolute; " src="<%= item.image %>"></img>
-									</div>
-									<p> </p>
-									<a class="block spacer" role="button" style="background-color: #ff3535; color: #fff; padding: 20px;margin: 20px;" href="/shop/addtocart/<%= item._id %>">
-										Purchase
-									</a>
-								</div>
-								<div class="col-sm-8 col-md-6 shift-00" style="text-align: left;">
-									<h3>
-										<%= item.title %>
-									</h3>
-									<p class="tb-font-m">
-										<%= item.description %>
-									</p>
-								</div>
-								<div class="col-sm-12 col-md-3" style="text-align: right;">
-									<p style="text-align: right; color: #fff;">
-										<span class="tb-font-m">
-											$
-											<span>
-												<%= item.price %>
-											</span>
-											<span>
-												&nbsp
-											</span>
-										</span>
-									</p>
-								</div>
-							</div>
-						<% }); %>
-						<div class="col-sm-12">
-							<p style="text-align: right; color: #fff;">
-								<span class="tb-font-m">
-									Total: 
-								</span>
-								<span class="tb-font-m">
-									
-									<span>
-										<%= content.length %>
-									</span>
-									<span>
-										 items
-									</span>
-								</span>
-								
-							</p>
-						</div>
-
-				<% } %>
+					<% } %><% } %>-->
 			</div>
 			<div class="row">
-				<div class="col-lg-6 mx-auto text-center">
-				<p class="text-muted mb-0">
-				The SLC DSA Chapter is an entirely member funded organization.  We currently do not receive any funding from the National DSA, and have relied on contributions from members like you to support all of our work and campaigns.  Thus far, we have raised money through fundraising events, but as our Chapter grows, and our members engage in ever larger and more ambitious campaigns, we can no longer sustain ourselves on events alone.
-				</p>
-				</div>
-			
-				<div class="col-lg-6 mx-auto">
-				<script src="https://donorbox.org/widget.js" paypalExpress="false"></script><iframe src="https://donorbox.org/embed/slc-dsa-dues" height="685px" width="100%" style="max-width:500px; min-width:310px; max-height:none!important" seamless="seamless" name="donorbox" frameborder="0" scrolling="no" allowpaymentrequest></iframe>
-				</div>
+					<div class="col-sm-6">
+						<% content.forEach(function(item) { %>
+						<img src="<%= item.image %>" style="width:100%;"></img>
+					
+						
+						
+					</div>
+					<div class="col-sm-6">			
+						<h3 style="text-transform:uppercase;"><%= item.title %></h3> 
+						
+						<p class="text-muted"><%= item.description %></p>
+						
+						<p class="text-muted"><strong>$ <%= (item.price / 100).toFixed(2) %></strong></p>
+						<a class="btn btn-primary btn-xl js-scroll-trigger" href="/shop/addtocart/<%= item._id %>">Purchase</a>
+						<% }); %>
+					</div>	
 			</div>
+		
 		</div>
     </section>
     
