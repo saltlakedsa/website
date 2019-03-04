@@ -21,7 +21,7 @@
 				<div class="col-lg-12 text-center">
 				<h2 class="section-heading">Shopping cart</h2>
 				<hr>
-				<% if (cart.length) { %>
+				<% if (locals.cart) { %>
 					<div class="col-sm-12">
 						<% cart.forEach(function(item) { %>
 							<% include ../partials/cartitem %>
@@ -46,6 +46,8 @@
 							</a>
 						</div>
 						<p> </p>
+				<% } else { %>
+					<p>Your cart is empty</p>
 				<% } %>
 			</div>
 			<div class="row">

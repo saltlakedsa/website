@@ -1,16 +1,21 @@
 #modal {
 	top: 0;
-	right: 0;
+	right: -20px;
 	left: auto;
 	bottom: auto;
-	width: 70px;
-	height: 70px;
+	width: 22px;
+	height: 22px;
 	overflow: hidden;
 	color: #fff;
 	background-color: rgba(255,255,255,0);
+	margin-right: -20px;
 }
 
 #modal.vis {
 	width: auto;
 	height: auto;
+}
+
+#modal i {
+	font-size: 20px;
 }
