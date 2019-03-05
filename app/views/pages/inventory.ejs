@@ -19,23 +19,70 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12 text-center">
-					<h1 class="section-heading pb-5">Salt Lake DSA Official T-shirt</h1>
-				</div>
-				
-				<!--<% if (locals.content) { %>
-					<span class="tb-font-xl">
-						<%= content.length %>
-					</span>
-					<span> </span>
-					<% if (content.length > 1) { %>
-						<span>
-							items for sale
-						</span>
-					<% } else { %>
-						<span>
-							item for sale
-						</span>
-					<% } %><% } %>-->
+				<h2 class="section-heading">Store inventory</h2>
+				<hr>
+				<% if (locals.content) { %>
+					<div class="col-sm-12" id="select">
+						<div class="row" v-for="(t, i) in distinct">
+							<!-- for each type of item (content titles should be distinct. i.e. all items titled 't-shirt' will 
+							appear as one item. Further refinement needed. ) -->
+							<div class="col-sm-12" style="margin-bottom: 20px;">
+								<h3>Choose size</h3>
+								<button style="margin:0 auto; display:inline-block; width: 23%;" @click="selectSize('S')" class="btn" :class="(sz === 'S' ? 'btn-success' : '')">S</button>
+								<button style="margin:0 auto; display:inline-block; width: 23%;" @click="selectSize('M')" class="btn" :class="(sz === 'M' ? 'btn-success' : '')" >M</button>
+								<button style="margin:0 auto; display:inline-block; width: 23%;" @click="selectSize('L')" class="btn" :class="(sz === 'L' ? 'btn-success' : '')" >L</button>
+								<button style="margin:0 auto; display:inline-block; width: 23%;" @click="selectSize('XL')" class="btn" :class="(sz === 'XL' ? 'btn-success' : '')" >XL</button>
+							</div>
+
+							<% content.forEach(function(item) { %>
+								<!-- for each item in the inventory -->
+								<div class="col-sm-12" v-if="'<%= item.title %>' === t">
+									<!-- for each item in the distinct title -->
+									<% if (item.size === 'S') {%>
+										<div class="row sizeSmall" v-if="sz === 'S'">
+											<h2><%= item.title %> $ <%= (item.price / 100).toFixed(2) %></h2>
+											<% include ../partials/item %>
+										</div>
+									<%} else if (item.size === 'M') {%>
+										<div class="row sizeSmall" v-if="sz === 'M'">
+											<h2><%= item.title %> $ <%= (item.price / 100).toFixed(2) %></h2>
+											<% include ../partials/item %>
+										</div>
+									<%} else if (item.size === 'L') {%>
+										<div class="row sizeSmall" v-if="sz === 'L'">
+											<h2><%= item.title %> $ <%= (item.price / 100).toFixed(2) %></h2>
+											<% include ../partials/item %>
+										</div>
+									<%} else if (item.size === 'XL') {%>
+										<div class="row sizeSmall" v-if="sz === 'XL'">
+											<h2><%= item.title %> $ <%= (item.price / 100).toFixed(2) %></h2>
+											<% include ../partials/item %>
+										</div>
+									<%}%>
+								</div>
+							<% }); %>
+							
+
+						</div>
+						<div class="col-sm-12">
+							<p style="text-align: right; color: #fff;">
+								<span class="tb-font-m">
+									Total: 
+								</span>
+								<span>
+									
+									<span>
+										<%= content.length %>
+									</span>
+									<span>
+										 items
+									</span>
+								</span>
+								
+							</p>
+						</div>
+
+				<% } %>
 			</div>
 			<div class="row">
 					<div class="col-sm-6">
@@ -65,7 +112,43 @@
     <!-- /.container -->
 
     <% include ../partials/footer %>
-
+	<script type="text/javascript">
+		
+		new Vue({ el: '#select',
+				data() {
+					return { 
+						sz: '',
+						distinct: [],
+						content: this.parseObj(<%- vContent %>)
+					}
+				},
+				mounted(){
+					var self = this;
+					if (self.sz === '') {
+						self.sz = 'S';
+					}
+					if (self.distinct.length === 0) {
+						self.content.forEach(function(doc){
+							if (self.distinct.indexOf(doc.title) === -1) {
+								self.distinct.push(doc.title);
+								
+							}
+						})
+						console.log(self.distinct)
+					}
+				},
+				methods: {
+					parseObj(obj) {
+						if (!obj) return '';
+						return obj;
+					},
+					selectSize(size) {
+						var self = this;
+						self.sz = size;
+					}
+				}
+			})
+	</script>
   </body>
 
 </html>

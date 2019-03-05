@@ -9,7 +9,8 @@ var Content = new Schema({
 		end: Date
 	},
 	price: Number,
-	image: String
+	image: String,
+	size: String
 }, {collection: 'inventory'});
 
 module.exports = mongoose.model('Content', Content);

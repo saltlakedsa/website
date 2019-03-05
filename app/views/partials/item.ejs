@@ -1,0 +1,32 @@
+
+<div class="col-sm-5 col-lg-4">
+
+	<div class="crop" style="height: 200px; width: 100%; position: relative; overflow:hidden;margin: 0 auto;">
+		<img style="width: auto; height: 110%; transform:translate(-50%,0); position: absolute; " src="<%= item.image %>"></img>
+	</div>
+	<p> </p>
+	<a class="block spacer" role="button" style="background-color: #ff3535; color: #fff; padding: 20px;margin: 20px;" href="/shop/addtocart/<%= item._id %>">
+		Choose options
+	</a>
+</div>
+<div class="col-sm-7 col-lg-6" style="text-align: left;">
+	<h3>
+		<%= item.title %>
+	</h3>
+	<h5>
+		<%= item.description %>
+	</h5>
+</div>
+<div class="col-sm-12 col-lg-2" style="text-align: right;">
+	<p style="text-align: right;">
+		<span>
+			$
+			<span>
+				<%= (item.price / 100).toFixed(2) %>
+			</span>
+			<span>
+				&nbsp
+			</span>
+		</span>
+	</p>
+</div>
