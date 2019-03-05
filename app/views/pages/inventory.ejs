@@ -19,39 +19,39 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12 text-center">
-				<h2 class="section-heading">Store inventory</h2>
-				<hr>
+					<h1 class="section-heading pb-4">Official Salt Lake DSA Store</h1>
+				</div>
+				
 				<% if (locals.content) { %>
 					<div class="col-sm-12" id="select">
 						<div class="row" v-for="(t, i) in distinct">
 							<!-- for each type of item (content titles should be distinct. i.e. all items titled 't-shirt' will 
 							appear as one item. Further refinement needed. ) -->
-							<div class="col-sm-12" style="margin-bottom: 20px;">
-								<h3>Choose size</h3>
-								<button style="margin:0 auto; display:inline-block; width: 23%;" @click="selectSize('S')" class="btn" :class="(sz === 'S' ? 'btn-success' : '')">S</button>
-								<button style="margin:0 auto; display:inline-block; width: 23%;" @click="selectSize('M')" class="btn" :class="(sz === 'M' ? 'btn-success' : '')" >M</button>
-								<button style="margin:0 auto; display:inline-block; width: 23%;" @click="selectSize('L')" class="btn" :class="(sz === 'L' ? 'btn-success' : '')" >L</button>
-								<button style="margin:0 auto; display:inline-block; width: 23%;" @click="selectSize('XL')" class="btn" :class="(sz === 'XL' ? 'btn-success' : '')" >XL</button>
-							</div>
+							
 
 							<% content.forEach(function(item) { %>
 								<!-- for each item in the inventory -->
 								<div class="col-sm-12" v-if="'<%= item.title %>' === t">
 									<!-- for each item in the distinct title -->
+									
 									<% if (item.size === 'S') {%>
 										<div class="row sizeSmall" v-if="sz === 'S'">
+											
 											<% include ../partials/item %>
 										</div>
 									<%} else if (item.size === 'M') {%>
 										<div class="row sizeSmall" v-if="sz === 'M'">
+											
 											<% include ../partials/item %>
 										</div>
 									<%} else if (item.size === 'L') {%>
 										<div class="row sizeSmall" v-if="sz === 'L'">
+											
 											<% include ../partials/item %>
 										</div>
 									<%} else if (item.size === 'XL') {%>
 										<div class="row sizeSmall" v-if="sz === 'XL'">
+											
 											<% include ../partials/item %>
 										</div>
 									<%}%>
