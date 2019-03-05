@@ -84,24 +84,6 @@
 
 				<% } %>
 			</div>
-			<div class="row">
-					<div class="col-sm-6">
-						<% content.forEach(function(item) { %>
-						<img src="<%= item.image %>" style="width:100%;"></img>
-					
-						
-						
-					</div>
-					<div class="col-sm-6">			
-						<h3 style="text-transform:uppercase;"><%= item.title %></h3> 
-						
-						<p class="text-muted"><%= item.description %></p>
-						
-						<p class="text-muted"><strong>$ <%= (item.price / 100).toFixed(2) %></strong></p>
-						<a class="btn btn-primary btn-xl js-scroll-trigger" href="/shop/addtocart/<%= item._id %>">Purchase</a>
-						<% }); %>
-					</div>	
-			</div>
 		
 		</div>
     </section>
