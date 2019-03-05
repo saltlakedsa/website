@@ -40,22 +40,18 @@
 									<!-- for each item in the distinct title -->
 									<% if (item.size === 'S') {%>
 										<div class="row sizeSmall" v-if="sz === 'S'">
-											<h2><%= item.title %> $ <%= (item.price / 100).toFixed(2) %></h2>
 											<% include ../partials/item %>
 										</div>
 									<%} else if (item.size === 'M') {%>
 										<div class="row sizeSmall" v-if="sz === 'M'">
-											<h2><%= item.title %> $ <%= (item.price / 100).toFixed(2) %></h2>
 											<% include ../partials/item %>
 										</div>
 									<%} else if (item.size === 'L') {%>
 										<div class="row sizeSmall" v-if="sz === 'L'">
-											<h2><%= item.title %> $ <%= (item.price / 100).toFixed(2) %></h2>
 											<% include ../partials/item %>
 										</div>
 									<%} else if (item.size === 'XL') {%>
 										<div class="row sizeSmall" v-if="sz === 'XL'">
-											<h2><%= item.title %> $ <%= (item.price / 100).toFixed(2) %></h2>
 											<% include ../partials/item %>
 										</div>
 									<%}%>

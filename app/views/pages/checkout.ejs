@@ -69,18 +69,18 @@
 								<input class="required form-control" id="tel" type="tel" name="phone" placeholder="XXX-XXX-XXXX" />
 						<label for="email">E-mail Address</label>
 								<input class="required form-control" id="email" type="email" name="email" title="Please provide a valid e-mail address to confirm your order" placeholder="example@address.com" required />
-								
+						<label for="shipOrNo">Do you need the item shipped?</label>
+						<input class="form-control" value="300" name="ship" id="ship" type="checkbox" title="Check this box if you would like the item shipped to this address." />
 					</div>
 				</div>
 						
 					<input type="hidden" value='<%=total%>' name="total" />
-						
-						<button class="btn btn-success" id="submitbutton" type="submit">
-							Submit payment
-						</button>
-						<a role="button" class="btn btn-primary" href="/shop/cart" style="background-color: var(--primary); bottom: 0; float: right;">
-							Cancel
-						</a>
+					<button class="btn btn-success" id="submitbutton" type="submit">
+						Submit payment
+					</button>
+					<a role="button" class="btn btn-primary" href="/shop/cart" style="background-color: var(--primary); bottom: 0; float: right;">
+						Cancel
+					</a>
 			</form>
 		</div>
 		
@@ -146,7 +146,6 @@
 					}
 				});
 			});
-			//
 			function stripeTokenHandler(token) {
 				// Insert the token ID into the form so it gets submitted to the server
 				var form = document.getElementById('payment-form');

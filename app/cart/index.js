@@ -21,7 +21,7 @@ router.get('/logout', function(req, res, next){
 		} else {
 			req.session = null;
 		}
-		next(null)
+		return res.redirect('/')
 	});	
 })
 
@@ -101,7 +101,7 @@ router.get('/inventory', function(req, res, next) {
 								}
 								return res.render('pages/inventory', {
 									content: data,
-									vContent: JSON.stringify(data)
+									vContent: (!data ? '' : JSON.stringify(data))
 								})
 							})
 						})
@@ -117,10 +117,19 @@ router.get('/inventory', function(req, res, next) {
 					return res.redirect('/inventory')
 				})
 			} else {
-				return res.render('pages/inventory', {
-					content: data,
-					vContent: JSON.stringify(data)
-				})
+				if (data.length === 4 && !data[0].qty) {
+					Content.deleteMany({}, function(err, data){
+						if (err) {
+							return next(err)
+						}
+						return res.redirect('/inventory')
+					})
+				} else {
+					return res.render('pages/inventory', {
+						content: data,
+						vContent: (!data ? '' : JSON.stringify(data))
+					})
+				}
 			}
 			
 		}
@@ -138,7 +147,6 @@ router.get('/reduce/:id', function(req, res, next) {
 router.get('/addtocart/:id', function(req, res, next) {
 	var id = req.params.id;
 	var cart = new Cart(req.session.cart ? req.session.cart : {items: {}});
-	console.log(cart);
 	Content.findById(id, function(err, doc) {
 		if (err) {
 			return res.redirect('/shop/cart');
@@ -196,11 +204,15 @@ router.get('/checkout', function(req, res, next) {
 	});
 });
 
-router.post('/checkout', upload.array(), function(req, res, next) {
+router.post('/checkout', upload.array(), async function(req, res, next) {
 	if (!req.session.cart) {
 		return res.redirect('/cart');
 	}
 	var cart = new Cart(req.session.cart);
+	if (req.body.ship) {
+		await cart.calcShipping(parseInt(req.body.ship, 10));
+	}
+	req.session.cart = cart;
 	var token = req.body.stripeToken;
 	var storesecret = process.env.NODE_ENV === 'production' ? process.env.STORE_SECRET : process.env.STORE_SECRET_TEST;
 	var stripe = require("stripe")(storesecret);
@@ -226,32 +238,31 @@ router.post('/checkout', upload.array(), function(req, res, next) {
 			state: req.body.state,
 			name: req.body.name,
 			phone: req.body.phone,
-			email: req.body.email
+			email: req.body.email,
+			ship: (req.body.ship && !isNaN(parseInt(req.body.ship)) ? true : false)
 		});
 		
-		order.save(function(err) {
+		order.save(async function(err) {
 			if (err) {
 				return next(err)
 			}
-			var cartarray = cart.generateArray()
-			// for one-of-a-kind items only
-			// for (var i in cartarray) {
-			// 	// set doc.price to null once order complete
-			// 	Content.findOneAndUpdate({_id: cartarray[i].item._id}, {$set: {'properties.price': null}}, function(err, doc) {
-			// 		if (err) {
-			// 			return next(err)
-			// 		}
-			// 
-			// 	})
-			// }
+			var cartarray = cart.generateArray();
+			
+			for (var i in cartarray) {
+				// reduce inventory qty after successful order
+				var qty = cartarray[i].qty;
+				var iQty = await Content.findOne({_id: cartarray[i].item._id}).then((doc)=>doc.qty).catch((err)=>next(err));
+				var newQty = iQty - qty;
+				await Content.findOneAndUpdate({_id: cartarray[i].item._id}, {$set: {qty: newQty }}, {new:true, multi:false}).then((doc)=>{}).catch((err)=>next(err))
+			}
 			req.session.cart = null;
-			return res.redirect('/shop/ordersuccess/'+order._id+'')
+			return res.redirect('/shop/ordersuccess/'+(req.body.ship ? true : false)+'/'+order._id+'')
 		})
 	});
 	
 });
 
-router.get('/ordersuccess/:id', function(req, res, next){
+router.get('/ordersuccess/:ship/:id', function(req, res, next){
 	var id = req.params.id;
 	Order.findOne({_id: id}, function(err, order){
 		if (err) {
@@ -261,7 +272,8 @@ router.get('/ordersuccess/:id', function(req, res, next){
 		return res.render('pages/order', {
 			order: order,
 			totalPrice: cart.totalPrice,
-			cart: cart.generateArray()
+			cart: cart.generateArray(),
+			ship: req.params.ship
 		})
 	})
 })

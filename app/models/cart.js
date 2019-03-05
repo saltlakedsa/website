@@ -2,6 +2,10 @@ module.exports = function Cart(oldCart){
 	this.items = oldCart.items || {};
 	this.totalPrice = oldCart.totalPrice || 0;
 	this.totalQty = oldCart.totalQty || 0;
+	this.calcShipping = function(ship) {
+		if (!ship || isNaN(parseInt(ship, 10))) return;
+		this.totalPrice += ship
+	};
 	this.add = function(item, id) {
 		var storedItem = this.items[id];
 		if (!storedItem) {

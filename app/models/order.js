@@ -9,7 +9,8 @@ var schema = new Schema({
 	zip: {type: String, required: true},
 	name: {type: String, required: true},
 	phone: {type: String, required: true},
-	email: {type: String, required: true}
+	email: {type: String, required: true},
+	ship: Boolean
 }, {collection: 'orders'});
 
 module.exports = mongoose.model('Order', schema);
