@@ -87,7 +87,7 @@ app.use('/shop', cartRoutes);
 
 app
 .get('/', (req, res) => {
-	res.render('pages/index', { cart: (req.session && req.session.cart ? req.session.cart : null) });
+	res.render('pages/index', { alertCart: (req.session && req.session.cart ? req.session.cart : null) });
 })
 .get('/b/*',(req, res) => {
 	var fn = url.parse(req.url,true).pathname;
@@ -115,7 +115,7 @@ app
 .get('*', (req, res) => {
 	fs.stat('views/pages'+req.url+'.ejs',(err,stats) => {
 		if (err) res.render('pages/error');
-		else res.render('pages'+req.url, { cart: (req.session && req.session.cart ? req.session.cart : null) });
+		else res.render('pages'+req.url, { alertCart: (req.session && req.session.cart ? req.session.cart : null) });
 	});
 });
 
