@@ -22,7 +22,17 @@
 					<h1 class="section-heading pb-5">Check Out</h1>
 				</div>
 		</div>
-		
+		<hr>
+			<% if (locals.cart) { %>
+				<% cart.forEach(function(item) { %>
+					<p>
+						<span class="badge badge-primary block"><%= item.qty %></span>
+						<%= item.item.title %>
+						<span> Size </span>
+						<%= item.item.size %>
+					</p>
+				<% }); %>
+			<% } %>
 		<div id="card-errors" role="alert"></div>
 			<form enctype="multipart/form-data" action="/shop/checkout" method="POST" id="payment-form">
 				<label for="card-element">

@@ -38,19 +38,93 @@ router.get('/inventory', function(req, res, next) {
 					begin: new Date(),
 					end: new Date()
 				},
-				price: 2000,
+				size: 'S',
+				qty: 10,
+				price: 2100,
 				image: '/static/img/shop/DSA-Red.jpg'
-			})
+			});
 			item.save(function(err){
 				if (err) {
 					return next(err)
 				}
+				var item2 = new Content({
+					title: 't-shirt',
+					description: 'Red shirt with full-color DSA SLC artwork',
+					time: {
+						begin: new Date(),
+						end: new Date()
+					},
+					size: 'M',
+					qty: 10,
+					price: 2100,
+					image: '/static/img/shop/DSA-Red.jpg'
+				});
+				item2.save(function(err){
+					if (err) {
+						return next(err)
+					}
+					var item3 = new Content({
+						title: 't-shirt',
+						description: 'Red shirt with full-color DSA SLC artwork',
+						time: {
+							begin: new Date(),
+							end: new Date()
+						},
+						size: 'L',
+						qty: 10,
+						price: 2100,
+						image: '/static/img/shop/DSA-Red.jpg'
+					});
+					item3.save(function(err){
+						if (err) {
+							return next(err)
+						}
+						var item4 = new Content({
+							title: 't-shirt',
+							description: 'Red shirt with full-color DSA SLC artwork',
+							time: {
+								begin: new Date(),
+								end: new Date()
+							},
+							size: 'XL',
+							qty: 5,
+							price: 2500,
+							image: '/static/img/shop/DSA-Red.jpg'
+						});
+						item4.save(function(err){
+							if (err) {
+								return next(err)
+							}
+							Content.find({}, function(err, data){
+								if (err) {
+									return next(err)
+								}
+								return res.render('pages/inventory', {
+									content: data,
+									vContent: JSON.stringify(data)
+								})
+							})
+						})
+					});
+				})
 			});
-			data = [item]
+		} else {
+			if (data.length === 1) {
+				Content.deleteMany({}, function(err, data){
+					if (err) {
+						return next(err)
+					}
+					return res.redirect('/inventory')
+				})
+			} else {
+				return res.render('pages/inventory', {
+					content: data,
+					vContent: JSON.stringify(data)
+				})
+			}
+			
 		}
-		return res.render('pages/inventory', {
-			content: data
-		})
+		
 	})
 })
 router.get('/reduce/:id', function(req, res, next) {
@@ -63,7 +137,6 @@ router.get('/reduce/:id', function(req, res, next) {
 });
 router.get('/addtocart/:id', function(req, res, next) {
 	var id = req.params.id;
-	// console.log(req.session.cart)
 	var cart = new Cart(req.session.cart ? req.session.cart : {items: {}});
 	console.log(cart);
 	Content.findById(id, function(err, doc) {
@@ -116,6 +189,7 @@ router.get('/checkout', function(req, res, next) {
 	
 	res.render('pages/checkout', {
 		pk: process.env.NODE_ENV === 'production' ? process.env.STORE_PUBLISH : process.env.STORE_PUBLISH_TEST,
+		cart: cart.generateArray(),
 		total: cart.totalPrice
 		// ,
 		// csrfToken: req.csrfToken()

@@ -19,3 +19,9 @@
 #modal i {
 	font-size: 20px;
 }
+#cc label, #cc input {
+	width: 100%;
+}
+#cc input {
+	margin-bottom: 10px;
+}
