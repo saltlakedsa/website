@@ -1,53 +1,33 @@
-<h2><%= item.item.title %> $ <%= (item.item.price / 100).toFixed(2) %></h2>
-<div class="row">
-	<div class="col-sm-4 col-lg-3">
-		<div class="row">
-			<div class="col-sm-12">
-				<span class="label label-success">$<%= (item.item.price / 100).toFixed(2) %></span>
-			</div>
-			<div class="col-sm-12">
-				<p>Quantity</p>
-			</div>
-			<div class="col-sm-12">
-				<span class="badge badge-primary block"><%= item.qty %></span>
-				<strong><%= item.item.title %></strong>
-			</div>
-			<div class="col-sm-12">
-				<div class="btn-group mr-2" role="group" aria-label="Increase or decrease quantity of <%= item.item.title %>">
-					<a href="/shop/reduce/<%= item.item._id %>" role="button" class="btn btn-primary" type="button"">–</a>
-					<a href="/shop/addtocart/<%= item.item._id %>" role="button" class="btn btn-primary" type="button"">+</a>
-				</div>
-			</div>
-		</div>
-		<div class="row" style="height: 200px;">
-		<img style="width: 100%; height: auto;" src="<%= item.item.image %>"></img>
-		</div>
-	</div>
-	<div class="col-sm-8 col-md-6" style="text-align:left;">
-		<h3>
-			<%= item.item.title %>
-		</h3>
-		<h4>
-			<%= item.item.description %>
-		</h4>
-	</div>
-	<div class="col-sm-12">
-		<a class="block spacer" role="button" style="background-color: #ff3535; color: #fff; padding: 20px;margin: 20px;" href="/shop/removefromcart/<%= item.item._id %>">
-			Remove
-		</a>
-	</div>
-	<div class="col-sm-12 col-md-2 col-lg-1" style="text-align: right; height:auto; pointer-events: none;">
-		<h4 style="text-align: right;">
-			$
-			<span>
-				<%= (item.item.price / 100).toFixed(2) %>
-			</span>
-			<span>
-				&nbsp
-			</span>
-			<span>
-				each
-			</span>
-		</h4>
-	</div>
+
+
+
+<div class="card">
+<a href="/shop/removefromcart/<%= item.item._id %>" class="btn btn-primary mx-5 my-2">Remove</a>
+  <img class="card-img-top" src="<%= item.item.image %>" alt="purchase image">
+  <div class="card-body">
+    <h4 class="card-title" style="text-transform:uppercase;"><%= item.item.title %></h4>
+    <p class="card-text text-muted"><%= item.item.description %></p>
+	<table class="table table-striped">
+	 
+		<thead>
+			<tr>
+				<th scope="col">Price</th>
+				<th scope="col">Quantity 
+				<a href="/shop/reduce/<%= item.item._id %>" role="button" class="btn btn-primary btn-sm" style="border-radius:5px;">–</a>
+				<a href="/shop/addtocart/<%= item.item._id %>" role="button" class="btn btn-primary btn-sm" style="border-radius:5px;">+</a>
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>$ <%= (item.item.price / 100).toFixed(2) %></td>
+				<td><%= item.qty %>
+				</td>
+			</tr>
+  </tbody>
+</table>
+	
+	
+   
+  </div>
 </div>

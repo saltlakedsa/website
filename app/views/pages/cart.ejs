@@ -15,19 +15,23 @@
 
     <!-- Page Content -->
     <div id="page-top">
-	<section id="donate">
+	<section id="cart">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12 text-center">
-				<h2 class="section-heading">Shopping cart</h2>
-				<hr>
-				<% if (locals.cart) { %>
-					<div class="col-sm-12">
+					<h1 class="section-heading pb-4">Shopping cart</h1>
+				</div>
+			</div>
+			<div class="row">
+				
+				<div class="col-sm-8">
+						<% if (locals.cart) { %>
 						<% cart.forEach(function(item) { %>
 							<% include ../partials/cartitem %>
 						<% }); %>
-						<div class="col-sm-12">
-							<p style="text-align: right; height:auto;">
+				</div>
+				<div class="col-sm-4">
+							<p>
 								<span>
 									Total: 
 								</span>
@@ -39,30 +43,21 @@
 								</span>
 								
 							</p>
-						</div>
-						<div class="col-sm-12">
-							<a class="block spacer" role="button"  style="background-color: #ff3535; color: #fff; padding: 20px;margin: 20px;"  href="/shop/checkout">
+							<a class="btn btn-primary btn-xl"  href="/shop/checkout">
 								checkout
 							</a>
-						</div>
-						<p> </p>
+				</div>
+			</div>
+			
+						
 				<% } else { %>
-					<p>Your cart is empty</p>
+					<p>Your cart is empty. Check out the <a href="/shop/inventory">store</a></p>
 				<% } %>
 			</div>
-			<div class="row">
-				<div class="col-lg-6 mx-auto text-center">
-				<p class="text-muted mb-0">
-				The SLC DSA Chapter is an entirely member funded organization.  We currently do not receive any funding from the National DSA, and have relied on contributions from members like you to support all of our work and campaigns.  Thus far, we have raised money through fundraising events, but as our Chapter grows, and our members engage in ever larger and more ambitious campaigns, we can no longer sustain ourselves on events alone.
-				</p>
-				</div>
 			
-				<div class="col-lg-6 mx-auto">
-				<script src="https://donorbox.org/widget.js" paypalExpress="false"></script><iframe src="https://donorbox.org/embed/slc-dsa-dues" height="685px" width="100%" style="max-width:500px; min-width:310px; max-height:none!important" seamless="seamless" name="donorbox" frameborder="0" scrolling="no" allowpaymentrequest></iframe>
-				</div>
-			</div>
-		</div>
-    </section>
+	</section>
+		
+   
     
 	<% include ../partials/socialmedia %>
 	  

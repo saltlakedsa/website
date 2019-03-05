@@ -17,87 +17,63 @@
     <div id="page-top">
 	<section id="donate">
 		<div class="container">
-			<div class="row">
+		<div class="row">
 				<div class="col-lg-12 text-center">
-				<h2 class="section-heading">Check out</h2>
-				<hr>
-				<div id="card-errors" role="alert"></div>
-
-				<form enctype="multipart/form-data" action="/shop/checkout" method="POST" id="payment-form">
-					<label for="card-element">
-						Credit or debit card
-					</label>
-					<div id="card-element" style="background-color: rgb(256,251,214); padding: 20px; border:1px dotted black;"></div>
-						<div class="row">
-							<div class="col-sm-12 col-md-5">
-								<label for="name">
-									Name
-								</label>
-								<input class="required" id="name" type="text" name="name" placeholder="Your Name"></input>
-							</div>
-							<div class="col-sm-12 col-md-5">
-								<label for="address">
-									Address
-								</label>
-								<input class="required" id="adaddr" type="text" name="address" placeholder="Street Address" />
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-sm-12 col-md-4">
-								<label for="city">
-									City
-								</label>
-								<input class="required" id="cityaddr" type="text" name="city" placeholder="Your City" />
-							</div>
-							<div class="col-sm-12 col-md-4">
-								<label for="state">
-									State
-								</label>
-								<input id="stateaddr" type="text" name="state" placeholder="XX" />
-							</div>
-							<div class="col-sm-12 col-md-4">
-								<label for="zip">
-									ZIP Code
-								</label>
-								<input class="required" id="zipaddr" type="text" name="zip" placeholder="XXXXX" />
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-sm-12 col-md-4">
-								<label for="phone">
-									Phone Number
-								</label>
-								<input class="required" id="tel" type="tel" name="phone" placeholder="XXX-XXX-XXXX" />
-							</div>
-							<div class="col-sm-12 col-md-4">
-								<label for="email">
-									E-mail Address
-								</label>
-								<input class="required" id="email" type="email" name="email" title="Please provide a valid e-mail address to confirm your order" placeholder="example@address.com" required />
-							</div>
-						</div>
-						<input type="hidden" value='<%=total%>' name="total" />
+					<h1 class="section-heading pb-5">Check Out</h1>
+				</div>
+		</div>
+		
+		<div id="card-errors" role="alert"></div>
+			<form enctype="multipart/form-data" action="/shop/checkout" method="POST" id="payment-form">
+				<label for="card-element">
+					Credit or debit card
+				</label>
+					
+				<div id="card-element" style="background-color: rgb(256,251,214); padding: 20px; border:1px dotted black;"></div>
+				
+				<div class="row py-4">
+					<div class="col-sm-6 form-group">
+							<label for="name">Name</label>
+							<input class="required form-control" id="name" type="text" name="name" placeholder="Your Name"></input>
+					</div>
+					
+					<div class="col-sm-6 form-group">
+						<label for="address">Address</label>
+						<input class="required form-control" id="adaddr" type="text" name="address" placeholder="Street Address" />
+					</div>
+					
+				</div>
+				
+				<div class="row">
+					<div class="col-sm-6 form-group">
+						<label for="city">City</label>
+							<input class="required form-control" id="cityaddr" type="text" name="city" placeholder="Your City" />
+							<label for="state">State</label>
+								<input class="form-control" id="stateaddr" type="text" name="state" placeholder="XX" />
+							<label for="zip">ZIP Code</label>
+								<input class="required form-control" id="zipaddr" type="text" name="zip" placeholder="XXXXX" />
+					</div>
+							
+					<div class="col-sm-6 form-group">
+						<label for="phone">Phone Number</label>
+								<input class="required form-control" id="tel" type="tel" name="phone" placeholder="XXX-XXX-XXXX" />
+						<label for="email">E-mail Address</label>
+								<input class="required form-control" id="email" type="email" name="email" title="Please provide a valid e-mail address to confirm your order" placeholder="example@address.com" required />
+								
+					</div>
+				</div>
+						
+					<input type="hidden" value='<%=total%>' name="total" />
+						
 						<button class="btn btn-success" id="submitbutton" type="submit">
 							Submit payment
 						</button>
-						<a role="button" class="btn btn-primary" href="/cart" style="background-color: var(--primary); bottom: 0; float: right;">
+						<a role="button" class="btn btn-primary" href="/shop/cart" style="background-color: var(--primary); bottom: 0; float: right;">
 							Cancel
 						</a>
-				</form>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-lg-6 mx-auto text-center">
-				<p class="text-muted mb-0">
-				The SLC DSA Chapter is an entirely member funded organization.  We currently do not receive any funding from the National DSA, and have relied on contributions from members like you to support all of our work and campaigns.  Thus far, we have raised money through fundraising events, but as our Chapter grows, and our members engage in ever larger and more ambitious campaigns, we can no longer sustain ourselves on events alone.
-				</p>
-				</div>
-			
-				<div class="col-lg-6 mx-auto">
-				<script src="https://donorbox.org/widget.js" paypalExpress="false"></script><iframe src="https://donorbox.org/embed/slc-dsa-dues" height="685px" width="100%" style="max-width:500px; min-width:310px; max-height:none!important" seamless="seamless" name="donorbox" frameborder="0" scrolling="no" allowpaymentrequest></iframe>
-				</div>
-			</div>
+			</form>
 		</div>
+		
     </section>
     
 	<% include ../partials/socialmedia %>

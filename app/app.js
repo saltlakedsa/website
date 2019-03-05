@@ -115,7 +115,7 @@ app
 .get('*', (req, res) => {
 	fs.stat('views/pages'+req.url+'.ejs',(err,stats) => {
 		if (err) res.render('pages/error');
-		else res.render('pages'+req.url);
+		else res.render('pages'+req.url, { cart: (req.session && req.session.cart ? req.session.cart : null) });
 	});
 });
 
