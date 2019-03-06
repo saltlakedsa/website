@@ -6,6 +6,7 @@ var Cart = require('../models/cart.js');
 var Order = require('../models/order.js');
 var multer = require('multer');
 var upload = multer();
+var url = require('url');
 dotenv.load();
 
 // router.get('/addtoinventory/:item', function(req, res, next) {
@@ -264,6 +265,10 @@ router.post('/checkout', upload.array(), async function(req, res, next) {
 
 router.get('/ordersuccess/:ship/:id', function(req, res, next){
 	var id = req.params.id;
+	var fn = url.parse(req.url,true).pathname;
+	fn = fn.split('/')[2];
+	var isShip = (fn == 'true');
+;
 	Order.findOne({_id: id}, function(err, order){
 		if (err) {
 			return next(err) 
@@ -273,7 +278,7 @@ router.get('/ordersuccess/:ship/:id', function(req, res, next){
 			order: order,
 			totalPrice: cart.totalPrice,
 			cart: cart.generateArray(),
-			ship: req.params.ship
+			ship: isShip
 		})
 	})
 })

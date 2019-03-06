@@ -15,7 +15,8 @@
 
     <!-- Page Content -->
     <div id="page-top">
-	<section id="donate">
+	<section>
+	You have been charged: $<%= (totalPrice / 100).toFixed(2) %>
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12 text-center">
@@ -30,8 +31,9 @@
 								</p>
 							<% }); %>
 						<% } %>
-						<% if (locals.ship) { %>
-							<% if (ship) { %>
+						<%= ship %>
+						<% if (locals.ship) { %>	
+							<% if (ship = true) { %>
 								<h3>
 									These items will be shipped to the address you provided:
 								</h3>
@@ -54,12 +56,13 @@
 								
 							<% } %>
 						<% } else { %>
-							<h3> Your items will be available for pick up. </h3>
+							<h3> Your items will be available for pick up at, contact DSA local member to arrange pickup. </h3>
 						<% } %>
 					</div>
 				</div>
 			</div>
 		</div>
+		
 	</section>
 </body>
 </html>

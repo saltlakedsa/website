@@ -69,12 +69,15 @@
 								<input class="required form-control" id="tel" type="tel" name="phone" placeholder="XXX-XXX-XXXX" />
 						<label for="email">E-mail Address</label>
 								<input class="required form-control" id="email" type="email" name="email" title="Please provide a valid e-mail address to confirm your order" placeholder="example@address.com" required />
-						<label for="shipOrNo">Do you need the item shipped?</label>
+						<label for="shipOrNo">Do you need the item shipped for $3.00 shipping fee</label>
 						<input class="form-control" value="300" name="ship" id="ship" type="checkbox" title="Check this box if you would like the item shipped to this address." />
 					</div>
 				</div>
 						
-					<input type="hidden" value='<%=total%>' name="total" />
+					<input id ="chargeTotal" type="hidden" value='<%=total%>' name="total" />
+					<p>Total: $<span id="getTotal"></span>
+					
+					<p>
 					<button class="btn btn-success" id="submitbutton" type="submit">
 						Submit payment
 					</button>
@@ -94,6 +97,19 @@
     <% include ../partials/footer %>
 
 		<script type="text/javascript">
+			var origTotal = $("#chargeTotal").val()/1;
+			
+			$("#getTotal").html(( origTotal/ 100).toFixed(2));
+			
+			$("#ship").change(function() {
+				if($(this).is(":checked")) {
+					$("#chargeTotal").val(origTotal+300.0);
+				} else {$("#chargeTotal").val(origTotal);}
+				
+				$("#getTotal").html(( $("#chargeTotal").val()/ 100.0).toFixed(2));
+			
+			});
+		
 			var pk = '<%= locals.pk %>'
 			var stripe = Stripe(pk);
 			var elements = stripe.elements();
