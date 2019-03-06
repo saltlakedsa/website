@@ -228,7 +228,7 @@ router.post('/checkout', upload.array(), async function(req, res, next) {
 		idempotency_key: uuid4()
 	}, function(err, charge) {
 		if (err) {
-			console.log(err)
+			//console.log(err)
 			return res.redirect('/shop/checkout');
 		}
 		var order = new Order({
