@@ -16,54 +16,67 @@
     <!-- Page Content -->
     <div id="page-top">
 	<section>
-		<p style="text-align:center;">You have been charged: $<%= (totalPrice / 100).toFixed(2) %></p>
-	
 		<div class="container">
-			<div class="row">
-				<div class="col-lg-12 text-center">
-					<div class="col-sm-12">
-						<% if (locals.cart) { %>
-							<% cart.forEach(function(item) { %>
-								<p>
-									<span class="badge badge-primary block"><%= item.qty %></span>
-									<%= item.item.title %>
-									<span> Size </span>
-									<%= item.item.size %>
-								</p>
-							<% }); %>
-						<% } %>
-						<!--<%= ship %> -->
-						<% if (locals.ship) { %>	
-							<% if (ship = true) { %>
-								<h3>
-									These items will be shipped to the address you provided:
-								</h3>
-								<p>
-									<%= order.name %>
-								</p>
-								<p>
-									<%= order.address %>
-								</p>
-								<p>
-									<%= order.city %>
-									<span>
-										<span>, </span>
-										<%= order.state %>
-									</span>
-									<span>
-										<%= order.zip %>
-									</span>
-								</p>
-								
-							<% } %>
-						<% } else { %>
-							<h3> Your items will be available for pick up at, contact DSA local member to arrange pickup. </h3>
-						<% } %>
-					</div>
-				</div>
+		<div class="row">
+			<div class="col-lg-12 text-center">
+			<h1>Thank You</h1>
+			
 			</div>
 		</div>
 		
+		<div class="row">
+			<div class="col-sm-6 text-center">
+				
+				<img src="/static/img/shop/logo-heart.png" alt="thank you image" style="width:100%"></img>
+			</div>
+			<div class="col-sm-6">
+			<p>You have been charged: <strong>$<%= (totalPrice / 100).toFixed(2) %></strong></p>
+			<strong class="border-bottom">Items on Order</strong>
+			<% if (locals.cart) { %>
+			<% cart.forEach(function(item) { %>
+			<p>
+			<span class="badge badge-primary block"><%= item.qty %></span> <%= item.item.title %><span> Size: </span><%= item.item.size %>
+			</p>	
+			<strong class="border-bottom">Your order number is</strong><p><%= order._id %><p>
+			<% }); %>
+			<% } %>
+			
+			</div>
+		</div>
+				
+		<hr>
+		
+		<div class="row">
+					<div class="col-lg-12">
+		<p class="text-muted">
+		<!--<%= ship %> -->
+		<% if (locals.ship) { %>	
+		<% if (ship = true) { %>
+								
+		These items will be shipped to the address you provided: <strong>Name:</strong><%= order.name %><strong> Address:</strong><%= order.address %><strong> City:</strong><%= order.city %><strong> State:</strong><%= order.state %><strong> Zip Code:</strong><%= order.zip %>
+								
+								
+							<% } %>
+						<% } else { %>
+			Your item(s) will be available for pick up at a general Salt Lake DSA meeting. See the <a href="/calendar">calendar</a> for the next meeting.
+						<% } %>
+		</p>
+		</div></div>
+
+<hr>
+<div class="row">
+			<div class="col-lg-12">
+			<p>Send any questions to: <a href="mailto:saltlakedsa@gmail.com">saltlakedsa@gmail.com</a><p>
+			</div>
+		</div>
+		
+	</div>
 	</section>
-</body>
+			<% include ../partials/socialmedia %>
+			
+		</div>
+		<!-- /.container -->
+		<% include ../partials/footer %>
+	</body>
+
 </html>

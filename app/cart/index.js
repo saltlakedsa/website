@@ -7,7 +7,16 @@ var Order = require('../models/order.js');
 var multer = require('multer');
 var upload = multer();
 var url = require('url');
+var nodemailer = require('nodemailer');
 dotenv.load();
+
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'saltlakedsa@gmail.com',
+    pass: 'rosaluxemburg'
+  }
+});
 
 // router.get('/addtoinventory/:item', function(req, res, next) {
 // 
@@ -270,19 +279,32 @@ router.get('/ordersuccess/:ship/:id', function(req, res, next){
 	var fn = url.parse(req.url,true).pathname;
 	fn = fn.split('/')[2];
 	var isShip = (fn == 'true');
-;
+
 	Order.findOne({_id: id}, function(err, order){
 		if (err) {
 			return next(err) 
 		}
 		var cart = new Cart(order.cart);
+		var mailOptions = {
+			from: 'saltlakedsa@gmail.com',
+			to: order.email,
+			subject: 'Thank you for your order',
+			text: "Your order confirmation is: " + order._id + " Please let us know if you have any questions"
+		};
+		transporter.sendMail(mailOptions, function(err, info){
+			if (err) { return next(err) }
+			else {
+			//console.log('Email sent: ' + info.response);
+		}
+		});
 		return res.render('pages/order', {
 			order: order,
 			totalPrice: cart.totalPrice,
 			cart: cart.generateArray(),
 			ship: isShip
-		})
-	})
-})
+		});
+	});
+	
+});
 
 module.exports = router;
