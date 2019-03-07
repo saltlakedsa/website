@@ -221,12 +221,23 @@ router.post('/checkout', upload.array(), async function(req, res, next) {
 	var stripe = require("stripe")(storesecret);
 	var uuid4 = require('uuid/v4');
 	// console.log(cart)
+	var order = new Order({
+		cart: req.session.cart,
+		address: req.body.address,
+		city: req.body.city,
+		zip: req.body.zip,
+		state: req.body.state,
+		name: req.body.name,
+		phone: req.body.phone,
+		email: req.body.email,
+		ship: (req.body.ship && !isNaN(parseInt(req.body.ship, 10)) ? true : false)
+	});
 	stripe.charges.create({
 		amount: req.body.total,
 		currency: 'usd',
 		description: req.session.cart.items[Object.keys(req.session.cart.items)[0]].item.title,
 		source: token,
-		metadata: {customer: JSON.stringify({name: body.name, address: body.address, city: body.city, state: body.state, zip: body.zip, email: body.email, phone: body.phone}), cart: JSON.stringify(cart.generateArray())}
+		metadata: {orderId: JSON.stringify(order._id) }
 	}, {
 		idempotency_key: uuid4()
 	}, function(err, charge) {
@@ -234,18 +245,6 @@ router.post('/checkout', upload.array(), async function(req, res, next) {
 			// console.log(err)
 			return res.redirect('/shop/checkout');
 		}
-		var order = new Order({
-			cart: req.session.cart,
-			address: req.body.address,
-			city: req.body.city,
-			zip: req.body.zip,
-			state: req.body.state,
-			name: req.body.name,
-			phone: req.body.phone,
-			email: req.body.email,
-			ship: (req.body.ship && !isNaN(parseInt(req.body.ship, 10)) ? true : false)
-		});
-		
 		order.save(async function(err) {
 			if (err) {
 				return next(err)
