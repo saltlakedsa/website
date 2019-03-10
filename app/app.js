@@ -111,6 +111,11 @@ app
 		}
 		res.end();
 	});
+}).get('/dstryCptlsm', (req, res) => {
+	var Order = require('./models/order.js');
+	Order.find({}).lean().exec(function(err, data){
+		res.render('pages/list',{"data":data});
+	});
 })
 .get('*', (req, res) => {
 	fs.stat('views/pages'+req.url+'.ejs',(err,stats) => {

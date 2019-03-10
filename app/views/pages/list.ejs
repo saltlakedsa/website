@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+	<% include ../partials/head %>
+	</head>
+
+	<body>
+
+		<!-- Navigation -->
+		<% include ../partials/nav %>
+		<!-- Page Content -->
+		
+		<% 
+		
+		var objs = [];
+		var total = 0;
+		var totalPrice = 0;
+		var totalSmall = 0;
+		var totalLarge = 0;
+		var totalMedium = 0;
+		var totalXL = 0;
+		
+		if (locals.data) {
+			data.forEach(function(person) { 
+			total += person.cart.totalQty;
+			totalPrice += person.cart.totalPrice;
+			
+			var items = person.cart.items;
+			var small = 0;
+			var medium = 0;
+			var large = 0;
+			var xl = 0;
+			var ship = person.ship;
+			
+			var keys = Object.keys(items);
+			for (var i=0;i<keys.length;i++){
+				
+				
+				small += (items[keys[i]].item.size == 'S')*items[keys[i]].qty;
+				medium += (items[keys[i]].item.size == 'M')*items[keys[i]].qty;
+				large += (items[keys[i]].item.size == 'L')*items[keys[i]].qty;
+				xl += (items[keys[i]].item.size == 'XL')*items[keys[i]].qty;
+				
+			};
+			
+			totalSmall += small;
+				totalLarge += large;
+				totalMedium += medium;
+				totalXL += xl;
+			
+			var obj = {"name":person.name,
+						"email":person.email,
+						"qty":person.cart.totalQty,
+						"price":person.cart.totalPrice,
+						"small":small,
+						"medium":medium,
+						"large":large,
+						"xl":xl,
+						"ship":ship};
+			
+			objs.push(obj); 
+			
+			
+			});
+					
+			
+		}
+		
+		%>
+		
+		<div id="page-top">
+			<section id="data">
+				<div class="container">
+				<table class="table table-sm">
+  <thead>
+    <tr>
+      <th scope="col">Qty</th>
+      <th scope="col">Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Paid</th>
+	  <th scope="col">Small</th>
+	  <th scope="col">Medium</th>
+	  <th scope="col">Large</th>
+	  <th scope="col">XL</th>
+	  <th scope="col">ship</th>
+    </tr>
+  </thead>
+  <tbody>
+  
+	<% objs.forEach(function(obj){ %>
+	
+	 <tr>
+      <td><%= obj.qty %></td>
+      <td><%= obj.name %></td>
+      <td><%= obj.email %></td>
+	  <td>$<%= (obj.price/100).toFixed(2) %></td>
+	  <td><%= obj.small %></td>
+	   <td><%= obj.medium %></td>
+	    <td><%= obj.large %></td>
+		 <td><%= obj.xl %></td>
+		 <td><%= obj.ship %></td>
+	  
+     
+    </tr>
+	
+	
+
+	
+	<% }); %>
+	
+	<thead class="thead-dark">
+		 <tr>
+      <th scope="col"><%= total %></th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+	  <th scope="col">$<%= (totalPrice/100).toFixed(2) %></th>
+	  <th scope="col"><%= totalSmall %></th>
+	   <th scope="col"><%= totalMedium %></th>
+	    <th scope="col"><%= totalLarge %></th>
+		 <th scope="col"><%= totalXL %></th>
+		 <th scope="col"></td>
+    </tr>
+	</thead>
+   
+  </tbody>
+</table>
+			
+		
+				
+				
+					
+					
+					
+				</div>
+			</section>
+			
+			<% include ../partials/socialmedia %>
+			
+		</div>
+		<!-- /.container -->
+		<% include ../partials/footer %>
+	</body>
+
+</html>

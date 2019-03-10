@@ -285,7 +285,7 @@ router.get('/ordersuccess/:ship/:id', function(req, res, next){
 			return next(err) 
 		}
 		var cart = new Cart(order.cart);
-		var mailOptions = {
+	/* 	var mailOptions = {
 			from: 'saltlakedsa@gmail.com',
 			to: order.email,
 			subject: 'Thank you for your order',
@@ -296,7 +296,7 @@ router.get('/ordersuccess/:ship/:id', function(req, res, next){
 			else {
 			//console.log('Email sent: ' + info.response);
 		}
-		});
+		}); */
 		return res.render('pages/order', {
 			order: order,
 			totalPrice: cart.totalPrice,
