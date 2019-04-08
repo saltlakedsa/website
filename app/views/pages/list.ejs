@@ -20,11 +20,13 @@
 		var totalLarge = 0;
 		var totalMedium = 0;
 		var totalXL = 0;
+		var idx = 0;
 		
 		if (locals.data) {
 			data.forEach(function(person) { 
 			total += person.cart.totalQty;
 			totalPrice += person.cart.totalPrice;
+			
 			
 			var items = person.cart.items;
 			var small = 0;
@@ -57,9 +59,16 @@
 						"medium":medium,
 						"large":large,
 						"xl":xl,
-						"ship":ship};
+						"ship":ship,
+						"address":person.address,
+						"city":person.city,
+						"zip":person.zip,
+						"state":person.state,
+						"phone":person.phone,
+						"idx":idx};
 			
 			objs.push(obj); 
+			idx += 1;
 			
 			
 			});
@@ -92,7 +101,27 @@
 	
 	 <tr>
       <td><%= obj.qty %></td>
-      <td><%= obj.name %></td>
+      <td>
+	  
+	  <div class="">
+		<a class="accordion-toggle collapsed" data-toggle="collapse" href="#collapse<%= obj.idx %>">
+	<div>
+		<%= obj.name %>
+	 </div>
+	</a>
+							</div>
+		<div id="collapse<%= obj.idx %>" class="collapse">
+								<br><%= obj.address %>
+								<br><%= obj.city %>
+								<br><%= obj.state %>
+								<br><%= obj.zip %>
+		</div>
+	  
+	  
+	  
+		
+	  
+	  </td>
       <td><%= obj.email %></td>
 	  <td>$<%= (obj.price/100).toFixed(2) %></td>
 	  <td><%= obj.small %></td>
