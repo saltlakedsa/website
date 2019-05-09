@@ -1,6 +1,7 @@
 {
-  "name": "dsa2.git",
+  "name": "saltakedsa.org",
   "version": "1.0.0",
+  "private": true,
   "description": "package",
   "main": "app.js",
   "scripts": {
@@ -24,6 +25,7 @@
     "path": "^0.12.7",
     "serve-favicon": "^2.5.0",
     "stripe": "^6.25.1",
+    "tar": "^4.4.8",
     "url": "^0.11.0",
     "uuid": "^3.3.2"
   }
