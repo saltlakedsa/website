@@ -186,5 +186,7 @@ promise.then(function(db){
 
 app
 .listen(port, function () {
-	console.log('Web server listening on port: ' + port)
+	console.log('Using Node Version: ' + process.version);
+	(process.version == 'v10.15.3') ? console.log('..up-to-date') : console.log('expection v10.15.3');
+	console.log('Web server listening on port: ' + port);
 });
