@@ -7,7 +7,16 @@ var Order = require('../models/order.js');
 var multer = require('multer');
 var upload = multer();
 var url = require('url');
+var nodemailer = require('nodemailer');
 dotenv.load();
+
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'saltlakedsa@gmail.com',
+    pass: 'rosaluxemburg'
+  }
+});
 
 // router.get('/addtoinventory/:item', function(req, res, next) {
 // 
@@ -221,12 +230,23 @@ router.post('/checkout', upload.array(), async function(req, res, next) {
 	var stripe = require("stripe")(storesecret);
 	var uuid4 = require('uuid/v4');
 	// console.log(cart)
+	var order = new Order({
+		cart: req.session.cart,
+		address: req.body.address,
+		city: req.body.city,
+		zip: req.body.zip,
+		state: req.body.state,
+		name: req.body.name,
+		phone: req.body.phone,
+		email: req.body.email,
+		ship: (req.body.ship && !isNaN(parseInt(req.body.ship, 10)) ? true : false)
+	});
 	stripe.charges.create({
 		amount: req.body.total,
 		currency: 'usd',
 		description: req.session.cart.items[Object.keys(req.session.cart.items)[0]].item.title,
 		source: token,
-		metadata: {customer: JSON.stringify({name: body.name, address: body.address, city: body.city, state: body.state, zip: body.zip, email: body.email, phone: body.phone}), cart: JSON.stringify(cart.generateArray())}
+		metadata: {orderId: JSON.stringify(order._id) }
 	}, {
 		idempotency_key: uuid4()
 	}, function(err, charge) {
@@ -234,18 +254,6 @@ router.post('/checkout', upload.array(), async function(req, res, next) {
 			// console.log(err)
 			return res.redirect('/shop/checkout');
 		}
-		var order = new Order({
-			cart: req.session.cart,
-			address: req.body.address,
-			city: req.body.city,
-			zip: req.body.zip,
-			state: req.body.state,
-			name: req.body.name,
-			phone: req.body.phone,
-			email: req.body.email,
-			ship: (req.body.ship && !isNaN(parseInt(req.body.ship, 10)) ? true : false)
-		});
-		
 		order.save(async function(err) {
 			if (err) {
 				return next(err)
@@ -271,19 +279,32 @@ router.get('/ordersuccess/:ship/:id', function(req, res, next){
 	var fn = url.parse(req.url,true).pathname;
 	fn = fn.split('/')[2];
 	var isShip = (fn == 'true');
-;
+
 	Order.findOne({_id: id}, function(err, order){
 		if (err) {
 			return next(err) 
 		}
 		var cart = new Cart(order.cart);
+	/* 	var mailOptions = {
+			from: 'saltlakedsa@gmail.com',
+			to: order.email,
+			subject: 'Thank you for your order',
+			text: "Your order confirmation is: " + order._id + " Please let us know if you have any questions"
+		};
+		transporter.sendMail(mailOptions, function(err, info){
+			if (err) { return next(err) }
+			else {
+			//console.log('Email sent: ' + info.response);
+		}
+		}); */
 		return res.render('pages/order', {
 			order: order,
 			totalPrice: cart.totalPrice,
 			cart: cart.generateArray(),
 			ship: isShip
-		})
-	})
-})
+		});
+	});
+	
+});
 
 module.exports = router;
