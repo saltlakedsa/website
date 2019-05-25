@@ -73,6 +73,11 @@ app
 app
 .set('view engine', 'ejs');
 
+app.use(function (req, res, next) {
+	console.log(req.url);
+	next();
+});
+
 const csrfProtection = csrf({ cookie: true });
 const parseForm = bodyParser.urlencoded({ extended: false });
 const parseJSONBody = bodyParser.json();
