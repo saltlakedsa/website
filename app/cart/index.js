@@ -161,8 +161,10 @@ router.get('/addtocart/:id', function(req, res, next) {
 		if (err) {
 			return res.redirect('/shop/cart');
 		}
-		cart.add(doc, doc._id);
-		req.session.cart = cart;
+		if (doc) {
+			cart.add(doc, doc._id);
+			req.session.cart = cart;
+		}
 		return res.redirect('/shop/cart');
 	})
 });
@@ -177,7 +179,9 @@ router.get('/removefromcart/:id', function(req, res, next){
 		if (err) {
 			return res.redirect('/shop/cart');
 		}
-		cart.removeItem(doc, doc._id);
+		if (doc) {
+			cart.removeItem(doc, doc._id);
+		}
 		if (cart.generateArray().length === 0) {
 			delete req.session.cart;
 			return res.redirect('/shop/cart');
