@@ -158,7 +158,7 @@ router.get('/addtocart/:id', function(req, res, next) {
 	var id = req.params.id;
 	var cart = new Cart(req.session.cart ? req.session.cart : {items: {}});
 	Content.findById(id, function(err, doc) {
-		if (err) {
+		if (err || doc == null) {
 			return res.redirect('/shop/cart');
 		}
 		cart.add(doc, doc._id);
@@ -174,7 +174,7 @@ router.get('/removefromcart/:id', function(req, res, next){
 	}
 	var cart = new Cart(req.session.cart);
 	Content.findById(id, function(err, doc) {
-		if (err) {
+		if (err || doc == null) {
 			return res.redirect('/shop/cart');
 		}
 		cart.removeItem(doc, doc._id);

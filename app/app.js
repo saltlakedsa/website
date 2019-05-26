@@ -74,7 +74,7 @@ app
 .set('view engine', 'ejs');
 
 app.use(function (req, res, next) {
-	console.log(req.url);
+	if (req.url != '/') console.log(req.url);
 	next();
 });
 
@@ -173,6 +173,7 @@ app
 	
 });
 
+/**
 app.use(function (err, req, res) {
 	var url = require('url').parse(req.url).pathname;
 	console.log('error route: ');
@@ -183,6 +184,7 @@ app.use(function (err, req, res) {
 		error: {}
 	});
 });
+**/
 
 var uri = process.env.MONGOURL;
 
