@@ -29,14 +29,6 @@ var uploadedPosts  = '../uploads/posts/';
 var uploadedImages = '../uploads/img/';
 
 const fUpload = multer();
-
-const upload = multer({
-  dest: uploadedImages 
-}); 
-
-var app = express();
-app.use(favicon(path.join(__dirname, 'public/img', 'favicon.ico')));
-
 var store = new MongoDBStore(
 	{
 		mongooseConnection: mongoose.connection,
@@ -45,10 +37,14 @@ var store = new MongoDBStore(
 		autoRemove: 'interval',     
 		autoRemoveInterval: 3600
 	}
-)
+);
 store.on('error', function(error, next){
 	next(error)
 });
+
+const upload = multer({
+  dest: uploadedImages 
+}); 
 
 var sess = {
 	secret: process.env.SECRET,
@@ -59,36 +55,41 @@ var sess = {
 	// ,
   // cookie: { maxAge: 180 * 60 * 1000 }
 }
-// app.use(cookieParser(sess.secret));
-app.use(function (req, res, next) {
-  res.locals.session = req.session;
-  next();
-})
 
-app
-.use('/static',express.static(path.join(__dirname, 'public')))
-.use('/uploadedImages',express.static(path.join(__dirname, uploadedImages)))
-.use(bodyParser.json());
-
+var app = express();
 app
 .set('view engine', 'ejs');
 
-app.use(function (req, res, next) {
-	if (req.url != '/') console.log(req.url);
+app
+.use(favicon(path.join(__dirname, 'public/img', 'favicon.ico')))
+.use('/static',express.static(path.join(__dirname, 'public')))
+.use('/uploadedImages',express.static(path.join(__dirname, uploadedImages)))
+.use(bodyParser.json())
+.use(function (req, res, next) {
+  res.locals.session = req.session;
+  next();
+})
+.use(function (req, res, next) {
+	if (req.url != '/') {
+		console.log(req.url+" ---> "+req.method+" IP: "+req.ip+" IPs: "+req.ip);
+	}
 	next();
-});
+})
+.use(session(sess))
+.use('/shop', cartRoutes);
+
 
 const csrfProtection = csrf({ cookie: true });
 const parseForm = bodyParser.urlencoded({ extended: false });
 const parseJSONBody = bodyParser.json();
 const parseBody = [parseJSONBody, parseForm];
-app.use(session(sess));
+
 // TODO get this working (csrf)
 // app.get(/^(\/shop\/checkout$)/, csrfProtection);
 // // ensure multer parses before csrf
 // app.post(/^(\/shop\/checkout$)/, fUpload.array(), parseBody, csrfProtection);
 
-app.use('/shop', cartRoutes);
+
 
 app
 .get('/', (req, res) => {
@@ -173,18 +174,6 @@ app
 	
 });
 
-/**
-app.use(function (err, req, res) {
-	// var url = require('url').parse(req.url).pathname;
-	// console.log('error route: ');
-	// console.log(url);
-	res.status(err.status || 500);
-	res.render('pages/error', {
-		message: err.message,
-		error: {}
-	});
-});
-**/
 
 var uri = process.env.MONGOURL;
 
