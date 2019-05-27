@@ -71,7 +71,7 @@ app
 })
 .use(function (req, res, next) {
 	if (req.url != '/') {
-		console.log(req.url+" ---> "+req.method+" IP: "+req.ip+" IPs: "+req.ip);
+		console.log(req.url+" \n\t "+req.method+" \tIP: "+req.ip);
 	}
 	next();
 })
