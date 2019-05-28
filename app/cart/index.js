@@ -7,20 +7,8 @@ var Order = require('../models/order.js');
 var multer = require('multer');
 var upload = multer();
 var url = require('url');
-var nodemailer = require('nodemailer');
 dotenv.load();
 
-var transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'saltlakedsa@gmail.com',
-    pass: 'rosaluxemburg'
-  }
-});
-
-// router.get('/addtoinventory/:item', function(req, res, next) {
-// 
-// })
 
 router.get('/logout', function(req, res, next){
 	req.session.destroy(function(err){

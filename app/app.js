@@ -67,7 +67,7 @@ app
 .use(function (req, res, next) {
   res.locals.session = req.session;
   if (req.url != '/') {
-		var d = new Date();
+		var d = new Date().toLocaleString();
 		console.log(req.url+" \n\t "+req.method+" \tIP: "+req.ip+"  \t"+d);
 	}
   next();
@@ -82,14 +82,13 @@ app
 .use('/shop', cartRoutes);
 
 app
-.get('/b/*',(req, res) => {
+.get('/b/*',(req, res, next) => {
 	var fn = url.parse(req.url,true).pathname;
 	fn = fn.replace('/b','');
 	fs.readFile(uploadedPosts+fn,(err,data) => {
-		if (err) {res.render('pages/error');}
-		else {
+		if (!err) {
 			res.render('pages/blog',JSON.parse(data.toString()));
-			};
+		} else next();
 	});
 })
 .get('/getBlogList', (req, res) => {
