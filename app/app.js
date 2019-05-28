@@ -1,34 +1,23 @@
 'use strict';
 
-var express = require('express');
+require('dotenv').config();
+
 var favicon = require('serve-favicon');
 var path = require('path');
 var fs = require('fs');
 var bodyParser = require("body-parser");
 var cookieParser = require("cookie-parser");
 var url = require('url');
-const multer = require('multer');
-const dotenv = require('dotenv');
-const csrf = require('csurf');  
-const mongoose = require('mongoose');
-const session = require('express-session');
-const MongoDBStore = require('connect-mongodb-session')(session);
-const cartRoutes = require('./cart/index');
-// mongoose.Promise = promise;
+var multer = require('multer');
+var csrf = require('csurf');
 
-dotenv.load();
+var express = require('express');
+var app = express();
 
-const stripe = require("stripe")(
-	process.env.NODE_ENV === 'production' ? 
-	process.env.STORE_SECRET :
-	process.env.STORE_SECRET_TEST
-);
-
-var port           = (process.env.NODE_ENV === 'production' ? 80 : 3111);
-var uploadedPosts  = '../uploads/posts/';
-var uploadedImages = '../uploads/img/';
-
-const fUpload = multer();
+var session = require('express-session');
+  
+var mongoose = require('mongoose');
+var MongoDBStore = require('connect-mongodb-session')(session);
 var store = new MongoDBStore(
 	{
 		mongooseConnection: mongoose.connection,
@@ -41,22 +30,32 @@ var store = new MongoDBStore(
 store.on('error', function(error, next){
 	next(error)
 });
+mongoose.connect(process.env.MONGOURL, {useNewUrlParser: true})
+.then(function(db){
+	console.log('db connected')
+})
+.catch((err) => console.error.bind(console, 'connection error:'));
 
-const upload = multer({
+var cartRoutes = require('./cart/index');
+
+var stripe = require("stripe")(
+	process.env.NODE_ENV === 'production' ? 
+	process.env.STORE_SECRET :
+	process.env.STORE_SECRET_TEST
+);
+
+var port           = (process.env.NODE_ENV === 'production' ? 80 : 3111);
+var uploadedPosts  = '../uploads/posts/';
+var uploadedImages = '../uploads/img/';
+var fUpload = multer();
+
+
+var upload = multer({
   dest: uploadedImages 
 }); 
 
-var sess = {
-	secret: process.env.SECRET,
-	name: 'nodecookie',
-	resave: true,
-	saveUninitialized: true,
-	store: store
-	// ,
-  // cookie: { maxAge: 180 * 60 * 1000 }
-}
 
-var app = express();
+
 app
 .set('view engine', 'ejs');
 
@@ -67,34 +66,22 @@ app
 .use(bodyParser.json())
 .use(function (req, res, next) {
   res.locals.session = req.session;
+  if (req.url != '/') {
+		var d = new Date();
+		console.log(req.url+" \n\t "+req.method+" \tIP: "+req.ip+"  \t"+d);
+	}
   next();
 })
-.use(function (req, res, next) {
-	if (req.url != '/') {
-		console.log(req.url+" \n\t "+req.method+" \tIP: "+req.ip);
-	}
-	next();
-})
-.use(session(sess))
+.use(session({
+	secret: process.env.SECRET,
+	name: 'nodecookie',
+	resave: true,
+	saveUninitialized: true,
+	store: store
+}))
 .use('/shop', cartRoutes);
 
-
-const csrfProtection = csrf({ cookie: true });
-const parseForm = bodyParser.urlencoded({ extended: false });
-const parseJSONBody = bodyParser.json();
-const parseBody = [parseJSONBody, parseForm];
-
-// TODO get this working (csrf)
-// app.get(/^(\/shop\/checkout$)/, csrfProtection);
-// // ensure multer parses before csrf
-// app.post(/^(\/shop\/checkout$)/, fUpload.array(), parseBody, csrfProtection);
-
-
-
 app
-.get('/', (req, res) => {
-	res.render('pages/index', { alertCart: (req.session && req.session.cart ? req.session.cart : null) });
-})
 .get('/b/*',(req, res) => {
 	var fn = url.parse(req.url,true).pathname;
 	fn = fn.replace('/b','');
@@ -124,10 +111,20 @@ app
 	});
 })
 .get('*', (req, res) => {
-	fs.stat('views/pages'+req.url+'.ejs',(err,stats) => {
-		if (err) res.render('pages/error');
-		else res.render('pages'+req.url, { alertCart: (req.session && req.session.cart ? req.session.cart : null) });
+	var popup = { 
+		alertCart: (req.session && req.session.cart ? req.session.cart : null)
+		}
+		
+	if (req.url == '/') res.render('pages/index',popup);
+	else {
+		fs.stat('views/pages'+req.url+'.ejs',(err,stats) => {
+		if (err) {
+			res.render('pages/error',popup);
+			console.log("\t"+req.url+": error page returned");
+		}
+		else res.render('pages'+req.url, popup);
 	});
+	}
 });
 
 
@@ -175,13 +172,8 @@ app
 });
 
 
-var uri = process.env.MONGOURL;
 
-var promise = mongoose.connect(uri, {useNewUrlParser: true});
-promise.then(function(db){
-	console.log('db connected')
-})
-.catch((err) => console.error.bind(console, 'connection error:'));
+
 
 app
 .listen(port, function () {
