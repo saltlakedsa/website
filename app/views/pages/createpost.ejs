@@ -124,7 +124,7 @@
 		
 		//Function Get List of available detectors
 		$.ajax({
-			url: '/getBlogList',
+			url: '/b/getBlogList',
 			type: 'GET',
 			dataType: 'json',
 			timeout: 4000,
@@ -137,7 +137,7 @@
 				$("#blogRoll").html(str);
 				$('.editBlogEntry').click(function (){
 					$.ajax({
-						url: '/getBlogData',
+						url: '/b/getBlogData',
 						type: 'POST',
 						dataType: 'json',
 						timeout: 4000,
@@ -243,7 +243,7 @@
 			});
 			
 			$.ajax({
-				url: '/createNew',
+				url: '/b/createNew',
 				type: 'POST',
 				dataType: 'json',
 				timeout: 4000,

@@ -6,10 +6,10 @@ var favicon = require('serve-favicon');
 var path = require('path');
 var fs = require('fs');
 var bodyParser = require("body-parser");
-var cookieParser = require("cookie-parser");
-var url = require('url');
-var multer = require('multer');
-var csrf = require('csurf');
+//var cookieParser = require("cookie-parser");
+//var url = require('url');
+//var multer = require('multer');
+//var csrf = require('csurf');
 
 var express = require('express');
 var app = express();
@@ -37,6 +37,7 @@ mongoose.connect(process.env.MONGOURL, {useNewUrlParser: true})
 .catch((err) => console.error.bind(console, 'connection error:'));
 
 var cartRoutes = require('./cart/index');
+var blogRoutes = require('./blog/index');
 
 var stripe = require("stripe")(
 	process.env.NODE_ENV === 'production' ? 
@@ -45,14 +46,9 @@ var stripe = require("stripe")(
 );
 
 var port           = (process.env.NODE_ENV === 'production' ? 80 : 3111);
-var uploadedPosts  = '../uploads/posts/';
+
 var uploadedImages = '../uploads/img/';
-var fUpload = multer();
 
-
-var upload = multer({
-  dest: uploadedImages 
-}); 
 
 
 
@@ -79,31 +75,11 @@ app
 	saveUninitialized: true,
 	store: store
 }))
-.use('/shop', cartRoutes);
+.use('/shop', cartRoutes)
+.use('/b', blogRoutes);
 
 app
-.get('/b/*',(req, res, next) => {
-	var fn = url.parse(req.url,true).pathname;
-	fn = fn.replace('/b','');
-	fs.readFile(uploadedPosts+fn,(err,data) => {
-		if (!err) {
-			res.render('pages/blog',JSON.parse(data.toString()));
-		} else next();
-	});
-})
-.get('/getBlogList', (req, res) => {
-	var fn = [];
-	fs.readdir(uploadedPosts, (err, files) => {
-		if(err || (files == undefined)) {res.render('pages/error');}
-		else {
-			files.forEach(file => {
-				fn.push(file);
-			});
-			res.write(JSON.stringify({"fn":fn}));
-		}
-		res.end();
-	});
-}).get('/dstryCptlsm', (req, res) => {
+.get('/dstryCptlsm', (req, res) => {
 	var Order = require('./models/order.js');
 	Order.find({}).lean().exec(function(err, data){
 		res.render('pages/list',{"data":data});
@@ -126,7 +102,6 @@ app
 	}
 });
 
-
 app
 .post('/isCredentials', (req, res) => {
 	var ret = {"isValid":null};
@@ -139,40 +114,9 @@ app
 	res.end();
 	});
 })
-.post('/createNew', (req, res) => {
-	var fn = req.body.title.split(' ').join('_');
-	fs.writeFile(uploadedPosts+fn,JSON.stringify(req.body),function(err){
-		if(err) {res.render('pages/error');}
-	});
-	res.write(JSON.stringify({"fn":fn}));
-	res.end();	
-})
-.post('/getBlogData', (req,res) => {
-	var fn = uploadedPosts+req.body.fn;
-	fs.readFile(fn,(err,data) => {
-		if (err) {res.render('pages/error');}
-		if (data != undefined) {
-			var retval = JSON.parse(data.toString());
-			retval.fn = req.body.fn;
-			res.write(JSON.stringify(retval));
-		}
-		res.end();
-	});
-})
-.post('/loadFile', upload.single('file-to-upload'), (req, res) => {
-	var fn = req.file.filename;
-	fs.rename(uploadedImages+fn, uploadedImages+fn+'.jpg', function (err) {
-		if (err) {res.render('pages/error');}
-		fn += ".jpg";
-		res.write(JSON.stringify({"fn":fn}));
-		res.end();
-	});
-	
+.post('*',(req, res) => {
+	console.log("\t"+req.url+": post not returned");
 });
-
-
-
-
 
 app
 .listen(port, function () {
