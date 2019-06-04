@@ -39,7 +39,7 @@ var store = new MongoDBStore(
 	}
 );
 store.on('error', function(error, next){
-	next(error)
+	console.log(error);
 });
 
 const upload = multer({
