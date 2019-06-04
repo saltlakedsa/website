@@ -2,7 +2,6 @@
 # these can be installed with npm installed
 */node_modules/*
 
-
 #ignore contents of uploads
 uploads/*
 
@@ -12,3 +11,6 @@ shortcuts.txt
 #ignore environment variables
 .env
 */.env
+
+#ignore log files
+*.out

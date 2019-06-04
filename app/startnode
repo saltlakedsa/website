@@ -1,0 +1,10 @@
+#!/bin/bash
+DT=$(date +%S) 
+echo $DT
+
+echo stopping current nodes.....
+sudo killall node
+
+echo starting node
+nohup sudo node app.js > $DT'.out' &
+echo logging in file $DT'.out'
