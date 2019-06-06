@@ -19,12 +19,12 @@ const cartRoutes = require('./cart/index');
 dotenv.load();
 
 const stripe = require("stripe")(
-	process.env.NODE_ENV === 'production' ? 
+	new RegExp('production').test(process.env.NODE_ENV) ? 
 	process.env.STORE_SECRET :
 	process.env.STORE_SECRET_TEST
 );
 
-var port           = (process.env.NODE_ENV === 'production' ? 80 : 3111);
+var port           = (new RegExp('production').test(process.env.NODE_ENV) ? 80 : 3111);
 var uploadedPosts  = '../uploads/posts/';
 var uploadedImages = '../uploads/img/';
 
@@ -51,129 +51,162 @@ var sess = {
 	name: 'nodecookie',
 	resave: true,
 	saveUninitialized: true,
-	store: store
-	// ,
-  // cookie: { maxAge: 180 * 60 * 1000 }
+	store: store,
+	cookie: { maxAge: 180 * 60 * 1000 }
 }
 
 var app = express();
 app
 .set('view engine', 'ejs');
 
+const csrfProtection = csrf({ cookie: true });
+const parseForm = bodyParser.urlencoded({ extended: false });
+const parseJSONBody = bodyParser.json();
+const parseBody = [parseJSONBody, parseForm];
+
+
 app
 .use(favicon(path.join(__dirname, 'public/img', 'favicon.ico')))
 .use('/static',express.static(path.join(__dirname, 'public')))
 .use('/uploadedImages',express.static(path.join(__dirname, uploadedImages)))
-.use(bodyParser.json())
-.use(function (req, res, next) {
-  res.locals.session = req.session;
-  next();
-})
+// .use(bodyParser.json())
+.use(cookieParser(sess.secret))
+.use(session(sess))
+
 .use(function (req, res, next) {
 	if (req.url != '/') {
 		console.log(req.url+" \n\t "+req.method+" \tIP: "+req.ip);
 	}
 	next();
 })
-.use(session(sess))
-.use('/shop', cartRoutes);
-
-
-const csrfProtection = csrf({ cookie: true });
-const parseForm = bodyParser.urlencoded({ extended: false });
-const parseJSONBody = bodyParser.json();
-const parseBody = [parseJSONBody, parseForm];
-
-// TODO get this working (csrf)
-// app.get(/^(\/shop\/checkout$)/, csrfProtection);
-// // ensure multer parses before csrf
-// app.post(/^(\/shop\/checkout$)/, fUpload.array(), parseBody, csrfProtection);
-
 
 
 app
-.get('/', (req, res) => {
-	res.render('pages/index', { alertCart: (req.session && req.session.cart ? req.session.cart : null) });
+.get('/', (req, res, next) => {
+	console.log(req.session)
+	return res.render('pages/index', { alertCart: (req.session && req.session.cart ? req.session.cart : null) });
 })
-.get('/b/*',(req, res) => {
+.get('/b/*',(req, res, next) => {
 	var fn = url.parse(req.url,true).pathname;
 	fn = fn.replace('/b','');
 	fs.readFile(uploadedPosts+fn,(err,data) => {
-		if (err) {res.render('pages/error');}
+		if (err) {return next(err)}
 		else {
-			res.render('pages/blog',JSON.parse(data.toString()));
-			};
+			return res.render('pages/blog',JSON.parse(data.toString()));
+		};
 	});
 })
-.get('/getBlogList', (req, res) => {
+.get('/getBlogList', (req, res, next) => {
 	var fn = [];
-	fs.readdir(uploadedPosts, (err, files) => {
-		if(err || (files == undefined)) {res.render('pages/error');}
+	fs.readdir(uploadedPosts, async (err, files) => {
+		if(err || (files == undefined)) {return next(err)}
 		else {
-			files.forEach(file => {
+			await files.forEach(file => {
 				fn.push(file);
 			});
-			res.write(JSON.stringify({"fn":fn}));
+			return res.status(200).send(JSON.stringify({"fn":fn}));
 		}
-		res.end();
+		// res.end();
 	});
-}).get('/dstryCptlsm', (req, res) => {
+}).get('/dstryCptlsm', (req, res, next) => {
 	var Order = require('./models/order.js');
 	Order.find({}).lean().exec(function(err, data){
-		res.render('pages/list',{"data":data});
+		if (err) {
+			return next(err);
+		}
+		return res.render('pages/list',{"data":data});
 	});
 })
-.get('*', (req, res) => {
-	fs.stat('views/pages'+req.url+'.ejs',(err,stats) => {
-		if (err) res.render('pages/error');
-		else res.render('pages'+req.url, { alertCart: (req.session && req.session.cart ? req.session.cart : null) });
-	});
-});
+
 
 
 app
-.post('/isCredentials', (req, res) => {
+.post('/isCredentials', parseBody, (req, res, next) => {
 	var ret = {"isValid":null};
 	fs.readFile('psdlist',(err,data) => {
+		if (err) return next(err);
 		var temp = JSON.parse(data.toString());
 		if (req.body.password == temp[req.body.user]) {
 			ret.isValid = true;
 		} else ret.isValid = false;
-		res.write(JSON.stringify(ret));
-	res.end();
+		return res.status(200).send(JSON.stringify(ret));
 	});
 })
-.post('/createNew', (req, res) => {
+.post('/createNew', parseBody, async (req, res, next) => {
 	var fn = req.body.title.split(' ').join('_');
-	fs.writeFile(uploadedPosts+fn,JSON.stringify(req.body),function(err){
-		if(err) {res.render('pages/error');}
+	await fs.writeFile(uploadedPosts+fn,JSON.stringify(req.body),function(err){
+		if(err) return next(err)
 	});
-	res.write(JSON.stringify({"fn":fn}));
-	res.end();	
+	return res.status(200).send(JSON.stringify({"fn":fn}));
 })
-.post('/getBlogData', (req,res) => {
+.post('/getBlogData', parseBody, (req, res, next) => {
+	if (!req.body || req.body.fn) return res.status(200).send('')
 	var fn = uploadedPosts+req.body.fn;
 	fs.readFile(fn,(err,data) => {
-		if (err) {res.render('pages/error');}
+		if (err) return next(err);
 		if (data != undefined) {
 			var retval = JSON.parse(data.toString());
 			retval.fn = req.body.fn;
-			res.write(JSON.stringify(retval));
+			return res.status(200).send(JSON.stringify(retval));
 		}
-		res.end();
 	});
 })
-.post('/loadFile', upload.single('file-to-upload'), (req, res) => {
+.post('/loadFile', upload.single('file-to-upload'), parseBody, (req, res, next) => {
 	var fn = req.file.filename;
 	fs.rename(uploadedImages+fn, uploadedImages+fn+'.jpg', function (err) {
-		if (err) {res.render('pages/error');}
+		if (err) return next(err);
 		fn += ".jpg";
-		res.write(JSON.stringify({"fn":fn}));
-		res.end();
+		return res.status(200).send(JSON.stringify({"fn":fn}));
+		// res.end();
 	});
 	
 });
 
+app.use(function (req, res, next) {
+  res.locals.session = req.session;
+  next();
+});
+
+app.get('/shop/checkout', csrfProtection)
+app.post('/shop/checkout', fUpload.array(), parseBody, csrfProtection)
+app.use('/shop', cartRoutes);
+
+app.get(/^(?!\/shop)/, (req, res, next) => {
+	console.log(req.url)
+	fs.stat('views/pages'+req.url+'.ejs',(err,stats) => {
+		if (err) {
+			if (err.code === 'ENOENT') {
+				err = new Error('Not Found');
+				err.status = 404;
+				return res.render('pages/error', {
+					message: err.message,
+					error: {}
+				});
+			} else {
+				return next(err);
+			}
+		}
+		else return res.render('pages'+req.url, { alertCart: (req.session && req.session.cart ? req.session.cart : null) });
+	});
+});
+
+app.use(function (req, res, next) {
+	if (req.url) console.log(require('url').parse(req.url).pathname)
+	var err = new Error('Not Found');
+	err.status = 404;
+	return res.render('pages/error', {
+		message: err.message,
+		error: {}
+	});
+});
+
+app.use(function (err, req, res) {
+	res.status(err.status || 500);
+	res.render('pages/error', {
+		message: err.message,
+		error: {}
+	});
+});
 
 var uri = process.env.MONGOURL;
 
