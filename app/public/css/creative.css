@@ -315,6 +315,9 @@ header.masthead p {
   background-color: #ff3535;
   border-color: #ff3535;
 }
+.btn-primary:disabled {
+  background-color: #e65e5e;
+}
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active {
   color: #fff;

@@ -41,7 +41,8 @@ mongoose.connect(process.env.MONGOURL, {useNewUrlParser: true})
 const Schema = mongoose.Schema;
 const UserDetail = new Schema({
       username: String,
-      password: String
+      password: String,
+	  admin: Boolean
     },{collection: 'userInfo'});
 const UserDetails = mongoose.model('userInfo', UserDetail, 'userInfo');
 

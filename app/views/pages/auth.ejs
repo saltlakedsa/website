@@ -16,70 +16,78 @@
     <!-- Page Content -->
 <section>
 <div class="container">
-<form action="/login" method="post">
+<h1 id="sectionHeader" class="section-heading pb-4" style="text-align:center;"></h1>
+
+<form method="post" id="form">
+
+
 
 <div class="row form-group">
 <div class="col-lg-2">
 </div>
 <div class="col-lg-4">
 
-        <label class="text-uppercase">Email</label>
-       <input class="form-control" type="text" name="username" />
+       <label class="text-uppercase">Email</label>
+       <input class="form-control" type="text" name="username" id="e1"/>
 </div>
 <div class="col-lg-4">
 
 	<label class="text-uppercase">Password</label>
-	<input class="form-control" type="password" name="password" />
+	<input class="form-control" type="password" name="password" id="p1"/>
+	
+	<div id="confirmPassword" style="display: none;">
+	<br>
+	<label class="text-uppercase">Confirm Password</label>
+	<input class="form-control" type="password" name="password" id="p2"/>
+	</div>
 
 </div>
 <div class="col-lg-2">
 </div>
 </div>
+
+<div class="row">
+<div class="col-lg-2"></div>
+<div class="col-lg-8">
+<div class="alert alert-danger" role="alert" style="text-align:center; display: none;" id="message">Passwords don't match</div>
+<div class="alert alert-danger" role="alert" style="text-align:center; display: none;" id="message2">Please enter a valid email</div>
+</div>
+<div class="col-lg-2"></div>
+</div> 
 
 <div class="row form-group">
 <div class="col-lg-2">
 </div>
 <div class="col-lg-4">
 
+       
+</div>
+<div class="col-lg-4">
+	
+	 <input id="submitButton" class="btn btn-primary btn-block" type="submit"  disabled/>
 	 
-		
-        
-       
-</div>
-<div class="col-lg-4">
-
-	
-
 </div>
 <div class="col-lg-2">
 </div>
 </div>
+
 
 <div class="row form-group">
 <div class="col-lg-2">
 </div>
-<div class="col-lg-4">
 
-       
+<div class="col-lg-8">
+		<span id="switch"></span> <a href="#newUser">here</a>     
 </div>
-<div class="col-lg-4">
-	
-	 <input class="btn btn-primary btn-block" type="submit" value="Log in" />
 
-</div>
 <div class="col-lg-2">
 </div>
 </div>
 
-
-    
-      
-      
-      
-       
-      
+ 
  </form>
  </div>
+ 
 </section>
  
  
@@ -87,7 +95,81 @@
 			
 		</div>
 		<!-- /.container -->
-		<% include ../partials/footer %>
+	<% include ../partials/footer %>
+	<script>
+	
+	function validateLogin(validPSWD){
+		var validMail = false;
+		var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+		if($("#e1").val().match(mailformat)) {
+			$('#message2').css('display', 'none');
+			validMail = true;
+		} else {
+			$('#message2').css('display', 'block');
+		}
+		
+		var validP1 = false;
+		if($('#p1').val() != "") {
+			validP1 = true;
+		}
+		
+		if (validP1 && validPSWD && validMail) {
+		$("#submitButton").prop("disabled",false);
+		} else {
+		$("#submitButton").prop("disabled",false);}
+		
+	}
+	
+	function validatePassword(){
+		var validPSWD = false;
+		if($('#p1').val() != $('#p2').val()) {
+			$('#message').css('display', 'block');
+			//$("#submitButton").prop("disabled",true);
+		} else {
+			$('#message').css('display', 'none');
+			//$("#submitButton").prop("disabled",false);
+			validPSWD = true;
+		}
+		validateLogin(validPSWD);
+	}
+	
+	function swap(oldUser){
+		//
+		//(oldUser ? validateLogin() :validatePassword() )
+		
+		//clear alerts
+		$('#message').css('display', 'none');
+		$('#message2').css('display', 'none');
+		
+		 
+		
+		$('#sectionHeader').html((oldUser ? "Login" : "Register New User"));
+		$('#submitButton').val((oldUser ? "Login" : "Register"));
+		$('#switch').html((oldUser ? "New user register" : "Already a member log on"));
+		(oldUser) ? $('#confirmPassword').hide() : $('#confirmPassword').show();
+		$('#form').attr("action",((oldUser ? "/login" : "/login?newUser=true")));
+		
+		p1.onchange = (oldUser ? ""            :validatePassword);
+		p1.onkeyup  = (oldUser ? validateLogin :"");
+		p2.onkeyup  = (oldUser ? ""            :validatePassword);
+		
+		e1.onchange = validateLogin;
+		
+	}
+	
+	
+	$(document).ready(function () {
+		
+		var oldUser = true;
+		swap(oldUser);
+		oldUser = !oldUser;
+		
+		$('a[href="#newUser"]').click(function(){
+			swap(oldUser);			
+			oldUser = !oldUser;
+		});
+	});
+	</script>
 	</body>
 
 </html>
