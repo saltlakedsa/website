@@ -209,16 +209,15 @@ router.get('/checkout', function(req, res, next) {
 	}
 	var cart = new Cart(req.session.cart);
 	
-	res.render('pages/checkout', {
+	return res.render('pages/checkout', {
 		pk: process.env.NODE_ENV === 'production' ? process.env.STORE_PUBLISH : process.env.STORE_PUBLISH_TEST,
 		cart: cart.generateArray(),
-		total: cart.totalPrice
-		// ,
-		// csrfToken: req.csrfToken()
+		total: cart.totalPrice,
+		csrfToken: req.csrfToken()
 	});
 });
 
-router.post('/checkout', upload.array(), async function(req, res, next) {
+router.post('/checkout', async function(req, res, next) {
 	if (!req.session.cart) {
 		return res.redirect('/cart');
 	}
