@@ -197,16 +197,15 @@ router.get('/checkout', function(req, res, next) {
 	}
 	var cart = new Cart(req.session.cart);
 	
-	res.render('pages/checkout', {
+	return res.render('pages/checkout', {
 		pk: process.env.NODE_ENV === 'production' ? process.env.STORE_PUBLISH : process.env.STORE_PUBLISH_TEST,
 		cart: cart.generateArray(),
-		total: cart.totalPrice
-		// ,
-		// csrfToken: req.csrfToken()
+		total: cart.totalPrice,
+		csrfToken: req.csrfToken()
 	});
 });
 
-router.post('/checkout', upload.array(), async function(req, res, next) {
+router.post('/checkout', async function(req, res, next) {
 	if (!req.session.cart) {
 		return res.redirect('/cart');
 	}
@@ -277,18 +276,6 @@ router.get('/ordersuccess/:ship/:id', function(req, res, next){
 			return next(err) 
 		}
 		var cart = new Cart(order.cart);
-	/* 	var mailOptions = {
-			from: 'saltlakedsa@gmail.com',
-			to: order.email,
-			subject: 'Thank you for your order',
-			text: "Your order confirmation is: " + order._id + " Please let us know if you have any questions"
-		};
-		transporter.sendMail(mailOptions, function(err, info){
-			if (err) { return next(err) }
-			else {
-			//console.log('Email sent: ' + info.response);
-		}
-		}); */
 		return res.render('pages/order', {
 			order: order,
 			totalPrice: cart.totalPrice,
