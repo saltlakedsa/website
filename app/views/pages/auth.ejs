@@ -38,7 +38,7 @@
 	<div id="confirmPassword" style="display: none;">
 	<br>
 	<label class="text-uppercase">Confirm Password</label>
-	<input class="form-control" type="password" name="password" id="p2"/>
+	<input class="form-control" type="password" name="confirm_password" id="p2"/>
 	</div>
 
 </div>
@@ -99,49 +99,48 @@
 	<script>
 	
 	function validateLogin(validPSWD){
-		var validMail = false;
 		var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 		if($("#e1").val().match(mailformat)) {
 			$('#message2').css('display', 'none');
-			validMail = true;
+			return true;
 		} else {
 			$('#message2').css('display', 'block');
+			return false;
 		}
-		
-		var validP1 = false;
-		if($('#p1').val() != "") {
-			validP1 = true;
-		}
-		
-		if (validP1 && validPSWD && validMail) {
-		$("#submitButton").prop("disabled",false);
-		} else {
-		$("#submitButton").prop("disabled",false);}
 		
 	}
 	
 	function validatePassword(){
-		var validPSWD = false;
+		return ($('#p1').val()) 
+	}
+	
+	function validateConfirmPassword(){
+		if (!$(confirmPassword).is(":visible")) return true;
 		if($('#p1').val() != $('#p2').val()) {
 			$('#message').css('display', 'block');
+			return false
 			//$("#submitButton").prop("disabled",true);
 		} else {
 			$('#message').css('display', 'none');
+			return true
 			//$("#submitButton").prop("disabled",false);
 			validPSWD = true;
 		}
 		validateLogin(validPSWD);
 	}
 	
+	function validate(){
+		if (validateLogin() && validatePassword() && validateConfirmPassword() ) {
+			$("#submitButton").prop("disabled",false);
+		} else {
+			$("#submitButton").prop("disabled",true);
+		}
+	}
+	
 	function swap(oldUser){
-		//
-		//(oldUser ? validateLogin() :validatePassword() )
 		
-		//clear alerts
 		$('#message').css('display', 'none');
 		$('#message2').css('display', 'none');
-		
-		 
 		
 		$('#sectionHeader').html((oldUser ? "Login" : "Register New User"));
 		$('#submitButton').val((oldUser ? "Login" : "Register"));
@@ -149,11 +148,9 @@
 		(oldUser) ? $('#confirmPassword').hide() : $('#confirmPassword').show();
 		$('#form').attr("action",((oldUser ? "/login" : "/login?newUser=true")));
 		
-		p1.onchange = (oldUser ? ""            :validatePassword);
-		p1.onkeyup  = (oldUser ? validateLogin :"");
-		p2.onkeyup  = (oldUser ? ""            :validatePassword);
-		
-		e1.onchange = validateLogin;
+		p1.onkeyup  = validate;
+		p2.onkeyup  = validate;
+		e1.onkeyup = validate;
 		
 	}
 	

@@ -61,7 +61,7 @@ const UserDetail = new Schema({
       password: String,
 	  admin: Boolean
     },{collection: 'userInfo'});
-const UserDetails = mongoose.model('userInfo', UserDetail, 'userInfo');
+const UserDetails = mongoose.model('userInfo', UserDetail);
 
 
 UserDetails.find({}).lean().exec(function(err, data){
@@ -167,9 +167,6 @@ app
 	});
 })
 .get('*', (req, res, next) => {
-	if (req.user) {
-	console.log(req.user.username);
-	console.log(req.user.password);}
 	var pathURL = urlparser.parse(req.url,true);
 	if (req.url == '/') pathURL.pathname = '/index';
 	fs.stat('views/pages'+pathURL.pathname+'.ejs',(err,stats) => {
@@ -193,9 +190,18 @@ app
 	})
 })
 .post('/login',
-	passport.authenticate('local', { failureRedirect: '/loggedin?authfail=true' }),
-	function(req, res) {
-	res.redirect('/loggedin');
+  passport.authenticate('local', { failureRedirect: '/loggedin?authfail=true' }),
+  function(req, res) { res.redirect('/loggedin');  })
+.post('/newUser', (req, res, next) => {
+	var user = new UserDetails({
+		username: req.body.username,
+		password: req.body.password,
+		admin: false,
+	});
+	user.save(function(err){
+		if (err) {console.log("Error adding new user");}
+			})
+		res.redirect('/loggedin');
 })
 .post('/createNew', parseBody, async (req, res, next) => {
 	var fn = req.body.title.split(' ').join('_');
