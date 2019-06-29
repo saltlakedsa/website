@@ -39,9 +39,10 @@ var store = new MongoDBStore(
 	{
 		mongooseConnection: mongoose.connection,
 		uri: process.env.MONGOURL,
-		collection: 'shopSession',
-		autoRemove: 'interval',     
-		autoRemoveInterval: 3600
+		collection: 'shopSession'
+		// ,
+		// autoRemove: 'interval',     
+		// autoRemoveInterval: 3600
 	}
 );
 store.on('error', function(error){
@@ -53,42 +54,7 @@ var promise = mongoose.connect(uri, {useNewUrlParser: true});
 promise.then(function(db){
 	console.log('db connected')
 })
-.catch((err) => console.error.bind(console, 'connection error:'));
-
-const Schema = mongoose.Schema;
-const UserDetail = new Schema({
-      username: String,
-      password: String,
-	  admin: Boolean
-    },{collection: 'userInfo'});
-const UserDetails = mongoose.model('userInfo', UserDetail);
-
-
-UserDetails.find({}).lean().exec(function(err, data){
-		if (err) {
-			console.log("eeerrrorr");
-		}
-		if (data.length === 1) {
-			var item = new UserDetails({
-				username: 'admin',
-				password: 'password'
-				});
-			item.save(function(err){
-				if (err) {
-					console.log("eeerrrorr");
-				}
-			})
-			var item2 = new UserDetails({
-				username: 'admin2',
-				password: 'password'
-				});
-			item2.save(function(err){
-				if (err) {
-					console.log("eeerrrorr");
-				}
-			})
-		}
-});
+.catch((err) => console.error.bind(console, ('connection error:'+ err)));
 
 passport.serializeUser(function(user, cb) {
   cb(null, user.id);
@@ -147,12 +113,13 @@ app
 .use(session(sess),
 	passport.initialize(),
 	passport.session(),
-	bodyParser.json(),
-	bodyParser.urlencoded({extended: true }),
+	// bodyParser.json(),
+	// bodyParser.urlencoded({extended: true }),
 	cookieParser(sess.secret),
 	logger)
 .use('/shop', cartRoutes)
 .use('/b', blogRoutes)
+.use('/a', adminRoutes)
 .get('/logout', function(req, res){
   req.logout();
   res.redirect('/loggedin');
@@ -166,62 +133,27 @@ app
 		res.render('pages/list',{"data":data});
 	});
 })
-.get('*', (req, res, next) => {
-	var pathURL = urlparser.parse(req.url,true);
-	if (req.url == '/') pathURL.pathname = '/index';
-	fs.stat('views/pages'+pathURL.pathname+'.ejs',(err,stats) => {
+.get(/^(?!\/shop|\/b\/.*|\/a\/.*)/, (req, res, next) => {
+	console.log(req.url)
+	fs.stat('views/pages'+req.url+'.ejs',(err,stats) => {
 		if (err) {
 			if (err.code === 'ENOENT') {
 				err = new Error('Not Found');
 				err.status = 404;
-				res.render('pages/error', {
+				return res.render('pages/error', {
 					message: err.message,
 					error: {}
 				});
 			} else {
-				next(err);
+				return next(err);
 			}
 		}
-		else res.render('pages'+pathURL.pathname, { 
-			alertCart: (req.session && req.session.cart ? req.session.cart : null) ,
-			user: req.user,
-			parameters: pathURL.query
-		});
-	})
+		else return res.render('pages'+req.url, { alertCart: (req.session && req.session.cart ? req.session.cart : null) });
+	});
 })
 .post('/login',
   passport.authenticate('local', { failureRedirect: '/loggedin?authfail=true' }),
   function(req, res) { res.redirect('/loggedin');  })
-.post('/newUser', (req, res, next) => {
-	var user = new UserDetails({
-		username: req.body.username,
-		password: req.body.password,
-		admin: false,
-	});
-	user.save(function(err){
-		if (err) {console.log("Error adding new user");}
-			})
-		res.redirect('/loggedin');
-})
-.post('/createNew', parseBody, async (req, res, next) => {
-	var fn = req.body.title.split(' ').join('_');
-	await fs.writeFile(uploadedPosts+fn,JSON.stringify(req.body),function(err){
-		if(err) return next(err)
-	});
-	return res.status(200).send(JSON.stringify({"fn":fn}));
-})
-.post('/getBlogData', parseBody, (req, res, next) => {
-	if (!req.body || req.body.fn) return res.status(200).send('')
-	var fn = uploadedPosts+req.body.fn;
-	fs.readFile(fn,(err,data) => {
-		if (err) return next(err);
-		if (data != undefined) {
-			var retval = JSON.parse(data.toString());
-			retval.fn = req.body.fn;
-			return res.status(200).send(JSON.stringify(retval));
-		}
-	});
-})
 .use(function (req, res, next) {
   res.locals.session = req.session;
   next();
