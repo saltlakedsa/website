@@ -247,7 +247,7 @@ app
 				return next(err);
 			}
 		} else {
-			console.log(req.featuredblogs)
+			// console.log(req.featuredblogs)
 			return res.render('pages'+url, { 
 				username: (!req.query && !req.query.u ? '' : decodeURIComponent(req.query.u)),
 				email: (!req.query && !req.query.e ? '' : decodeURIComponent(req.query.e)),

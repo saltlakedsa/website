@@ -76,21 +76,7 @@
 </div>
 </div>
 
-
-<!-- <div class="row form-group">
-<div class="col-lg-2">
-</div>
-
-<div class="col-lg-8">
-		<span id="switch"></span> <a href="#newUser">here</a>     
-</div>
-
-<div class="col-lg-2">
-</div>
-</div> -->
-
- 
- </form>
+</form>
  <h6>You may also authenticate using your SLDSA Slack account:</h6>
  <a href="/auth/slack" ariaDescription="Authenticate with Slack" style="display:inline-block;height:auto;">
  	<img src="https://api.slack.com/img/sign_in_with_slack.png"></img>
@@ -140,32 +126,6 @@
 					self.confirmed = true;
 				}
 			}
-			// ,
-			// confirmEmail(e) {
-			// 	var self = this;
-			// 	var val = e.target.value.trim();
-			// 	if (val !== '') {
-			// 		var email = encodeURIComponent(val);
-			// 		$.post('/checkauth/'+email).then((response)=>{
-			// 			console.log(response)
-			// 			if (!response) {
-			// 				self.isUser = response;
-			// 				self.message = 'You need to have your e-mail address added to the guest list. Alternatively, core members may login with Slack.'
-			// 			} else {
-			// 				if (response === true) {
-			// 					return window.location.href = '/auth?e='+email;
-			// 				} else {
-			// 					self.isUser = true;
-			// 					self.message = 'You are on the guest list.'
-			// 				}
-			// 			}
-			// 		})
-			// 		.catch((err)=>{
-			// 			self.isUser = false;
-			// 			self.message = 'There was an error looking up that e-mail address. Please try again.'
-			// 		})
-			// 	}
-			// },
 		}
 	})
 	
