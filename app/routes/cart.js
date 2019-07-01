@@ -1,27 +1,18 @@
 var express = require('express');
 var router = express.Router();
 var dotenv = require('dotenv');
-var Content = require('../models/content.js');
-var Cart = require('../models/cart.js');
-var Order = require('../models/order.js');
+const { Content, Cart, Order } = require('../models/index.js');
 var multer = require('multer');
 var upload = multer();
 var url = require('url');
+var bodyParser = require("body-parser");
+var csrf = require('csurf'); 
+const csrfProtection = csrf({ cookie: true });
+const parseForm = bodyParser.urlencoded({ extended: false });
+const parseJSONBody = bodyParser.json();
+const parseBody = [parseJSONBody, parseForm];
+
 dotenv.load();
-
-
-router.get('/logout', function(req, res, next){
-	req.session.destroy(function(err){
-		if (err) {
-			req.session = null;
-			//improve error handling
-			
-		} else {
-			req.session = null;
-		}
-		return res.redirect('/')
-	});	
-})
 
 router.get('/inventory', function(req, res, next) {
 	Content.find({}).lean().exec(function(err, data){
@@ -191,7 +182,7 @@ router.get('/cart', function(req, res, next) {
 	});
 });
 
-router.get('/checkout', function(req, res, next) {
+router.get('/checkout', csrfProtection, function(req, res, next) {
 	if (!req.session.cart) {
 		return res.redirect('/shop/cart');
 	}
@@ -205,7 +196,7 @@ router.get('/checkout', function(req, res, next) {
 	});
 });
 
-router.post('/checkout', async function(req, res, next) {
+router.post('/checkout', upload.array(), parseBody, csrfProtection, async function(req, res, next) {
 	if (!req.session.cart) {
 		return res.redirect('/cart');
 	}

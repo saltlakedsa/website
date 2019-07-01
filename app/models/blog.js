@@ -11,14 +11,15 @@ var Media = new Schema({
 });
 
 var Blog = new Schema({
+	type: String,
 	title: String,
-	committee: String,
+	author: String,
+	category: String,
+	lede: String,
 	description: String,
-	time: {
-		begin: Date,
-		end: Date
-	},
-	media: [Media]
+	date: Date,
+	media: [Media],
+	tags: [String]
 }, {collection: 'blog'});
 
 module.exports = mongoose.model('Blog', Blog);

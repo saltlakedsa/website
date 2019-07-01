@@ -15,43 +15,53 @@
 
     <!-- Page Content -->
 <section>
-<div class="container">
-<h1 id="sectionHeader" class="section-heading pb-4" style="text-align:center;"></h1>
+<div class="container" id="auth">
+<h1 id="sectionHeader" class="section-heading pb-4" style="text-align:center;">Register new user</h1>
 
-<form method="post" id="form">
+<form method="POST" id="form" enctype="multipart/form-data" action="/auth">
 
-
-
+<% if (locals.csrfToken) { %>
+	<input type="hidden" name="_csrf" value="<%= csrfToken %>">
+<% } %>
 <div class="row form-group">
 <div class="col-lg-2">
 </div>
-<div class="col-lg-4">
+<div class="col-lg-8">
+  <label for="e1" class="text-uppercase">Email</label>
+	<% if (locals.email && email !== 'undefined') { %>
+		<input class="form-control" type="email" name="email" id="e1" value="<%= locals.email %>" @blur="confirmEmail"/>
+	<% } else { %>
+		<input class="form-control" type="email" name="email" id="e1" @blur="confirmEmail"/>
+	<% } %>
 
-       <label class="text-uppercase">Email</label>
-       <input class="form-control" type="text" name="username" id="e1"/>
 </div>
-<div class="col-lg-4">
+<div class="col-lg-8" :class="(!isUser ? 'alert-danger' : 'alert-success')" role="alert" v-text="message" style="text-align:center;margin:15px;">
+</div>
+<div class="col-lg-4" v-if="isUser">
+  <label for="u1" class="text-uppercase">Username</label>
+  <input class="form-control" type="text" name="username" id="u1"/>
 
-	<label class="text-uppercase">Password</label>
-	<input class="form-control" type="password" name="password" id="p1"/>
-	
-	<div id="confirmPassword" style="display: none;">
+</div>
+<div class="col-lg-4" v-if="isUser">
 	<br>
-	<label class="text-uppercase">Confirm Password</label>
-	<input class="form-control" type="password" name="confirm_password" id="p2"/>
+	<label for="p1" class="text-uppercase">Password</label>
+	<input class="form-control" type="password" name="password" id="p1" @blur="validatePassword"/>
+	
+	<div id="confirmPassword" v-if="pw">
+	<br>
+	<label for="p2" class="text-uppercase">Confirm Password</label>
+	<input class="form-control" type="password" name="confirm_password" id="p2" @keyup="confirmPassword"/>
 	</div>
 
 </div>
+
 <div class="col-lg-2">
 </div>
 </div>
 
 <div class="row">
 <div class="col-lg-2"></div>
-<div class="col-lg-8">
-<div class="alert alert-danger" role="alert" style="text-align:center; display: none;" id="message">Passwords don't match</div>
-<div class="alert alert-danger" role="alert" style="text-align:center; display: none;" id="message2">Please enter a valid email</div>
-</div>
+<div class="col-lg-8">&nbsp;</div>
 <div class="col-lg-2"></div>
 </div> 
 
@@ -64,28 +74,19 @@
 </div>
 <div class="col-lg-4">
 	
-	 <input id="submitButton" class="btn btn-primary btn-block" type="submit"  disabled/>
+	 <input id="submitButton" class="btn btn-primary btn-block" type="submit"  :disabled="!confirmed"/>
 	 
 </div>
 <div class="col-lg-2">
 </div>
 </div>
-
-
-<div class="row form-group">
-<div class="col-lg-2">
-</div>
-
-<div class="col-lg-8">
-		<span id="switch"></span> <a href="#newUser">here</a>     
-</div>
-
-<div class="col-lg-2">
-</div>
-</div>
-
  
  </form>
+ <h6>You may also authenticate using your SLDSA Slack account:</h6>
+ <a href="/auth/slack" ariaDescription="Authenticate with Slack" style="display:inline-block;height:auto;">
+ 	<img src="https://api.slack.com/img/sign_in_with_slack.png"></img>
+ </a>
+
  </div>
  
 </section>
@@ -97,75 +98,80 @@
 		<!-- /.container -->
 	<% include ../partials/footer %>
 	<script>
-	
-	function validateLogin(validPSWD){
-		var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-		if($("#e1").val().match(mailformat)) {
-			$('#message2').css('display', 'none');
-			return true;
-		} else {
-			$('#message2').css('display', 'block');
-			return false;
+	new Vue({ 
+		el: '#auth',
+		data() {
+			return { 
+				isUser: false,
+				pw: false,
+				lc: false,
+				uc: false,
+				nu: false,
+				confirmed: false,
+				message: ''
+			}
+		},
+		beforeDestroy(){
+		},
+		mounted(){
+			var self = this;
+			console.log(window.location.search)
+			if (window.location.search) {
+				$('#e1')[0].focus();
+				$('#e1')[0].blur();
+			}
+		},
+		methods: {
+			parseObj(obj) {
+				if (!obj) return '';
+				return obj;
+			},
+			confirmEmail(e) {
+				var self = this;
+				var val = e.target.value.trim();
+				if (val !== '') {
+					var email = encodeURIComponent(val);
+					$.post('/checkauth/'+email).then((response)=>{
+						console.log(response)
+						if (!response) {
+							self.isUser = response;
+							self.message = 'You need to have your e-mail address added to the guest list. Alternatively, core members may login with Slack.'
+						} else {
+							if (response === true) {
+								self.isUser = true;
+								self.message = 'You are on the guest list.'
+							} else {
+								return window.location.href = '/login?u='+encodeURIComponent(response.username);
+							}
+						}
+					})
+					.catch((err)=>{
+						self.isUser = false;
+						self.message = 'There was an error looking up that e-mail address. Please try again.'
+					})
+				}
+			},
+			validatePassword(e){
+				var self = this;
+				var val = e.target.value;
+				self.lc = /[a-z]/g.test(val);
+				self.uc = /[A-Z]/g.test(val);
+				self.nu = /\d/g.test(val);
+				if (self.lc && self.uc && self.nu) {
+					self.pw = true;
+				} else {
+					self.pw = false;
+					self.message = 'Your password must contain at least one lowercase, one uppercase letter, and at least one number.'
+				}
+				
+			},
+			confirmPassword(e) {
+				var self = this;
+				var val = e.target.value;
+				self.confirmed = ($('#p1').val() === val) 
+			},
 		}
-		
-	}
-	
-	function validatePassword(){
-		return ($('#p1').val()) 
-	}
-	
-	function validateConfirmPassword(){
-		if (!$(confirmPassword).is(":visible")) return true;
-		if($('#p1').val() != $('#p2').val()) {
-			$('#message').css('display', 'block');
-			return false
-			//$("#submitButton").prop("disabled",true);
-		} else {
-			$('#message').css('display', 'none');
-			return true
-			//$("#submitButton").prop("disabled",false);
-			validPSWD = true;
-		}
-		validateLogin(validPSWD);
-	}
-	
-	function validate(){
-		if (validateLogin() && validatePassword() && validateConfirmPassword() ) {
-			$("#submitButton").prop("disabled",false);
-		} else {
-			$("#submitButton").prop("disabled",true);
-		}
-	}
-	
-	function swap(oldUser){
-		
-		$('#message').css('display', 'none');
-		$('#message2').css('display', 'none');
-		
-		$('#sectionHeader').html((oldUser ? "Login" : "Register New User"));
-		$('#submitButton').val((oldUser ? "Login" : "Register"));
-		$('#switch').html((oldUser ? "New user register" : "Already a member log on"));
-		(oldUser) ? $('#confirmPassword').hide() : $('#confirmPassword').show();
-		$('#form').attr("action",((oldUser ? "/login" : "/login?newUser=true")));
-		
-		p1.onkeyup  = validate;
-		p2.onkeyup  = validate;
-		e1.onkeyup = validate;
-		
-	}
-	
-	
-	$(document).ready(function () {
-		
-		var oldUser = true;
-		swap(oldUser);
-		oldUser = !oldUser;
-		
-		$('a[href="#newUser"]').click(function(){
-			swap(oldUser);			
-			oldUser = !oldUser;
-		});
-	});
+	})
 	</script>
 	</body>
 

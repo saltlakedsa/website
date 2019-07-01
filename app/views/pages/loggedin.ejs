@@ -17,21 +17,32 @@
 			<div class="container" id="page-top">
 			<section>
 				
-			Logged in as
-				
-			<p>	
-			<% var tmp = "not logged in";
-			if (user) { tmp = user.username;} %>
+			<% var tmp = "logged in as ";
+			if (locals.user) {tmp += user.username;} else {tmp = 'not logged in'} %>
 			<%= tmp %>
-			
-				
-			<div>
-			<a class="btn btn-primary" href="/logout">LOG OUT</a>
-			
-			<% var failed = (parameters.authfail) ? "yes" : "no" %>
+			<% if (locals.user) { %>
+				<form method="POST" action="/loggedin" enctype="multipart/form-data">
+					<% if (locals.csrfToken) { %>
+						<input type="hidden" name="_csrf" value="<%= csrfToken %>">
+					<% } %>
+					<div class="form-group">
+						<label for="about"></label>
+						<textarea class="form-control" id="about" name="about"><%= user.about %></textarea>
+					</div>
+					<button class="btn btn-primary btn-block" type="submit">Save bio</button>
+				</form>
 
-			<%= failed %>
-			
+			<% } %>
+			<hr>
+			<div class="row">
+				<div class="col-sm-8">
+			<% if (locals.user) { %>
+				<a class="btn btn-primary btn-block" href="/logout">LOG OUT</a>
+			<% } else { %>
+				<a class="btn btn-primary btn-block" href="/login">LOG IN</a>
+			<% } %>
+				</div>
+			</div>
 			</section>
 			</div>
 			<% include ../partials/socialmedia %>

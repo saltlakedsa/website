@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+	<% include ../partials/head %>
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    
+	<% include ../partials/nav %>
+
+    <!-- Page Content -->
+<section>
+<div class="container" id="login">
+<h1 id="sectionHeader" class="section-heading pb-4" style="text-align:center;">Login</h1>
+
+<form method="POST" id="form" enctype="multipart/form-data" action="/login">
+
+	<% if (locals.csrfToken) { %>
+		<input type="hidden" name="_csrf" value="<%= csrfToken %>">
+	<% } %>
+
+<div class="row form-group">
+<div class="col-lg-2"></div>
+<div class="col-lg-4">
+
+  <label for="u1" class="text-uppercase">Username</label>
+	<% if (locals.username && username !== 'undefined') { %>
+		<input id="u1" class="form-control" type="text" name="username" value="<%= locals.username %>"/>
+	<% } else { %>
+		<input id="u1" class="form-control" type="text" name="username"/>
+	<% } %>
+
+	<!-- <% if (locals.email && email !== 'undefined') { %>
+		<input class="form-control" type="email" name="email" id="e1" value="<%= locals.email %>" @blur="confirmEmail"/>
+	<% } else { %>
+		<input class="form-control" type="email" name="email" id="e1" @blur="confirmEmail"/>
+	<% } %> -->
+	<div :class="(!isUser ? 'alert-danger' : 'alert-success')" role="alert" v-text="message" style="text-align:center;margin:15px;"></div>
+</div>
+<div class="col-lg-4">
+
+	<label id="p1" class="text-uppercase">Password</label>
+	<input class="form-control" type="password" name="password" id="p1" @keyup="passKeyUp"/>
+
+</div>
+<div class="col-lg-2">
+</div>
+</div>
+
+<div class="row">
+<div class="col-lg-2"></div>
+<div class="col-lg-8">&nbsp;</div>
+<div class="col-lg-2"></div>
+</div> 
+
+<div class="row form-group">
+<div class="col-lg-2"></div>
+<div class="col-lg-4">
+	<input id="submitButton" class="btn btn-primary btn-block" type="submit"  :disabled="!confirmed"/>
+</div>
+<div class="row">
+<div class="col-lg-2"></div>
+<div class="col-lg-8">&nbsp;</div>
+<div class="col-lg-2"></div>
+</div> 
+<div class="col-lg-4" v-if="authFail">
+	<h2>Not registered yet?</h2>
+	<a class="btn btn-primary btn-block" role="button" href="/auth" v-text="'Register'"></a>
+</div>
+<div class="col-lg-2">
+</div>
+</div>
+
+
+<!-- <div class="row form-group">
+<div class="col-lg-2">
+</div>
+
+<div class="col-lg-8">
+		<span id="switch"></span> <a href="#newUser">here</a>     
+</div>
+
+<div class="col-lg-2">
+</div>
+</div> -->
+
+ 
+ </form>
+ <h6>You may also authenticate using your SLDSA Slack account:</h6>
+ <a href="/auth/slack" ariaDescription="Authenticate with Slack" style="display:inline-block;height:auto;">
+ 	<img src="https://api.slack.com/img/sign_in_with_slack.png"></img>
+ </a>
+
+ </div>
+ 
+</section>
+ 
+ 
+ 	<% include ../partials/socialmedia %>
+			
+		</div>
+		<!-- /.container -->
+	<% include ../partials/footer %>
+	<script>
+	new Vue({ 
+		el: '#login',
+		data() {
+			return { 
+				isUser: false,
+				confirmed: false,
+				message: '',
+				authFail: false
+			}
+		},
+		beforeDestroy(){
+		},
+		mounted(){
+			var self = this;
+			if (window.location.search && /(authfail)/g.test(window.location.search)) {
+				self.authFail = true;
+				self.message = 'No user with that username.'
+			}
+		},
+		methods: {
+			parseObj(obj) {
+				if (!obj) return '';
+				return obj;
+			},
+			passKeyUp(e){
+				var self = this;
+				var val = e.target.value;
+				if (val.length < 3) {
+					self.confirmed = false;
+				} else {
+					self.confirmed = true;
+				}
+			}
+			// ,
+			// confirmEmail(e) {
+			// 	var self = this;
+			// 	var val = e.target.value.trim();
+			// 	if (val !== '') {
+			// 		var email = encodeURIComponent(val);
+			// 		$.post('/checkauth/'+email).then((response)=>{
+			// 			console.log(response)
+			// 			if (!response) {
+			// 				self.isUser = response;
+			// 				self.message = 'You need to have your e-mail address added to the guest list. Alternatively, core members may login with Slack.'
+			// 			} else {
+			// 				if (response === true) {
+			// 					return window.location.href = '/auth?e='+email;
+			// 				} else {
+			// 					self.isUser = true;
+			// 					self.message = 'You are on the guest list.'
+			// 				}
+			// 			}
+			// 		})
+			// 		.catch((err)=>{
+			// 			self.isUser = false;
+			// 			self.message = 'There was an error looking up that e-mail address. Please try again.'
+			// 		})
+			// 	}
+			// },
+		}
+	})
+	
+	</script>
+	</body>
+
+</html>

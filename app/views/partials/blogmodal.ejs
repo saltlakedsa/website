@@ -1,0 +1,17 @@
+<div class="modal" tabindex="-1" role="dialog" id="confirmdelete" :style="{display: (!modal ? 'none' : 'block')}">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Confirm delete</h5>
+			</div>
+			<div class="modal-body">
+				<p v-text="message"></p>
+			</div>
+			<div class="modal-footer row">
+				<a role="button" class="col-sm-4 btn btn-primary block" @click="recordYes">Delete</a>
+				<div class="col-sm-1"></div>
+				<a role="button" class="col-sm-4 btn btn-primary block" @click="recordNo">Cancel</a>
+			</div>
+		</div>
+	</div>
+</div>
