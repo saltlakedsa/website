@@ -3,9 +3,17 @@ const path = require('path');
 // require and configure dotenv, will load vars in .env in PROCESS.ENV
 const envPath = path.resolve(__dirname, '../.env');
 require('dotenv').config({ path: envPath });
-
+const isProduction = new RegExp('production').test(process.env.NODE_ENV);
+if (isProduction) {
+	process.env.SLACK_CALLBACK = 'https://saltlakedsa.org/auth/slack/callback';
+} else {
+	process.env.SLACK_CALLBACK = 'http://localhost:3111/auth/slack/callback';
+}
 // define validation for all the env vars
 const envVarsSchema = Joi.object({
+	NODE_ENV: Joi.string()
+	.allow(['development', 'production', 'test', 'provision'])
+	.default('production'),
 	SECRET: Joi.string(),
 	MONGOURL: Joi.string(),
 	STORE_PUBLISH: Joi.string(),
@@ -14,12 +22,9 @@ const envVarsSchema = Joi.object({
 	STORE_SECRET_TEST: Joi.string(),
 	SLACK_CLIENT_ID: Joi.string(),
 	SLACK_CLIENT_SECRET: Joi.string(),
-	SLACK_CALLBACK_DEV: Joi.string(),
-	SLACK_CALLBACK: Joi.string(),
-	// UPLOAD_IMG: Joi.string(),
-	// UPLOAD_FILE: Joi.string(),
-	// UPLOAD_IMG_DEV: Joi.string(),
-	// UPLOAD_FILE_DEV: Joi.string(),
+	SLACK_CALLBACK: Joi.string()
+	.allow(['https://saltlakedsa.org/auth/slack/callback', 'http://localhost:3111/auth/slack/callback'])
+	.default('https://saltlakedsa.org/auth/slack/callback'),
 	// list of admin e-mails separated by commas
 	ADMIN: Joi.string()
 })
@@ -37,12 +42,7 @@ const config = {
 	mongourl: envVars.MONGOURL,
 	slackClientId: envVars.SLACK_CLIENT_ID,
 	slackClientSecret: envVars.SLACK_CLIENT_SECRET,
-	slackCallbackDev: envVars.SLACK_CALLBACK_DEV,
 	slackCallback: envVars.SLACK_CALLBACK,
-	// uploadedImages: envVars.UPLOAD_IMG,
-	// uploadedImagesDev: envVars.UPLOAD_IMG_DEV,
-	// uploadedFiles: envVars.UPLOAD_FILE,
-	// uploadedFilesDev: envVars.UPLOAD_FILE_DEV,
 	storePublish: envVars.STORE_PUBLISH,
 	storePublishTest: envVars.STORE_PUBLISH_TEST,
 	storeSecret: envVars.STORE_SECRET,
