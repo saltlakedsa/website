@@ -1,265 +1,252 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<!--<% include ../partials/head %>-->
+		<% include ../partials/head %>
+		<script type="text/javascript" src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=yb2pwtctf7qznwdoo61w3kyj127j61gch5uhhzneop9mfkg7"></script> 
+
 	</head>
-	<!--<% include ../partials/nav %>-->
+	<% include ../partials/nav %>
 	
 
 	<body>
 	
-	
-		<div id="page-top">
-			<div class="modal" tabindex="-1" role="dialog" id="login" data-backdrop="static" data-keyboard=false>
-				<div class="modal-dialog" role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title">Login Information</h5>
-						</div>
-						<div class="modal-body">
-							<div id="alertPasswordIncorrect">
+		<div class="container">
+			<section id="blogedit" lang="ejs">
+				<div id="page-top" v-if="modal">
+					<div class="modal" tabindex="-1" role="dialog" id="confirmdelete" :style="{display: (!modal ? 'none' : 'block')}">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title">Confirm delete</h5>
+								</div>
+								<div class="modal-body">
+									<p v-text="message"></p>
+								</div>
+								<div class="modal-footer row">
+									<a role="button" class="col-sm-4 btn btn-primary block" @click="recordYes">Delete</a>
+									<div class="col-sm-1"></div>
+									<a role="button" class="col-sm-4 btn btn-primary block" @click="recordNo">Cancel</a>
+								</div>
 							</div>
-							<div class="form-group">
-								<label for="title">Username:</label>
-								<input type="text" class="form-control" id="username"/>
-							</div>
-							<div class="form-group">
-								<label for="date">Password:</label>
-								<input type="text" class="form-control" id="password"/>
-							</div>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-primary" id="verifyUser">Submit</button>
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
+				<form class="container" method="POST" id="form" enctype="multipart/form-data" :action="(!vDoc ? '' : ('/b/edit/'+vDoc._id))">
 
-		<section id="New-Content">
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-8">
-						<h1>Create New Blog Post</h1>
-						<hr>
-						<div id="newBlogForm">
-						<div class="form-group">
-							<label for="title">Post Title:</label>
-							<input type="text" class="form-control toJSON" id="title"/>
-						</div>
-						<div class="form-group">
-							<label for="date">Date:</label>
-							<input type="text" class="form-control toJSON" id="date" readonly/>
-						</div>
-						<div class="row">
-						<div class="col-sm-6">
-						<div class="form-group">
-							<label for="date">Upload Image for Post:</label>
-							<form enctype="multipart/form-data" id="uploadImage" action="/loadFile" method="POST">
-								<!--<input type="text" id="title">-->
-							
+					<% if (locals.csrfToken) { %>
+						<input type="hidden" name="_csrf" value="<%= csrfToken %>">
+					<% } %>
 
-								<input type="file" name="file-to-upload" class="">
-								<input type="submit" name="submit" value="Upload Image" class="">
-							</form>
-							
-							
+					<div class="row" v-if="vDoc">
+
+						<div class="col-sm-8 form-group" v-for="(key, i) in Object.keys(vDoc)" v-if="key !== 'media' && exclude.indexOf(key) === -1">
+							<label class="text-uppercase" :for="key" v-text="key"></label>
+							<input class="form-control" v-if="key !== 'description'" :id="key" type="text" :name="key" :value="vDoc[key]"/>
+							<div v-if="key === 'description'" id="description" name="description" v-html="vDoc.description"></div>
 						</div>
+						<div class="col-sm-8 form-group" v-for="(key, i) in Object.keys(vDoc)" v-if="key !== 'media' && exclude.indexOf(key) !== -1">
+							<input type="hidden" :id="key" type="text" :name="key" :value="vDoc[key]"/>
 						</div>
-						<div class="col-sm-6">
-							<img src="" style="width:100%;" alt="Image For Post - None selected" id="putStuff">
-							<input type="text" class="form-control toJSON" id="imagePath" readonly/>
-							<label for="date">Image Caption:</label>
-							<input type="text" class="form-control toJSON" id="imageCaption"/>
+						<div class="col-sm-8 py-4" v-if="vDoc.media.length > 0">
+							<div v-for="(item, j) in vDoc.media">
+								<label class="text-uppercase" :for="('switchimg' + j)" v-text="'switch image ' + (j + 1)"></label>
+								<input class="form-control" :id="('switchimg' + j)" @change="handleFile(vDoc._id, j, $event)" type="file" style="min-height: 52px;">
+								<img :src="item.image" style="width: 100%"></img>
+								<div class="form-group" v-for="(key, k) in Object.keys(item)" v-if="exclude.indexOf(key) === -1">
+									<br>
+									<label class="text-uppercase" :for="(key + j)" v-text="key + ' ' + (j+1) "></label>
+									<textarea class="form-control" :id="(key + j)" type="text" :name="'media['+j+']['+key+']'" v-html="item[key]"></textarea>
+								</div>
+								<!-- <h5><small v-text="item.caption"></small></h5> -->
+								<a class="btn btn-light btn-block" role="button" @click="initDeleteMedia(vDoc._id, j)" v-text="'Delete image '+ (j+1)"></a>
+								<br>
+								<hr class="py-2" style="max-width:75%;">
+							</div>
 						</div>
+						<div class="col-md-12">
+								<div class="progress">
+										<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+												<span class="sr-only"></span>
+										</div>
+								</div>
 						</div>
-						<div class="form-group">
-							<label for="date">Tags:</label>
-							<input type="text" class="form-control toJSON" id="tags"/>
-						</div>
-						<div class="row">
-						<div class="col-sm-6">
-						<div class="form-group">
-							<label for="date">Author:</label>
-							<input type="text" class="form-control toJSON" id="author"/>
-						</div>
-						</div>
-						<div class="col-sm-6">
-						<div class="form-group">
-							<label for="date">About the Author:</label>
-							<input type="text" class="form-control toJSON" id="aboutTheAuthor"/>
-						</div>
-						</div>
-						</div>
-						<div class="form-group">
-							<label for="date">Lede:</label>
-							<input type="text" class="form-control toJSON" id="lede"/>
-						</div>
-						
-						<div class="form-group">
-							<label for="content">Content:</label>
-							<textarea type="text" class="form-control toJSON" id="content">
-							</textarea>
-						</div>
-						<button id="submitPost" class="btn btn-primary">Submit</button>
-						</div>
+						<hr class="py-2" style="max-width:75%;">
 					</div>
-					<div class="col-sm-4">
-					<h3>Edit Previous Posts</h3>
-					<div id="blogRoll"></div>
-					</div>
-				</div>
+					<label class="text-uppercase" for="newimg">Add image</label>
+					<input class="form-control" id="newimg" @change="handleFile(vDoc._id, vDoc.media.length, $event)" type="file" style="min-height: 52px;">
+					<hr class="py-2" style="max-width:75%;">
 
-			</div>
-		</section>
-		<!--<% include ../partials/socialmedia %>-->
+					<br>
+					<input id="submitButton" class="btn btn-primary btn-block" type="submit"  :disabled="progressBar !== null"/>
+					<br>
+					<br>
+					<br>
+					<h4>Danger: This cannot be undone:</h4>
+					<a class="btn btn-warning btn-block" role="button" @click="initDeleteEntry(vDoc._id)">Delete this entry</a>
 
-		<!--<% include ../partials/footer %>-->
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
-
-		<script>
-		$(document).ready(function () {
-		
-		$('#login').modal('show');
-		
-		//Function Get List of available detectors
-		$.ajax({
-			url: '/getBlogList',
-			type: 'GET',
-			dataType: 'json',
-			timeout: 4000,
-			contentType: 'application/json',
-			success: function (res) {
-				var str = "";
-				for(var i=0;i<res.fn.length;i++){
-					str += "<button class='btn btn-primary btn-block editBlogEntry'>"+res.fn[i]+"</button>";
-					}
-				$("#blogRoll").html(str);
-				$('.editBlogEntry').click(function (){
-					$.ajax({
-						url: '/getBlogData',
-						type: 'POST',
-						dataType: 'json',
-						timeout: 4000,
-						contentType: 'application/json',
-						data: JSON.stringify({"fn":$(this).html()}),
-						success: function(res){
-							for (var key in res){
-								$("#"+key).val(res[key]);
-							};
-							if(res.imagePath != null) $("#putStuff").attr("src",res.imagePath)
-							else $("#putStuff").attr("src","");
-						},
-						error: function (jqXHR, textStatus, errorThrown) {}
-					});							
-				});
+				</form>
 				
-				},
-			error: function (jqXHR, textStatus, errorThrown) {}
-		});
-		
-		
-		
-		
-		
-		
-		//Function verify users
-		$('#verifyUser').click(function (){
-			var tmp = $('#verifyUser').html();
-			$('#verifyUser').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
-			$.ajax({
-				url: '/isCredentials',
-				type: 'POST',
-				dataType: 'json',
-				timeout: 4000,
-				contentType: 'application/json',
-				data: JSON.stringify({"user":$("#username").val(),"password":$("#password").val()}),
-				success: function (res) {
-					if (res.isValid) $('#login').modal('hide');
-					else {
-					var alertHTML = '<div class="alert alert-danger" role="alert">' + 
-									'<strong>Login Incorrect!</strong> Please enter correct information.' +
-									'<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
-									'<span aria-hidden="true">&times;</span>' +
-									'</button>' +
-									'</div>'; 
-						$("#alertPasswordIncorrect").html(alertHTML);
-						$("#username").focus();
-						$('#verifyUser').html(tmp);
+			</section>
+		</div>
+		<script type="text/javascript">
+		if (typeof tinymce === 'object') {
+			Vue.prototype.tinymce = tinymce;
+			if (typeof $ === 'object') Vue.prototype.$ = $;
+			new Vue({ 
+				el: '#blogedit',
+				data() {
+					return { 
+						user: '',
+						author: '',
+						vDoc: this.parseObj(
+							<%- vDoc %>
+							// !{JSON.stringify(vDoc)}
+						),
+						file: null,
+						//items to hide in the viewer
+						exclude: ['_id', '__v', 'date', 'image', 'image_abs', 'thumb', 'thumb_abs', 'author', 'tags'],
+						tinymce: null,
+						progressBar: null,
+						message: '',
+						modal: false,
+						deleteWhich: '',
+						confirmed: false
 					}
-					
 				},
-				error: function (jqXHR, textStatus, errorThrown) {
-					console.log("error");
-					console.log(errorThrown);
-					console.log(textStatus);
-				}
-			});
-		});
-		
-		
-		
-		////set date
-		var today = new Date();
-		var dd = today.getDate();
-		var mm = today.getMonth() + 1; //January is 0!
-		var yyyy = today.getFullYear();
-
-		if (dd < 10) {dd = '0' + dd;}
-		if (mm < 10) {  mm = '0' + mm;}
-		today = mm + '/' + dd + '/' + yyyy;
-
-		$("#date").val(today);
-		
-		
-		
-		
-		///Upload image
-		$('#uploadImage').submit(function(e){
-			e.preventDefault();
-     
-			var title = $('#Imagetitle').val(); 
-     
-			$(this).ajaxSubmit({
-				data: {title: title},
-				dataType: 'json',
-				contentType: 'application/json',
-				success: function(res){
-					console.log('image uploaded and form submitted: '+res.fn);  
-					$("#putStuff").attr("src", "/uploadedImages/"+res.fn);
-					$("#imagePath").val(res.fn);
-				}
-			});
-		return false;
-		});
-		
-		
-		
-		//Function Submit OiPost
-		$('#submitPost').click(function (){
-			var obj = {};
-			$('.toJSON').each(function(){
-				obj[$(this).attr('id')] = $(this).val();
-			});
-			
-			$.ajax({
-				url: '/createNew',
-				type: 'POST',
-				dataType: 'json',
-				timeout: 4000,
-				contentType: 'application/json',
-				data: JSON.stringify(obj),
-				success: function (res) {
-					console.log("success");
-					$("#newBlogForm").html("Created: <a href='/b/" + res.fn + "'>"+res.fn+"</a>");
+				
+				mounted(){
+					var self = this;
+					var editable = $('#description')[0]//document.getElementById('description')[0];
+					console.log(editable)
+					if (self.tinymce === '' && editable) {
+						self.loadTinyMCE()
+					} else {
+						setTimeout(function(){
+							self.loadTinyMCE()
+						}, 2000)
+					}
+				},
+				methods: {
+					parseObj(obj) {
+						if (!obj) return '';
+						return obj;
 					},
-				error: function (jqXHR, textStatus, errorThrown) {
-					console.log("error");
-					console.log(errorThrown);
-					console.log(textStatus);}
-			});
-		});
-		});
+					loadTinyMCE() {
+						var self = this;
+						self.tinymce = tinymce.init({
+							menubar: false,
+							statusbar: false,
+							// theme: 'inlite',
+							// inline: true,
+							selector: "#description",
+							plugins: 'lists, link',
+							valid_elements: '*[*]',
+							toolbar: 'bold italic underline strikethrough | bullist numlist | outdent indent blockquote | subscript superscript | link',
+							default_link_target: '_blank'
+						});
+					},
+					recordYes() {
+						var self = this;
+						if (!isNaN(parseInt(self.deleteWhich, 10))) {
+							$.post('/b/edit/deletemedia/'+self.vDoc._id+'/'+self.deleteWhich+'')
+							.then((result)=>{
+								console.log(result);
+								self.vDoc = result;
+								self.recordNo();
+							})
+							.catch((err)=>console.log(err))
+						} else if (self.deleteWhich.title) {
+							$.post('/b/edit/deleteentry/'+self.deleteWhich._id)
+							.then((result)=>{
+								console.log(result);
+								// self.recordNo();
+								window.location.href = '/b'
+							})
+							.catch((err)=>console.log(err))
+						}
+					},
+					recordNo() {
+						this.confirmed = false;
+						this.deleteWhich = '';
+						this.modal = false;
+						this.message = '';
+					},
+					initDeleteEntry(id) {
+						var self = this;
+						self.modal = true;
+						self.message = 'Are you sure you want to delete this blog entry? This action will delete all information and images for the blog entry, titled '+
+							self.vDoc.title +'.';
+						self.deleteWhich = self.vDoc;
+					},
+					initDeleteMedia(id, i) {
+						var self = this;
+						self.modal = true;
+						self.message = 'Are you sure you want to delete this image? This action is not reversible. ';
+						self.deleteWhich = i;
+					},
+					deletemedia(id, i) {
+						var self = this;
+						$.post('/b/edit/deletemedia/'+id+'/'+i+'')
+						.then((result) => {
+							console.log(result)
+						})
+						.catch((err) => {
+							console.log(err)
+						})
+					},
+					deleteentry(id) {
+						var self = this;
+						$.post('/b/edit/deleteentry/'+id+'')
+						.then((result) => {
+							console.log(result)
+						})
+						.catch((err) => {
+							console.log(err)
+						})
+					},
+					handleFile(id, i, e) {
+						var self = this;
+						self.file = e.target.files[0];
+						var formData = new FormData();
+						formData.append('img', self.file, self.file.name);
+						//https://www.codedodle.com/2016/10/nodejs-image-uploader-using-express-and.html
+						$.ajax({
+							url: '/b/edit/uploadimg/'+id+'',
+							method: 'POST',
+							data: formData,
+							processData: false,
+							contentType: false,
+							xhr: function () {
+								var xhr = new XMLHttpRequest();
+
+								// Add progress event listener to the upload.
+								xhr.upload.addEventListener('progress', function (event) {
+									self.progressBar = $('.progress-bar');
+
+									if (event.lengthComputable) {
+										var percent = (event.loaded / event.total) * 100;
+										self.progressBar.width(percent + '%');
+
+										if (percent === 100) {
+											self.progressBar.removeClass('active');
+										}
+									}
+								});
+								return xhr;
+							}
+						}).done((result) => {
+							console.log(result)
+							self.vDoc = result;
+							self.progressBar.removeClass('active');
+							self.progressBar.width('0%');
+							self.progressBar = null;
+						}).fail(function (xhr, status) {
+							alert(status);
+						})
+					}
+				}
+			})
+		}
 		</script>
 	</body>
 </html>

@@ -1,0 +1,6 @@
+.carousel-item {
+	transition: opacity 1s ease-in-out!important;
+	display: block!important;
+	/* transition-property: opacity!important;
+	transition-duration: 1s!important; */
+}

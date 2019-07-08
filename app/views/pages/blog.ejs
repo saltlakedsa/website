@@ -9,59 +9,101 @@
 
   <body>
 
-    <!-- Navigation -->
-    
+		<!-- Navigation -->
+		
 	<% include ../partials/nav %>
 
-    <!-- Page Content -->
-    <div id="page-top">
+		<!-- Page Content -->
+	<div id="page-top">
 	<section id="blog">
 	<div class="container">
-		<div class="row">
-			<div class="col-lg-6">
-	
-				<h1 class="py-4"><%= (typeof title != "undefined") ? title : "Not Defined" %></h1>
-	
-				<p class="text-muted my-0">By</p>
-				<h4><%= author %></h4>
-	
-	
-				<p class="text-muted my-0"><%= date %></p>
-				
-				<h5 class="py-3"><small><%= lede %></small></h5>
+		<% if (locals.doc) { %>
+			<% if (locals.user) { %> 
+				<a :href="'/b/edit/'+vDoc._id"><i class="fas fa-1x fa-edit"></i><span> Edit</span></a>
+			<% } %>
+
+			<div class="row">
+				<div class="col-lg-6">
+					<h1 class="py-4"><%- doc.title %></h1>
+		
+					<% if (locals.author) { %>
+						<p class="text-muted my-0">By</p>
+						<h4><%= author.username %></h4>
+					<% } %>
+					<p class="text-muted my-0"><%- doc.date %></p>
+					
+					<h5 class="py-3"><small><%- doc.lede %></small></h5>
+				</div>
+		
+				<div class="col-lg-6 py-4" v-if="vDoc.media && vDoc.media.length > 0">
+					<div class="carousel-inner">
+						<div class="carousel-item" :class="(sliderIndex === j ? 'active' : '')" v-for="(item, j) in vDoc.media"
+						:style="{opacity: (sliderIndex === j ? 1 : 0 ) }">
+							<img class="d-block w-100" :src="item.image" :alt="'Slide '+ j"/>
+							<div class="carousel-caption d-md-block">
+								<h5 v-text="vDoc.category"></h5>
+								<p v-text="item.caption"></p>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
-	
-			<div class="col-lg-6 py-4">
+			<hr class="py-2" style="max-width:75%;">
 			
-	
-				<img src="/<%= (typeof imagePath != "undefined") ? "uploadedImages/"+imagePath : "Not Defined" %>" style="width:100%;">
-				<h5><small><%= imageCaption %></small></h5>
-				
+			<div id="content"><%- doc.description %></div>
 			
-			</div>
-	
-		</div>
-	
-	<hr class="py-2" style="max-width:75%;">
-	
-	<div id="content"><%- content %></div>
-	
-	<hr class="py-2" style="max-width:75%;">
-	
-	<p class="text-muted my-2">ABOUT THE AUTHOR</p>
-				<h5><small><%= aboutTheAuthor %></small></h5>
-	
+			<hr class="py-2" style="max-width:75%;">
+			<% if (locals.author) { %>
+				<p class="text-muted my-2">ABOUT THE AUTHOR</p>
+				<h5><small><%= author.about %></small></h5>
+			<% } %>
+		<% } %>
+
+
 	</div>
-    </section>
-    
+	</section>
+		
 	<% include ../partials/socialmedia %>
 	  
-    </div>
-    <!-- /.container -->
+		</div>
+		<!-- /.container -->
 
-    <% include ../partials/footer %>
+		<% include ../partials/footer %>
 	<script>
-	$("#content").html($("#content").html().replace(/(?:\r\n|\r|\n)/g, '<p>'));
+	if (typeof $ === 'object') Vue.prototype.$ = $;
+	new Vue({ 
+		el: '#blog',
+		data() {
+			return { 
+				vDoc: this.parseObj(
+					<%- vDoc %>
+				),
+				sliderIndex: 0,
+				sliderInterval: null
+			}
+		},
+		beforeDestroy(){
+			clearInterval(self.sliderInterval)
+		},
+		mounted(){
+			var self = this;
+			var length = self.vDoc.media.length;
+			self.sliderInterval = setInterval(function(){
+				if (self.sliderIndex < (length - 1)){
+					self.sliderIndex++;
+				} else {
+					self.sliderIndex = 0;
+				}
+			}, 5000)
+		},
+		methods: {
+			parseObj(obj) {
+				if (!obj) return '';
+				return obj;
+			}
+		}
+	})
+
 	</script>
 
   </body>

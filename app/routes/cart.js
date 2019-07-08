@@ -1,39 +1,18 @@
 var express = require('express');
 var router = express.Router();
 var dotenv = require('dotenv');
-var Content = require('../models/content.js');
-var Cart = require('../models/cart.js');
-var Order = require('../models/order.js');
+const { Content, Cart, Order } = require('../models/index.js');
 var multer = require('multer');
 var upload = multer();
 var url = require('url');
-var nodemailer = require('nodemailer');
+var bodyParser = require("body-parser");
+var csrf = require('csurf'); 
+const csrfProtection = csrf({ cookie: true });
+const parseForm = bodyParser.urlencoded({ extended: false });
+const parseJSONBody = bodyParser.json();
+const parseBody = [parseJSONBody, parseForm];
+
 dotenv.load();
-
-var transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'saltlakedsa@gmail.com',
-    pass: 'rosaluxemburg'
-  }
-});
-
-// router.get('/addtoinventory/:item', function(req, res, next) {
-// 
-// })
-
-router.get('/logout', function(req, res, next){
-	req.session.destroy(function(err){
-		if (err) {
-			req.session = null;
-			//improve error handling
-			
-		} else {
-			req.session = null;
-		}
-		return res.redirect('/')
-	});	
-})
 
 router.get('/inventory', function(req, res, next) {
 	Content.find({}).lean().exec(function(err, data){
@@ -203,7 +182,7 @@ router.get('/cart', function(req, res, next) {
 	});
 });
 
-router.get('/checkout', function(req, res, next) {
+router.get('/checkout', csrfProtection, function(req, res, next) {
 	if (!req.session.cart) {
 		return res.redirect('/shop/cart');
 	}
@@ -217,7 +196,7 @@ router.get('/checkout', function(req, res, next) {
 	});
 });
 
-router.post('/checkout', async function(req, res, next) {
+router.post('/checkout', upload.array(), parseBody, csrfProtection, async function(req, res, next) {
 	if (!req.session.cart) {
 		return res.redirect('/cart');
 	}
@@ -288,18 +267,6 @@ router.get('/ordersuccess/:ship/:id', function(req, res, next){
 			return next(err) 
 		}
 		var cart = new Cart(order.cart);
-	/* 	var mailOptions = {
-			from: 'saltlakedsa@gmail.com',
-			to: order.email,
-			subject: 'Thank you for your order',
-			text: "Your order confirmation is: " + order._id + " Please let us know if you have any questions"
-		};
-		transporter.sendMail(mailOptions, function(err, info){
-			if (err) { return next(err) }
-			else {
-			//console.log('Email sent: ' + info.response);
-		}
-		}); */
 		return res.render('pages/order', {
 			order: order,
 			totalPrice: cart.totalPrice,

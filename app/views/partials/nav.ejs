@@ -1,6 +1,6 @@
 
 <!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav" lang="ejs">
 	<div class="container">
 		<a class="navbar-brand" href="/">Salt Lake DSA</a>
 		<button id="mainNav-toggler" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,11 +25,26 @@
 					<a class="nav-link" href="/newsletter">NewsLetter</a>
 				</li>
 				<li class="nav-item">
+					<a class="nav-link" href="/b">Blog</a>
+				</li>
+				<li class="nav-item">
 					<a class="nav-link" href="/shop/inventory">Shop</a>
+				</li>
+				<li class="nav-item">
+					
+					<% if (session.user) { %>
+					
+					<a class="nav-link" href="/loggedin"><%= session.user.username %></a>
+					
+					<% } else { %>
+					
+					<a class="nav-link" href="/auth"><i class="fas fa-1x fa-user"></i></a>
+
+					<% } %>
 				</li>
 			</ul>
 		</div>
-	</div>
+	</div>	
 </nav>
 
 <% if (locals.alertCart) { %>
@@ -41,8 +56,8 @@
 <div class="col-lg-6 text-center" style="width:50px;">
 
 <div class="alert alert-light fixed-top border border-danger  sr-icon-4" role="alert" style="top:70px; right:20%; left:20%; opacity: 0.82;"><strong>
-<a href="/shop/cart">There are items in your Cart <i class="fas fa-1x fa-shopping-cart"></i></a>
-<button type="button" class="close" data-dismiss="alert" aria-label="Close"></strong>
+<a href="/shop/cart">There are items in your Cart <i class="fas fa-1x fa-shopping-cart"></i></a></strong>
+<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 <span aria-hidden="true">&times;</span>
 </button>	
 </div>

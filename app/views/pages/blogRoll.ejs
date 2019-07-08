@@ -15,10 +15,31 @@
 
     <!-- Page Content -->
     <div id="page-top">
-	<section id="blog">
-	<div class="container" id ="list">
-	
-	
+	<section>
+	<div class="container" id="list">
+		<% if (locals.data) { %>
+		<div class="col-lg-6 py-4" v-for="(doc, i) in vData">
+			<% if (locals.user) { %> 
+				<a v-if="doc" :href="'/b/edit/'+doc._id"><i class="fas fa-1x fa-edit"></i><span> Edit</span></a>
+			<% } %>
+			
+			<p class="text-muted">
+				<small>Posted on <small v-text="new Date(doc.date).getMonth() +'-'+new Date(doc.date).getDate() + '-' + new Date(doc.date).getFullYear() "></small>
+				at <small v-text="new Date(doc.date).getHours() + ':' + (new Date(doc.date).getMinutes() < 10 ? ('0' + new Date(doc.date).getMinutes()) : new Date(doc.date).getMinutes()) "></small>
+				in <small><strong class="text-uppercase" v-text="doc.category"></strong></small>
+				</small>
+			</p>
+			<!-- <p><small class="my-0" v-html="doc.date"></small></p> -->
+			<a :href="'/b/'+doc._id">
+				<h1 v-text="doc.title"></h1>
+			</a>
+			<p v-html="doc.description"><p>
+			<% include ../partials/carouselitem %>
+			<hr class="py-2" style="max-width:75%;">
+
+		</div>
+		<% } %>
+
 	
 	</div>
     </section>
@@ -30,32 +51,53 @@
 
     <% include ../partials/footer %>
 	<script>
-	
-		$(document).ready(function () {
-		console.log("Jer");
-		$.ajax({
-			url: '/getBlogList',
-			type: 'GET',
-			dataType: 'json',
-			timeout: 4000,
-			contentType: 'application/json',
-		
-			success: function (res) {
-				var str = "";
-				console.log(res.fn);
-				for(var i=0;i<res.fn.length;i++){
-					str += "<p>Created: <a href='/b?fn=" + res.fn[i] + "'>"+res.fn[i]+"</a>";
+	new Vue({ 
+		el: '#list',
+		data() {
+			return { 
+				vData: this.parseObj(
+					<%- vData %>
+				),
+				sliderIndex: 0,
+				sliderInterval: null,
+				docIndex: 0
+			}
+		},
+		beforeDestroy(){
+			clearInterval(self.sliderInterval)
+		},
+		mounted(){
+			var self = this;
+			if (self.vData && self.vData.length > 0) {
+				var length = self.vData[self.docIndex].media.length;
+				self.setSliderInterval(length);
+			}
+		},
+		methods: {
+			parseObj(obj) {
+				if (!obj) return '';
+				return obj;
+			},
+			changeDocIndex(i) {
+				var self = this;
+				self.sliderIndex = 0;
+				self.docIndex = i;
+				clearInterval(self.sliderInterval);
+				var length = self.vData[self.docIndex].media.length;
+				self.setSliderInterval(length);
+			},
+			setSliderInterval(length) {
+				var self = this;
+				self.sliderInterval = setInterval(function(){
+					if (self.sliderIndex < (length - 1)){
+						self.sliderIndex++;
+					} else {
+						self.sliderIndex = 0;
 					}
-				$("#list").html(str);
-				},
-			error: function (jqXHR, textStatus, errorThrown) {
-				console.log("error");
-				console.log(errorThrown);
-				console.log(textStatus);}
-		});
-		
-	});
-		
+				}, 5000)
+			}
+		}
+	})
 	</script>
 	
 

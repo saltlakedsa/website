@@ -11,7 +11,7 @@
 			<section id="intro">
 				<div class="container my-auto">
 					<div class="row">
-						<div class="col-lg-12 mx-auto">
+						<div class="col-lg-12 mx-auto" id="committees">
 							<h1 class="section-heading" style="text-align:center;">Committees and Affiliated Groups</h1>
 							<hr class="my-4"/>
 
@@ -21,160 +21,79 @@
 							</p>
 							<p>If you would like to start your own committe to work a specific goal, members may submit a statement to the Coordinating Committee that includes the committee name, mission statement, scope of the committee's work and at least five (5) other members interested in creating the committee.	
 							</p>
-							<div class="panel-heading border-top py-2">
-								<a class="accordion-toggle collapsed" data-toggle="collapse" href="#collapseOne">
-									<div>
-									Coordinating Committee
+							<% if (locals.data) { %>
+								<div v-for="(doc, i) in vData">
+									<div class="panel-heading border-top py-2">
+										<a class="accordion-toggle collapsed" data-toggle="collapse" :href="'#collapse'+i">
+											<div v-text="doc.category"></div>
+										</a>
 									</div>
-								</a>
-							</div>
-							<div id="collapseOne" class="collapse pl-4">
-								<p>The Coordinating Committee is dedicated to the empowerment of our membership. We view ourselves as administrators and rely on our membership to take the lead in campaigns. We will not force anyone to take part in a campaign they feel no love for and we will always support campaigns we may personally disagree with. We hope to empower every socialist in the valley.
-								</p>
-								<p>Every Coordinating Committee meeting is open to the General Membership, so if you would like your voice heard you are more than welcome to join us for our monthly meetings. Our meetings aren’t very exciting though, unless you are interested in internal work. If you are interested, our next meeting will be on Monday, February 11th at Mestizo Coffee starting at 7pm.
-								</p>
-								<p>If you’d like to contact us by email, please reach us at <a href="mailto:saltlakedsa.cc@gmail.com">saltlakedsa.cc@gmail.com</a>.
-								</p>
-							</div>
-							<div class="panel-heading border-top py-2">
-								<a class="accordion-toggle collapsed" data-toggle="collapse" href="#collapseTwo">
-									<div>
-									Communications Committee
+									<div :id="'collapse'+ i" class="collapse pl-4">
+										<% if (locals.user) { %> 
+											<a v-if="doc" :href="'/b/edit/'+doc._id"><i class="fas fa-1x fa-edit"></i><span> Edit</span></a>
+										<% } %>
+
+										<div v-html="doc.description"></div>
+										<% include ../partials/carouselitem %>
 									</div>
-								</a>
-							</div>
-							<div id="collapseTwo" class="collapse pl-4">
-								<p>The mission of the Communications Committee is to facilitate communications within the chapter, inform members of local events, and keep members in touch with developments in national DSA. We are currently working on representing DSA to the broader community in Salt Lake and on amplifying the voices of chapter members.
-								</p>
-								<p>The communications committee is organizing a monthly electronic newsletter. The newsletter will help orient new members, contain upcoming events, and deliver reports from committees and affiliated groups to the membership. 
-								</p>
-								<p>The communications committee is also developing print publications for the chapter. We will begin with a half-sheet that announces DSA SL that represents the chapter to Salt Lake. Communications is also preparing a DSA SL newspaper. The newspaper will be a venue to report local stories in a socialist perspective, report on local DSA projects, and share the creativity of Salt Lake DSA members. This month communications is developing submission guidelines for the paper and next month we will be calling for submissions from the membership.
-								</p>
-							</div>
-							<div class="panel-heading border-top py-2">
-								<a class="accordion-toggle collapsed" data-toggle="collapse" href="#collapseThree">
-									<div>
-									Eco-Socialist Committee
-									</div>
-								</a>
-							</div>
-							<div id="collapseThree" class="collapse pl-4">
-								<p>Salt Lake DSA is excited to announce the formation of our Ecosocialist Working Group! Ecosocialism is a vision of a transformed society in harmony with nature, and the development of practices that can attain it. It is directed toward alternatives to all socially and ecologically destructive systems, such as patriarchy, racism, homophobia and the fossil-fuel based economy. We argue that capitalist exploitation of the working class and nonhuman nature are bound together, and that overcoming ecological crisis requires immediate action and transformative change. Nationally, DSA has a vibrant, dedicated Ecosocialist Working Group and we’re thrilled to greater apply our chapter to struggles for environmental justice in Utah.
-								</p>									
-								<p>We recently had our first meeting and defined our organizing priorities. There are multiple issues to work on, including clean air, climate justice, and free water for all. We plan to fight for these on a local scale while coordinating on national campaigns, using a diversity of tactics from direct action to left policy creation to “hands-on” rejuvenation work. There are many local groups doing important work to ally with towards these goals, and we look forward to adding a socialist voice to environmental discourse in Utah while raising ecological consciousness on the Left. Currently, we meet biweekly, and will next be developing a concrete action plan. Join our fight for a future to build a better world in!
-								</p>									
-								<p>More information can be found on the slack channel or from Shane at <a href="mailto:lucidumsomnium@gmail.com">lucidumsomnium@gmail.com</a>.</p>
-							</div>
-							<div class="panel-heading border-top py-2">
-								<a class="accordion-toggle collapsed" data-toggle="collapse" href="#collapseFour">
-									<div>
-									Mutual Aid Committee	
-									</div>
-								</a>
-							</div>
-							<div id="collapseFour" class="collapse pl-4">
-								<p>The mission of the Mutual Aid Committee is to organize mutual aid projects that result in immediate, material gains for working class people and to demonstrate the power of collective action to transform social relations and material conditions in practice. Mutual aid is not charity. Our goal is to allow our community to cooperatively self-organize and meet its own needs, both internal and external to SLDSA.</p>	
-								<p>Last month the Mutual Aid Committee supported the continued work of Union for Street Solidarity (USS) to alleviate the suffering of the homeless in Salt Lake City through distributions of free essentials every other Saturday in Pioneer Park. To learn more contact <a href="mailto:UnionforStreetSolidarity@gmail.com">UnionforStreetSolidarity@gmail.com</a>. These distributions were bolstered by SLDSA and Rose Park Brown Beret members who organized a Winter Clothing Drive along with local organizers. The drive brought together seven socialist organizations including Utah Harm Reduction Coalition, UAPB, USS, FRSO, PSL, SLDSA and BB. The success of this event led to a write up which will appear in Build!</p>
-								<div id="carouselUSSSlides" class="carousel slide carousel-fade" data-ride="carousel">
-									<ol class="carousel-indicators">
-										<li data-target="#carouselUSSSlides" data-slide-to="0" class="active"/>
-										<li data-target="#carouselUSSSlides" data-slide-to="1"/>
-										<li data-target="#carouselUSSSlides" data-slide-to="2"/>
-										<li data-target="#carouselUSSSlides" data-slide-to="3"/>
-									</ol>
-									<div class="carousel-inner">
-										<div class="carousel-item active">
-											<img class="d-block w-100" src="static/img/uss1.jpg" alt="First slide"/>
-											<div class="carousel-caption d-none d-md-block">
-												<h5>Union For Street Solidarity</h5>
-												<p>Passing out supplies</p>
-											</div>
-										</div>
-										<div class="carousel-item">
-											<img class="d-block w-100" src="static/img/uss2.jpg" alt="Second slide"/>
-											<div class="carousel-caption d-none d-md-block">
-												<h5>Union For Street Solidarity</h5>
-												<p>Putting packets together for distribution</p>
-											</div>
-										</div>
-										<div class="carousel-item">
-											<img class="d-block w-100" src="static/img/uss3.jpg" alt="Third slide"/>
-											<div class="carousel-caption d-none d-md-block">
-												<h5>Union For Street Solidarity</h5>
-												<p>Displaying new banner</p>
-											</div>
-										</div>
-										<div class="carousel-item">
-											<img class="d-block w-100" src="static/img/uss4.jpg" alt="Fourth slide"/>
-											<div class="carousel-caption d-none d-md-block">
-												<h5>Union For Street Solidarity</h5>
-												<p>Stew for the distribution</p>
-											</div>
-										</div>
-									</div>
-									<a class="carousel-control-prev" href="#carouselUSSSlides" role="button" data-slide="prev">
-										<span class="carousel-control-prev-icon" aria-hidden="true"/>
-										<span class="sr-only">Previous</span>
-									</a>
-									<a class="carousel-control-next" href="#carouselUSSSlides" role="button" data-slide="next">
-										<span class="carousel-control-next-icon" aria-hidden="true"/>
-										<span class="sr-only">Next</span>
-									</a>
 								</div>
-								<p>Within SLDSA the we have started a carpool for general meetings. Carpools build community and make attendance easier for members lacking transport, all while reducing our carbon footprint. In February, our general meeting Child Care Program will begin. This program provides books, crafts, and SLDSA volunteers to entertain children so their parents can take part in SLDSA organizing. Child care programs increase membership by easing access to SLDSA for overburdened parents while acknowledging the unpaid labor of Momrades and Dadrades.	
-								</p>
-								<p>Finally, over February we will be working with the Rose Park Brown Berets to plan a brake light clinic. Brake light clinics meet the material needs of workers by replacing their bulbs and decreasing their odds of police interactions. Interactions which put the lives of marginalized people at risk every time they get pulled over. The goal of this event is to not only meet a need, but to build solidarity with the most oppressed members of society while educating them on the power of collective action.	</p>
-								<p>If you want to get involved with any of this, or have ideas for other awesome things we can be doing please email us at <a href="mailto:saltlakedsa.mutualaid@gmail.com">saltlakedsa.mutualaid@gmail.com</a>
-								</p>
-								<p>Meetings held at Mestizo every other Thursday and are open to everyone!</p>
-							</div>
-							<div class="panel-heading border-top py-2">
-								<a class="accordion-toggle collapsed" data-toggle="collapse" href="#collapseFive">
-									<div>
-									Political Education Committee
-									</div>
-								</a>
-							</div>
-							<div id="collapseFive" class="collapse pl-4">
-								<p>The Political Education Committee is responsible for programming and sponsoring events around helping DSA members and the broader Salt Lake community learn about politics. Our purpose is to facilitate critical thinking and dialogue around issues that matter to radical and progressive audiences. Political education includes panels, lectures, screenings, exhibits, podcasts, and videos on any political issue or theory. 
-								
-								<p>The Political Education Committee also oversees the Lefty Lending Library (see <strong><a href="https://docs.google.com/spreadsheets/d/1EqelCdPjbvTqFvqYFn72CsAHu_2iZG_aqgywe1J381w/edit#gid=0">the spreadsheet here for books to borrow</a></strong> and here for <strong><a href="https://drive.google.com/drive/folders/1ENuwKwKXUJPVk0Qbdoycem3oRYO0K9Mo">free online PDFs</a></strong>). With over 1000 items, the Lefty Lending Library is a place for people to browse for books, PDFs, and other media. While our library has material representing numerous theoretical and political perspectives, it was made by and for leftists in the Salt Lake area—not just DSA members. If you have any questions or would like to borrow an item, please email the committee at <strong><a href="mailto:leftylendinglibrary@gmail.com"> leftylendinglibrary@gmail</a></strong>. You can also find our guidelines for the library <strong><a href="https://docs.google.com/document/d/1frO0taE_glK9oVUENukx2Os3HBJ78D51SUeW1ohLR7I/edit">here</a></strong>.
-
-								<p>The Political Education Committee is also working on a web app to eventually replace the spreadsheet. With the web app, all someone would need is the ISBN to list their materials on the library.
-
-							</div>
-							<div class="panel-heading border-top py-2">
-								<a class="accordion-toggle collapsed" data-toggle="collapse" href="#collapseSix">
-									<div>
-									U of U YDSA
-									</div>
-								</a>
-							</div>
-							<div id="collapseSix" class="collapse pl-4">
-								<p>U of U YDSA is a youth wing of the Democratic Socialists of America with the goal of advocating for socialism in a campus setting. You can find more information about our work nationally <a href="https://y.dsausa.org/our-work/">here.</a>
-								</p>
-								<p>We recently had our first meeting, where we voted in the Central Committee and established some semester-long goals. Some of those goals include working with other student groups on mutual aid projects such as helping out with medical equipment redistribution with Project Embrace, base-building on campus via tabling, 1-2 social events, and 1-2 educational events. We also just received our charter, so that’s exciting.</p>
-								<p>We meet at the Marriott Library every first Tuesday of the month @ 5:30-6:30. The meeting room will be announced on our Slack channel (#uofuydsa) and also on our groupme. If you’d like to follow our antics or contact us, you can reach out via slack/groupme, our email <a href="mailto:uofuydsa@gmail.com">uofuydsa@gmail.com</a>, or find us on Insta or Twitter @uofuydsa.</p>
-							</div>
-							<div class="panel-heading border-top py-2">
-								<a class="accordion-toggle collapsed" data-toggle="collapse" href="#collapseSeven">
-									<div>
-									Reading and Study Group
-									</div>
-								</a>
-							</div>
-							<div id="collapseSeven" class="collapse pl-4">
-								<p>We are just beginning study of Rosa Luxemburg: Her Life and Work written by her contemporary comrades Paul Frolich and Rosi Wolfstein.  We have been learning about C.L.R. James and The Black Jacobins for the last several months; our prior projects were The Antonio Gramsci Reader and Carbon Democracy: Political Power in the Age of Oil by Timothy Mitchell.</p>	
-								<p>Our Reading Group meets 6:30 Tuesday evenings in the 3rd floor conference room of the downtown SLC public library.  We read and discuss books on revolutionary politics, capitalism and social change, socialist movement history and strategy.  As we finish a book we democratically decide on our next book project.</p>	
-								<p>We usually read around thirty pages a week.  We will discuss the first two chapters of Rosa Luxemburg, "Youth" and "The Fate of Poland," on January 29 and choose someone to lead discussion of the next chapter(s) on February 5.  You are welcome to join us on any Tuesday evening when you are able, regardless of whether you have kept up with reading, been at previous discussions.</p>
-								<p>You can keep up with what the reading group is doing on the relevant SLDSA Slack channel and/or let me know if you want to receive email updates at <a href="mailto:daynegoodwin@gmail.com">daynegoodwin@gmail.com</a>.</p>
-							</div>
+							<% } %>
 						</div>
 					</div>
 				</div>
 			</section>
 			<% include ../partials/socialmedia %>
 		</div>
+		<script type="text/javascript">
+		new Vue({ 
+			el: '#committees',
+			data() {
+				return { 
+					vData: this.parseObj(
+						<%- vData %>
+					),
+					sliderIndex: 0,
+					sliderInterval: null,
+					docIndex: 0
+				}
+			},
+			beforeDestroy(){
+				clearInterval(self.sliderInterval)
+			},
+			mounted(){
+				var self = this;
+				if (self.vData && self.vData.length > 0) {
+					var length = self.vData[self.docIndex].media.length;
+					self.setSliderInterval(length);
+				}
+			},
+			methods: {
+				parseObj(obj) {
+					if (!obj) return '';
+					return obj;
+				},
+				changeDocIndex(i) {
+					var self = this;
+					self.sliderIndex = 0;
+					self.docIndex = i;
+					clearInterval(self.sliderInterval);
+					var length = self.vData[self.docIndex].media.length;
+					self.setSliderInterval(length);
+				},
+				setSliderInterval(length) {
+					var self = this;
+					self.sliderInterval = setInterval(function(){
+						if (self.sliderIndex < (length - 1)){
+							self.sliderIndex++;
+						} else {
+							self.sliderIndex = 0;
+						}
+					}, 5000)
+				}
+			}
+		})
+
+		</script>
 		<!-- /.container -->
 		<% include ../partials/footer %>
 	</body>

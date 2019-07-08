@@ -1,0 +1,55 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+	<% include ../partials/head %>
+	</head>
+
+	<body>
+
+		<!-- Navigation -->
+		<% include ../partials/nav %>
+		<!-- Page Content -->
+		
+			<div class="container" id="page-top">
+			<section>
+				
+			<% var tmp = "logged in as ";
+			if (locals.user) {tmp += user.username;} else {tmp = 'not logged in'} %>
+			<%= tmp %>
+			<% if (locals.user) { %>
+				<form method="POST" action="/loggedin" enctype="multipart/form-data">
+					<% if (locals.csrfToken) { %>
+						<input type="hidden" name="_csrf" value="<%= csrfToken %>">
+					<% } %>
+					<div class="form-group">
+						<label for="about"></label>
+						<textarea class="form-control" id="about" name="about"><%= user.about %></textarea>
+					</div>
+					<button class="btn btn-primary btn-block" type="submit">Save bio</button>
+				</form>
+
+			<% } %>
+			<hr>
+			<div class="row">
+				<div class="col-sm-8">
+			<% if (locals.user) { %>
+				<a class="btn btn-primary btn-block" href="/logout">LOG OUT</a>
+			<% } else { %>
+				<a class="btn btn-primary btn-block" href="/login">LOG IN</a>
+			<% } %>
+				</div>
+			</div>
+			</section>
+			</div>
+			<% include ../partials/socialmedia %>
+			
+		
+		<!-- /.container -->
+		<% include ../partials/footer %>
+	</body>
+
+</html>
