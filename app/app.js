@@ -177,32 +177,53 @@ app
 	}
 })
 .get('/auth', csrfProtection)
-.post('/auth', fUpload.array(), parseBody, csrfProtection, (req, res, next) => {
+.post('/auth', fUpload.array(), parseBody, csrfProtection, async (req, res, next) => {
 	var admin;
 	if (config.admin.split(',').indexOf(req.body.email.trim()) !== -1) {
 		admin = true;
 	} else {
 		admin = false;
 	}
-	User.register(new User(
-		{ username : req.body.username, 
-			email: req.body.email, 
-			admin: admin,
-			date: new Date()
-		}
-	), req.body.password, (err, user) => {
-		if (err) {
-			return res.render('pages/auth', {info: "Sorry. That Name already exists. Try again."});
-		}
-		req.session.user = req.user;
-		req.session.username = req.body.username;
-		passport.authenticate('local', 
-			{ successRedirect: '/loggedin', failureRedirect: '/loggedin?authfail=true' }
-		)(req, res, function () {
-			return res.redirect('/loggedin')
+	// console.log(admin)
+	const existingUser = await User.findOne({email:req.body.email}).then((doc)=>doc).catch((err)=>next(err));
+	console.log('existingUser')
+	console.log(existingUser)
+	var usr;
+	if (!existingUser) {
+		usr = new User(
+			{ username : req.body.username, 
+				email: req.body.email, 
+				admin: admin,
+				date: new Date()
+			}
+		)
+		User.register(usr, req.body.password, (err, user) => {
+			if (err) {
+				return res.render('pages/auth', {info: "Sorry. That Name already exists. Try again."});
+			}
+			req.session.user = req.user;
+			req.session.username = req.body.username;
+			passport.authenticate('local', 
+				{ successRedirect: '/loggedin', failureRedirect: '/loggedin?authfail=true' }
+			)(req, res, function () {
+				return res.redirect('/loggedin')
+			})
+				
+		});
+	} else {
+		usr = existingUser;
+		usr.setPassword(req.body.password, function(err,user){
+			if (err) {
+				return next(err)
+			} else { 
+				user.save((err)=>next(err));
+				req.session.user = user;
+				req.session.username = user.username;
+				return res.redirect('/loggedin')
+			}
 		})
-			
-	});
+	}
+	
 })
 .get('/login', csrfProtection)
 .post('/login', fUpload.array(), parseBody, csrfProtection, 
@@ -221,10 +242,11 @@ app
 .use('/a', adminRoutes)
 .get('/loggedin', csrfProtection)
 .post('/loggedin', fUpload.array(), parseBody, csrfProtection, (req, res, next) => {
-	User.findOneAndUpdate({_id:req.session.user._id}, {$set:{about:req.body.about}}, {new:true}, (err, doc)=>{
+	User.findOneAndUpdate({_id:req.session.user._id}, {$set:{about:req.body.about}}, {new:true}).lean().exec((err, user)=>{
 		if (err) {
 			return next(err)
 		} else {
+			req.session.user = user;
 			return res.redirect('/loggedin')
 		}
 	})
@@ -249,6 +271,7 @@ app
 		} else {
 			// console.log(req.featuredblogs)
 			return res.render('pages'+url, { 
+				isUser: (!req.query.u && !req.query.e ? false : true),
 				username: (!req.query && !req.query.u ? '' : decodeURIComponent(req.query.u)),
 				email: (!req.query && !req.query.e ? '' : decodeURIComponent(req.query.e)),
 				user: (!req.user ? req.session.user : req.user),

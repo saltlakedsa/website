@@ -51,7 +51,7 @@
 							<div v-for="(item, j) in vDoc.media">
 								<label class="text-uppercase" :for="('switchimg' + j)" v-text="'switch image ' + (j + 1)"></label>
 								<input class="form-control" :id="('switchimg' + j)" @change="handleFile(vDoc._id, j, $event)" type="file" style="min-height: 52px;">
-								<img :src="item.image" style="width: 100%"></img>
+								<img :src="item.image+'?version='+Math.random()" style="width: 100%"></img>
 								<div class="form-group" v-for="(key, k) in Object.keys(item)" v-if="exclude.indexOf(key) === -1">
 									<br>
 									<label class="text-uppercase" :for="(key + j)" v-text="key + ' ' + (j+1) "></label>
