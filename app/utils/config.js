@@ -3,12 +3,17 @@ const path = require('path');
 // require and configure dotenv, will load vars in .env in PROCESS.ENV
 const envPath = path.resolve(__dirname, '../.env');
 require('dotenv').config({ path: envPath });
-const isProduction = new RegExp('production').test(process.env.NODE_ENV);
-if (isProduction) {
-	process.env.SLACK_CALLBACK = 'https://saltlakedsa.org/auth/slack/callback';
-} else {
-	process.env.SLACK_CALLBACK = 'http://localhost:3111/auth/slack/callback';
-}
+// if (!process.env.SLACK_CALLBACK) {
+// 	const isProduction = new RegExp('production').test(process.env.NODE_ENV);
+// 	const isStaging = new RegExp('test').test(process.env.NODE_ENV);
+// 	if (isProduction) {
+// 		process.env.SLACK_CALLBACK = 'https://saltlakedsa.org/auth/slack/callback';
+// 	} else if (isStaging) {
+// 		process.env.SLACK_CALLBACK = 'http://18.237.248.6:3111/auth/slack/callback';	
+// 	} else {
+// 		process.env.SLACK_CALLBACK = 'http://localhost:3111/auth/slack/callback';
+// 	}
+// }
 // define validation for all the env vars
 const envVarsSchema = Joi.object({
 	NODE_ENV: Joi.string()
@@ -23,7 +28,7 @@ const envVarsSchema = Joi.object({
 	SLACK_CLIENT_ID: Joi.string(),
 	SLACK_CLIENT_SECRET: Joi.string(),
 	SLACK_CALLBACK: Joi.string()
-	.allow(['https://saltlakedsa.org/auth/slack/callback', 'http://localhost:3111/auth/slack/callback'])
+	.allow(['https://saltlakedsa.org/auth/slack/callback', 'http://localhost:3111/auth/slack/callback','http://18.237.248.6:3111/auth/slack/callback'])
 	.default('https://saltlakedsa.org/auth/slack/callback'),
 	// list of admin e-mails separated by commas
 	ADMIN: Joi.string()

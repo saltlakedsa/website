@@ -18,7 +18,7 @@
 <div class="container" id="auth">
 <h1 id="sectionHeader" class="section-heading pb-4" style="text-align:center;">Log on</h1>
 
-
+<form method="POST" id="form" enctype="multipart/form-data" action="/auth">
 <% if (locals.csrfToken) { %>
 	<input type="hidden" name="_csrf" value="<%= csrfToken %>">
 <% } %>
@@ -41,7 +41,7 @@
 	</div>
 	<div class="col-lg-4" v-if="isUser">
 	<label for="u1" class="text-uppercase">Username</label>
-	<input class="form-control" type="text" name="username" id="u1"/>
+	<input class="form-control" type="text" name="username" :value="username" id="u1"/>
 
 	</div>
 	<div class="col-lg-4" v-if="isUser">
@@ -101,6 +101,7 @@
 		el: '#auth',
 		data() {
 			return { 
+				username: '',
 				isUser: false,
 				pw: false,
 				lc: false,
@@ -141,6 +142,9 @@
 						} else if (!response.slack) {
 							return window.location.href = '/login?u='+encodeURIComponent(response.username);
 						} else {
+							self.isUser = true;
+							self.username = response.username;
+							//return window.location.href = '/auth/?u='+encodeURIComponent(response.username);
 						}
 					})
 					.catch((err)=>{

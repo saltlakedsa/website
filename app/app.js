@@ -177,20 +177,29 @@ app
 	}
 })
 .get('/auth', csrfProtection)
-.post('/auth', fUpload.array(), parseBody, csrfProtection, (req, res, next) => {
+.post('/auth', fUpload.array(), parseBody, csrfProtection, async (req, res, next) => {
 	var admin;
 	if (config.admin.split(',').indexOf(req.body.email.trim()) !== -1) {
 		admin = true;
 	} else {
 		admin = false;
 	}
-	User.register(new User(
-		{ username : req.body.username, 
-			email: req.body.email, 
-			admin: admin,
-			date: new Date()
-		}
-	), req.body.password, (err, user) => {
+	console.log(admin)
+	const existingUser = await User.findOne({email:req.body.email}).then((doc)=>doc).catch((err)=>next(err));
+	var usr;
+	if (!existingUser) {
+		usr = new User(
+			{ username : req.body.username, 
+				email: req.body.email, 
+				admin: admin,
+				date: new Date()
+			}
+		)
+	} else {
+		usr = existingUser;
+	}
+	console.log(existingUser)
+	User.register(usr, req.body.password, (err, user) => {
 		if (err) {
 			return res.render('pages/auth', {info: "Sorry. That Name already exists. Try again."});
 		}
