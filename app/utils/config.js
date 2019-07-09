@@ -3,6 +3,17 @@ const path = require('path');
 // require and configure dotenv, will load vars in .env in PROCESS.ENV
 const envPath = path.resolve(__dirname, '../.env');
 require('dotenv').config({ path: envPath });
+if (!process.env.SLACK_CALLBACK) {
+	const isProduction = new RegExp('production').test(process.env.NODE_ENV);
+	const isStaging = new RegExp('test').test(process.env.NODE_ENV);
+	if (isProduction) {
+		process.env.SLACK_CALLBACK = 'https://saltlakedsa.org/auth/slack/callback';
+	} else if (isStaging) {
+		process.env.SLACK_CALLBACK = 'http://18.237.248.6:3111/auth/slack/callback';	
+	} else {
+		process.env.SLACK_CALLBACK = 'http://localhost:3111/auth/slack/callback';
+	}
+}
 // define validation for all the env vars
 const envVarsSchema = Joi.object({
 	NODE_ENV: Joi.string()
