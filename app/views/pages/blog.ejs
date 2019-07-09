@@ -9,12 +9,12 @@
 
   <body>
 
-		<!-- Navigation -->
-		
+  <!-- Navigation -->
+  
 	<% include ../partials/nav %>
 
-		<!-- Page Content -->
-	<div id="page-top">
+  <!-- Page Content -->
+  <div id="page-top">
 	<section id="blog">
 	<div class="container">
 		<% if (locals.doc) { %>
@@ -61,14 +61,14 @@
 
 
 	</div>
-	</section>
-		
+  </section>
+  
 	<% include ../partials/socialmedia %>
 	  
-		</div>
-		<!-- /.container -->
+  </div>
+  <!-- /.container -->
 
-		<% include ../partials/footer %>
+  <% include ../partials/footer %>
 	<script>
 	if (typeof $ === 'object') Vue.prototype.$ = $;
 	new Vue({ 
