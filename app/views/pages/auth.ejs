@@ -41,7 +41,11 @@
 	</div>
 	<div class="col-lg-4" v-if="isUser">
 	<label for="u1" class="text-uppercase">Username</label>
-	<input class="form-control" type="text" name="username" :value="username" id="u1"/>
+	<% if (locals.username && username !== 'undefined') { %>
+		<input class="form-control" type="text" name="username" id="u1" value="<%= locals.username %>"/>
+	<% } else { %>
+		<input class="form-control" type="text" name="username" id="u1"/>
+	<% } %>
 
 	</div>
 	<div class="col-lg-4" v-if="isUser">
@@ -101,8 +105,9 @@
 		el: '#auth',
 		data() {
 			return { 
-				username: '',
-				isUser: false,
+				isUser: this.parseObj(
+					<%- isUser %>
+				),
 				pw: false,
 				lc: false,
 				uc: false,
@@ -115,11 +120,6 @@
 		},
 		mounted(){
 			var self = this;
-			console.log(window.location.search)
-			if (window.location.search) {
-				$('#e1')[0].focus();
-				$('#e1')[0].blur();
-			}
 		},
 		methods: {
 			parseObj(obj) {
@@ -142,9 +142,7 @@
 						} else if (!response.slack) {
 							return window.location.href = '/login?u='+encodeURIComponent(response.username);
 						} else {
-							self.isUser = true;
-							self.username = response.username;
-							//return window.location.href = '/auth/?u='+encodeURIComponent(response.username);
+							return window.location.href = '/auth?u='+encodeURIComponent(response.username)+'&e='+encodeURIComponent(response.email);
 						}
 					})
 					.catch((err)=>{
@@ -161,6 +159,9 @@
 				self.nu = /\d/g.test(val);
 				if (self.lc && self.uc && self.nu) {
 					self.pw = true;
+					setTimeout(function(){
+						$('#p2').focus();
+					}, 500)
 				} else {
 					self.pw = false;
 					self.message = 'Your password must contain at least one lowercase, one uppercase letter, and at least one number.'
