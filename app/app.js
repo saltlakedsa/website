@@ -223,7 +223,6 @@ app
 			}
 		})
 	}
-	// console.log(existingUser)
 	
 })
 .get('/login', csrfProtection)
