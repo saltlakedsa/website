@@ -39,7 +39,7 @@
 					<div class="carousel-inner">
 						<div class="carousel-item" :class="(sliderIndex === j ? 'active' : '')" v-for="(item, j) in vDoc.media"
 						:style="{opacity: (sliderIndex === j ? 1 : 0 ) }">
-							<img class="d-block w-100" :src="item.image" :alt="'Slide '+ j"/>
+							<img class="d-block w-100" :src="item.image+'?version='+Math.random()" :alt="'Slide '+ j"/>
 							<div class="carousel-caption d-md-block">
 								<h5 v-text="vDoc.category"></h5>
 								<p v-text="item.caption"></p>
