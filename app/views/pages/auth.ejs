@@ -16,72 +16,9 @@
     <!-- Page Content -->
 <section>
 <div class="container" id="auth">
-<h1 id="sectionHeader" class="section-heading pb-4" style="text-align:center;">Register new user</h1>
+<h1 id="sectionHeader" class="section-heading pb-4" style="text-align:center;">Log on</h1>
 
-<form method="POST" id="form" enctype="multipart/form-data" action="/auth">
 
-<% if (locals.csrfToken) { %>
-	<input type="hidden" name="_csrf" value="<%= csrfToken %>">
-<% } %>
-<div class="row form-group">
-<div class="col-lg-2">
-</div>
-<div class="col-lg-8">
-  <label for="e1" class="text-uppercase">Email</label>
-	<% if (locals.email && email !== 'undefined') { %>
-		<input class="form-control" type="email" name="email" id="e1" value="<%= locals.email %>" @blur="confirmEmail"/>
-	<% } else { %>
-		<input class="form-control" type="email" name="email" id="e1" @blur="confirmEmail"/>
-	<% } %>
-
-</div>
-<div class="col-lg-8" :class="(!isUser ? 'alert-danger' : 'alert-success')" role="alert" v-text="message" style="text-align:center;margin:15px;">
-</div>
-<div class="col-lg-4" v-if="isUser">
-  <label for="u1" class="text-uppercase">Username</label>
-  <input class="form-control" type="text" name="username" id="u1"/>
-
-</div>
-<div class="col-lg-4" v-if="isUser">
-	<br>
-	<label for="p1" class="text-uppercase">Password</label>
-	<input class="form-control" type="password" name="password" id="p1" @blur="validatePassword"/>
-	
-	<div id="confirmPassword" v-if="pw">
-	<br>
-	<label for="p2" class="text-uppercase">Confirm Password</label>
-	<input class="form-control" type="password" name="confirm_password" id="p2" @keyup="confirmPassword"/>
-	</div>
-
-</div>
-
-<div class="col-lg-2">
-</div>
-</div>
-
-<div class="row">
-<div class="col-lg-2"></div>
-<div class="col-lg-8">&nbsp;</div>
-<div class="col-lg-2"></div>
-</div> 
-
-<div class="row form-group">
-<div class="col-lg-2">
-</div>
-<div class="col-lg-4">
-
-       
-</div>
-<div class="col-lg-4">
-	
-	 <input id="submitButton" class="btn btn-primary btn-block" type="submit"  :disabled="!confirmed"/>
-	 
-</div>
-<div class="col-lg-2">
-</div>
-</div>
- 
- </form>
  <h6>You may also authenticate using your SLDSA Slack account:</h6>
  <a href="/auth/slack" ariaDescription="Authenticate with Slack" style="display:inline-block;height:auto;">
  	<img src="https://api.slack.com/img/sign_in_with_slack.png"></img>
