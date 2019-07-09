@@ -1,0 +1,12 @@
+#!/bin/bash
+echo $'Killing all Nodes\n'
+sudo killall node
+
+
+echo $'downloading dependencies\n'
+npm i
+
+echo $'starting server - logging in app.out\n'
+nohup sudo node app.js > app.out &
+
+

@@ -80,7 +80,8 @@ router
 	Blog.findById(req.params.bid).lean().exec((err, doc) => {
 		if (err) {
 			return next(err)
-		}
+		} else {
+		/**
 		if (doc && doc.author) {
 			User.findById(doc.author).lean().exec((err, author) => {
 				if (err) {
@@ -96,11 +97,14 @@ router
 			})
 		} else {
 			// console.log(doc)
-			return res.render('pages/blog', {
+			/**return res.render('pages/blog', {
 				user: (!req.user ? req.session.user : req.user),
 				vDoc: JSON.stringify(doc),
 				doc: doc//JSON.parse(JSON.stringify(doc))//JSON.stringify(doc)
 			});
+			**/
+			req.doc = doc;
+		next();
 		}
 	})
 	
@@ -134,7 +138,7 @@ router
 	const doc = await Blog.findById(req.params.bid).lean().then((doc) => doc).catch((err) => next(err));
 	let author;
 	if (doc) author = await User.findById(doc.author).lean().then((author) => author).catch((err) => next(err));
-	res.render('pages/createpost', {
+	/**res.render('pages/createpost', {
 		doc: doc,
 		vDoc: JSON.stringify(doc),
 		csrfToken: req.csrfToken(),
@@ -142,6 +146,11 @@ router
 		author: author,
 		edit: true
 	});
+	
+	**/
+	req.vDoc = JSON.stringify(doc);
+	req.pageDisplay = '/b/createPost';
+	next();
 })
 .post('/edit/:bid', upload.array(), parseBody, csrfProtection, (req, res, next) => {
 	Blog.findOne({_id: req.params.bid}, async (err, doc) => {
@@ -158,6 +167,8 @@ router
 				})
 			}
 		});
+		var d = new Date();
+		doc.date = d.toString();
 		var cleanupDescription = marked(curly(doc.description));
 		doc.description = cleanupDescription;
 		if (req.user) doc.author = req.user._id;

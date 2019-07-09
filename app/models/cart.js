@@ -29,8 +29,13 @@ module.exports = function Cart(oldCart){
 		}
 	};
 	this.removeItem = function(item, id) {
-		this.totalQty--;
-		this.totalPrice -= item.price;
+		//my changes
+		this.totalQty -= this.items[id].qty;
+		this.totalPrice -= this.items[id].price;
+		
+		
+		//this.totalQty--;
+		//this.totalPrice -= item.price;
 		delete this.items[id];
 	};
 	this.generateArray = function() {

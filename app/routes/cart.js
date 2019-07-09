@@ -88,10 +88,14 @@ router.get('/inventory', function(req, res, next) {
 								if (err) {
 									return next(err)
 								}
-								return res.render('pages/inventory', {
+								/**return res.render('pages/inventory', {
 									content: data,
 									vContent: (!data ? '' : JSON.stringify(data))
 								})
+								*/
+								req.content = data;
+								req.vContent = (!data ? '' : JSON.stringify(data));
+								next();
 							})
 						})
 					});
@@ -114,10 +118,15 @@ router.get('/inventory', function(req, res, next) {
 						return res.redirect('/inventory')
 					})
 				} else {
+					/**
 					return res.render('pages/inventory', {
 						content: data,
 						vContent: (!data ? '' : JSON.stringify(data))
 					})
+					*/
+					req.content = data;
+					req.vContent = (!data ? '' : JSON.stringify(data));
+					next();
 				}
 			}
 			
@@ -173,13 +182,18 @@ router.get('/removefromcart/:id', function(req, res, next){
 
 router.get('/cart', function(req, res, next) {
 	if (!req.session.cart) {
-		return res.render('pages/cart', {cart: null});
-	}
+		//return res.render('pages/cart', {cart: null});
+		req.cart = null;
+		next();
+	} else {
 	var cart = new Cart(req.session.cart);
-	return res.render('pages/cart', {
-		cart: cart.generateArray(),
-		totalPrice: cart.totalPrice
-	});
+		/**return res.render('pages/cart', {
+			cart: cart.generateArray(),
+			totalPrice: cart.totalPrice
+		});*/
+		req.cart = cart.generateArray();
+		req.totalPrice = cart.totalPrice;
+	next();}
 });
 
 router.get('/checkout', csrfProtection, function(req, res, next) {
@@ -188,12 +202,19 @@ router.get('/checkout', csrfProtection, function(req, res, next) {
 	}
 	var cart = new Cart(req.session.cart);
 	
+	
+	/*
 	return res.render('pages/checkout', {
 		pk: process.env.NODE_ENV === 'production' ? process.env.STORE_PUBLISH : process.env.STORE_PUBLISH_TEST,
 		cart: cart.generateArray(),
 		total: cart.totalPrice,
 		csrfToken: req.csrfToken()
 	});
+	*/
+	req.cart = cart.generateArray();
+	req.totalPrice = cart.totalPrice;
+	next();
+	
 });
 
 router.post('/checkout', upload.array(), parseBody, csrfProtection, async function(req, res, next) {
@@ -267,12 +288,18 @@ router.get('/ordersuccess/:ship/:id', function(req, res, next){
 			return next(err) 
 		}
 		var cart = new Cart(order.cart);
+		/**
 		return res.render('pages/order', {
 			order: order,
 			totalPrice: cart.totalPrice,
 			cart: cart.generateArray(),
 			ship: isShip
 		});
+		**/
+		req.pageDisplay = '/shop/order';
+		req.order = order;
+		req.ship = isShip;
+		next();
 	});
 	
 });

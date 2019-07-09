@@ -115,35 +115,37 @@ var sess = {
 	resave: true,
 	saveUninitialized: true,
 	store: store,
-	cookie: { maxAge: 180 * 60 * 1000 }
+	cookie: { maxAge: 365 * 24 * 60 * 60 * 1000 }
 }
 
 
-function logger(req, res, next) {
-	
+function logger(req, res, next) {	
 	var d = new Date().toLocaleString();
-	var u = (req.user != null) ? req.user.username : "not logged in"; 
-	console.log("\n\n"+req.url+" \n"+req.method+" \tIP: "+req.ip+"  \t"+d+" \tusr: "+u);
-	console.log(req.session);
+	var u = (req.user != null) ? req.user.username : "NOT LOGGED IN"; 
+	if(!req.session.views) {
+		req.session.views = {}
+	}
+	req.session.views[req.url] = (req.session.views[req.url] || 0) + 1;
+	console.log("\n\n"+req.url+" \n"+req.method+" \nIP: "+req.ip+"  \n"+d+" \nusr: "+u);
+	console.log('visited: '+JSON.stringify(req.session.views,null,2));
+	console.log('errors: '+JSON.stringify(req.session.errors,null,2));
+	console.log('cart: '+JSON.stringify(req.session.cart,null,2));
+	console.log('user: '+JSON.stringify(req.session.user,null,2));
 	next();
 }
 
 app
 .set('view engine', 'ejs')
+.set('views', ['views','views/partials'])
 .use(favicon(path.join(__dirname, 'public/img', 'favicon.ico')))
 .use('/static',express.static(path.join(__dirname, 'public')))
+.use(session(sess))
 .use('/uploadedImages',express.static(path.join(__dirname, uploadedImages)))
-.use(session(sess),
-	passport.initialize(),
+.use('/uploadedImages',(req, res, next) => {return next("Image Not Found "+req.url)})
+.use(passport.initialize(),
 	passport.session(),
-	// handle bodyParser separately to ensure it comes before csrfProtection
 	cookieParser(sess.secret),
 	logger)
-.use(function (req, res, next) {
-  res.locals.session = req.session;
-  next();
-})
-.get('/', ensureBlogData)
 .get('/committees', ensureBlogData)
 .get('/logout', function(req, res){
   req.logout();
@@ -151,16 +153,16 @@ app
 		if (err) {
 			req.session = null;
 		}
-		res.redirect('/loggedin'); 
+		res.redirect('/userinfo'); 
 	})
 })
 .get('/auth/slack', passport.authenticate('slack'))
  
 .get('/auth/slack/callback',
-  passport.authenticate('slack', { failureRedirect: '/login' }),
+  passport.authenticate('slack', { failureRedirect: '/userinfo' }),
   (req, res) => {
 		req.session.user = req.user;
-		return res.redirect('/loggedin');
+		return res.redirect('/userinfo');
 })
 .post('/checkauth/:email', async (req, res, next) => {
 	var email = decodeURIComponent(req.params.email);
@@ -176,101 +178,42 @@ app
 		return res.status(200).send(false)
 	}
 })
-.get('/auth', csrfProtection)
-.post('/auth', fUpload.array(), parseBody, csrfProtection, async (req, res, next) => {
-	var admin;
-	if (config.admin.split(',').indexOf(req.body.email.trim()) !== -1) {
-		admin = true;
-	} else {
-		admin = false;
-	}
-	// console.log(admin)
-	const existingUser = await User.findOne({email:req.body.email}).then((doc)=>doc).catch((err)=>next(err));
-	console.log('existingUser')
-	console.log(existingUser)
-	var usr;
-	if (!existingUser) {
-		usr = new User(
-			{ username : req.body.username, 
-				email: req.body.email, 
-				admin: admin,
-				date: new Date()
-			}
-		)
-		User.register(usr, req.body.password, (err, user) => {
-			if (err) {
-				return res.render('pages/auth', {info: "Sorry. That Name already exists. Try again."});
-			}
-			req.session.user = req.user;
-			req.session.username = req.body.username;
-			passport.authenticate('local', 
-				{ successRedirect: '/loggedin', failureRedirect: '/loggedin?authfail=true' }
-			)(req, res, function () {
-				return res.redirect('/loggedin')
-			})
-				
-		});
-	} else {
-		usr = existingUser;
-		usr.setPassword(req.body.password, function(err,user){
-			if (err) {
-				return next(err)
-			} else { 
-				user.save((err)=>next(err));
-				req.session.user = user;
-				req.session.username = user.username;
-				return res.redirect('/loggedin')
-			}
-		})
-	}
-	
-})
-.get('/login', csrfProtection)
-.post('/login', fUpload.array(), parseBody, csrfProtection, 
-  passport.authenticate('local', { successRedirect: '/loggedin', failureRedirect: '/login?authfail=true' }),
-	function(req, res, next){
-		req.session.user = req.user;
-		res.redirect('/loggedin')
-	})
-
-// .get('/shop/checkout', csrfProtection)
-// .post('/shop/checkout', fUpload.array(), parseBody, csrfProtection)
 .use('/shop', cartRoutes)
-// .get('/cms/*', csrfProtection)
-// .post('/cms/*', )
 .use('/b', blogRoutes)
 .use('/a', adminRoutes)
-.get('/loggedin', csrfProtection)
-.post('/loggedin', fUpload.array(), parseBody, csrfProtection, (req, res, next) => {
-	User.findOneAndUpdate({_id:req.session.user._id}, {$set:{about:req.body.about}}, {new:true}).lean().exec((err, user)=>{
-		if (err) {
-			return next(err)
-		} else {
-			req.session.user = user;
-			return res.redirect('/loggedin')
-		}
-	})
-})
-.get(/^(?!\/shop|\/cms\/.*|\/b\/.*|\/a\/.*)/, (req, res, next) => {
+.get('*', (req, res, next) => {
 	var url = req.url.split('?')[0];
 	if (url === '/') {
 		url = '/index'
 	};
+	if (url.includes('/b/')) {
+		url = '/b/blog';
+		console.log(url);
+	};
+	if (req.pageDisplay) {
+		url = req.pageDisplay;
+		console.log(url);
+	}
 	fs.stat('views/pages'+url+'.ejs',(err,stats) => {
 		if (err) {
 			if (err.code === 'ENOENT') {
 				err = new Error('Not Found');
 				err.status = 404;
-				return res.render('pages/error', {
-					message: err.message,
-					error: {}
-				});
+				return next(err);
 			} else {
 				return next(err);
 			}
 		} else {
-			// console.log(req.featuredblogs)
 			return res.render('pages'+url, { 
+				order: (req.order ? req.order : null),
+				ship: (req.isShip ? req.isShip : null),			
+				doc: (req.doc ? req.doc : null),
+				vDoc: (req.vDoc ? req.vDoc : null),
+				pk: process.env.NODE_ENV === 'production' ? process.env.STORE_PUBLISH : process.env.STORE_PUBLISH_TEST,
+				content: (req.content ? req.content : null),
+				vContent: (req.vContent ? req.vContent : null),
+				cart: (req.cart ? req.cart : null),
+				totalPrice: (req.totalPrice ? req.totalPrice : null),
 				isUser: (!req.query.u && !req.query.e ? false : true),
 				username: (!req.query && !req.query.u ? '' : decodeURIComponent(req.query.u)),
 				email: (!req.query && !req.query.e ? '' : decodeURIComponent(req.query.e)),
@@ -283,24 +226,22 @@ app
 		}
 	});
 })
-.use(function (req, res, next) {
-	if (req.url) console.log(require('url').parse(req.url).pathname)
-	var err = new Error('Not Found');
-	err.status = 404;
-	return res.render('pages/error', {
-		message: err.message,
-		error: {}
-	});
-})
 .use(function (err, req, res, next) {
-	console.log("!!!ERROR!!!")
+	console.log("!!!ERR0R!!!")
 	console.log(err)
-	console.log("!!!ERROR!!!")
+	
+	if(!req.session.errors) {
+		req.session.errors = {}
+	}
+	req.session.errors[err] = (req.session.errors[err] || 0) + 1;
+	
 	res.status(err.status || 500);
 	res.render('pages/error', {
 		message: err.message,
+		user: null,
 		error: {}
 	});
+	
 });
 
 

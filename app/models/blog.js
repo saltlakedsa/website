@@ -16,6 +16,8 @@ var Blog = new Schema({
 	author: String,
 	category: String,
 	lede: String,
+	Author_Name: String,
+	Author_Bio: String,
 	description: String,
 	date: Date,
 	media: [Media],

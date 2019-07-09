@@ -17,7 +17,7 @@ dotenv.load();
 router
 .all('/*', ensureAdmin)
 .get('/dstryCptlsm', (req, res, next) => {
-	var Order = require('./models/order.js');
+	var Order = require('../models/order.js');
 	Order.find({}).lean().exec(function(err, data){
 		if (err) {
 			next(err);

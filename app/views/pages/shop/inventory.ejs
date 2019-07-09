@@ -3,7 +3,7 @@
 
   <head>
 
-	<% include ../partials/head %>
+	<% include ../../partials/head %>
 
   </head>
 
@@ -11,7 +11,7 @@
 
     <!-- Navigation -->
     
-	<% include ../partials/nav %>
+	<% include ../../partials/nav %>
 
     <!-- Page Content -->
     <div id="page-top">
@@ -37,22 +37,22 @@
 									<% if (item.size === 'S') {%>
 										<div class="row sizeSmall" v-if="sz === 'S'">
 											
-											<% include ../partials/item %>
+											<% include ../../partials/item %>
 										</div>
 									<%} else if (item.size === 'M') {%>
 										<div class="row sizeSmall" v-if="sz === 'M'">
 											
-											<% include ../partials/item %>
+											<% include ../../partials/item %>
 										</div>
 									<%} else if (item.size === 'L') {%>
 										<div class="row sizeSmall" v-if="sz === 'L'">
 											
-											<% include ../partials/item %>
+											<% include ../../partials/item %>
 										</div>
 									<%} else if (item.size === 'XL') {%>
 										<div class="row sizeSmall" v-if="sz === 'XL'">
 											
-											<% include ../partials/item %>
+											<% include ../../partials/item %>
 										</div>
 									<%}%>
 								</div>
@@ -84,12 +84,12 @@
 		</div>
     </section>
     
-	<% include ../partials/socialmedia %>
+	<% include ../../partials/socialmedia %>
 	  
     </div>
     <!-- /.container -->
 
-    <% include ../partials/footer %>
+    <% include ../../partials/footer %>
 	<script type="text/javascript">
 		
 		new Vue({ el: '#select',

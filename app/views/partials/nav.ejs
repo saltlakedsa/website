@@ -1,11 +1,38 @@
 
 <!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav" lang="ejs">
+<nav class="navbar  navbar-dark fixed-top" id="mainNav" lang="ejs">
 	<div class="container">
-		<a class="navbar-brand" href="/">Salt Lake DSA</a>
+	
+	<a href="/">
+		<img class="nav-image" src="/static/img/SLCDSA1.png" alt="DSA Logo">
+		<div class="navbar-brand longer-text">Salt Lake DSA</div>
+		<div class="navbar-brand shorten-text">SL DSA</div>
+		
+	</a>
+		
+		
+		<div class="d-flex flex-row">
+		<a class="nav-icon nav-link px-1" href="/userinfo"><i class="fas fa-1x fa-user"></i>
+		
+	
+		
+		<small class="text-center" style="display: inline-block; width: 18px; height: 18px; color:#f5f4f4; background-color: rgba(10, 6, 6, 1);  border-radius: 50%; transform: translate(-10px, -10px); opacity:<%= (user) ? 1 :0%>;">✓</small>
+		
+		</a>
+		
+		<a class="nav-icon nav-link px-1" href="/shop/cart"><i class="fas fa-1x fa-shopping-cart"></i>
+		
+		
+		<% var cartNum = locals.alertCart ? alertCart.totalQty : 0%>
+		<small class="text-center" style="display: inline-block; width: 18px; height: 18px; color:#f5f4f4; background-color: rgba(10, 6, 6, 1);  border-radius: 50%; transform: translate(-10px, -10px); opacity:<%= cartNum>0 ? 1 : 0%>;"><%= cartNum%></small>
+		
+	
+	 </a>
+			
 		<button id="mainNav-toggler" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
+	</div>
 		<div class="collapse navbar-collapse" id="navbarResponsive">
 			<ul class="navbar-nav ml-auto">
 				<li class="nav-item active">
@@ -21,51 +48,16 @@
 				<li class="nav-item">
 					<a class="nav-link" href="/donate">Donate</a>
 				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="/newsletter">NewsLetter</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="/b">Blog</a>
-				</li>
+			
+			
 				<li class="nav-item">
 					<a class="nav-link" href="/shop/inventory">Shop</a>
 				</li>
-				<li class="nav-item">
-					
-					<% if (session.user) { %>
-					
-					<a class="nav-link" href="/loggedin"><%= session.user.username %></a>
-					
-					<% } else { %>
-					
-					<a class="nav-link" href="/auth"><i class="fas fa-1x fa-user"></i></a>
-
-					<% } %>
-				</li>
+		
 			</ul>
 		</div>
+		
 	</div>	
 </nav>
 
-<% if (locals.alertCart) { %>
-<% if (alertCart) { %>
 
-<div class="container my-auto text-center">
-<div class="row">
-
-<div class="col-lg-6 text-center" style="width:50px;">
-
-<div class="alert alert-light fixed-top border border-danger  sr-icon-4" role="alert" style="top:70px; right:20%; left:20%; opacity: 0.82;"><strong>
-<a href="/shop/cart">There are items in your Cart <i class="fas fa-1x fa-shopping-cart"></i></a></strong>
-<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-<span aria-hidden="true">&times;</span>
-</button>	
-</div>
-
-</div>
-
-</div>
-</div>
-		
-<% } %>
-<% } %>

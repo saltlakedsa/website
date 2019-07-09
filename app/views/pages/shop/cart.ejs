@@ -3,7 +3,7 @@
 
   <head>
 
-	<% include ../partials/head %>
+	<% include ../../partials/head %>
 
   </head>
 
@@ -11,7 +11,7 @@
 
     <!-- Navigation -->
     
-	<% include ../partials/nav %>
+	<% include ../../partials/nav %>
 
     <!-- Page Content -->
     <div id="page-top">
@@ -27,7 +27,7 @@
 					<div class="col-sm-8">
 						
 							<% cart.forEach(function(item) { %>
-								<% include ../partials/cartitem %>
+								<% include ../../partials/cartitem %>
 							<% }); %>
 							<a class="btn btn-primary btn-xl px-2" role="button" style="border-radius:5px; width:100%" href="/shop/inventory">Continue Shopping</a>
 						
@@ -38,19 +38,21 @@
 						
 					</div>
 				<% } else { %>
+					<div class="col-sm-12">
 					<p>Your cart is empty. Check out the <a href="/shop/inventory">store</a></p>
+					</div>
 				<% } %>
 			</div>		
 	</section>
 		
    
     
-	<% include ../partials/socialmedia %>
+	<% include ../../partials/socialmedia %>
 	  
     </div>
     <!-- /.container -->
 
-    <% include ../partials/footer %>
+    <% include ../../partials/footer %>
 
   </body>
 
