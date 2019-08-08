@@ -126,11 +126,15 @@ function logger(req, res, next) {
 		req.session.views = {}
 	}
 	req.session.views[req.url] = (req.session.views[req.url] || 0) + 1;
-	console.log("\n\n"+req.url+" \n"+req.method+" \nIP: "+req.ip+"  \n"+d+" \nusr: "+u);
-	console.log('visited: '+JSON.stringify(req.session.views,null,2));
-	console.log('errors: '+JSON.stringify(req.session.errors,null,2));
-	console.log('cart: '+JSON.stringify(req.session.cart,null,2));
-	console.log('user: '+JSON.stringify(req.session.user,null,2));
+	if(req.url == "/"){
+		console.log('home');
+	} else {
+		console.log("\n\n"+req.url+" \n"+req.method+" \nIP: "+req.ip+"  \n"+d+" \nusr: "+u);
+		console.log('visited: '+JSON.stringify(req.session.views,null,2));
+		console.log('errors: '+JSON.stringify(req.session.errors,null,2));
+		console.log('cart: '+JSON.stringify(req.session.cart,null,2));
+		console.log('user: '+JSON.stringify(req.session.user,null,2));
+	}
 	next();
 }
 
@@ -140,8 +144,9 @@ app
 .use(favicon(path.join(__dirname, 'public/img', 'favicon.ico')))
 .use('/static',express.static(path.join(__dirname, 'public')))
 .use(session(sess))
-.use('/uploadedImages',express.static(path.join(__dirname, uploadedImages)))
-.use('/uploadedImages',(req, res, next) => {return next("Image Not Found "+req.url)})
+.use('/uploadedImages',
+	express.static(path.join(__dirname, uploadedImages)),
+	(req, res, next) => {return next("Image Not Found "+req.url)})
 .use(passport.initialize(),
 	passport.session(),
 	cookieParser(sess.secret),
