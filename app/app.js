@@ -151,6 +151,12 @@ app
 	passport.session(),
 	cookieParser(sess.secret),
 	logger)
+.post('/saveLanguage/:lang', function(req, res, next){
+	var lang = decodeURIComponent(req.params.lang);
+	console.log(lang);
+	session.lang = lang;
+	
+})
 .get('/committees', ensureBlogData)
 .get('/logout', function(req, res){
   req.logout();
@@ -209,7 +215,9 @@ app
 				return next(err);
 			}
 		} else {
-			return res.render('pages'+url, { 
+			return res.render('pages'+url, {
+				lang: (session.lang ? session.lang : 'en'),
+				reqObj: (req.data ? req.data : null),
 				order: (req.order ? req.order : null),
 				ship: (req.isShip ? req.isShip : null),			
 				doc: (req.doc ? req.doc : null),

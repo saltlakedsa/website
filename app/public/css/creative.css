@@ -397,3 +397,11 @@ div.dropCaps p:first-child:first-letter {
   padding-left: 3px;
 }
 
+.selectpicker {
+	    color: white;
+		background-color: #ff3535;
+		border:0;
+		padding-right: 4px;
+		margin-right: 4px;
+	
+}

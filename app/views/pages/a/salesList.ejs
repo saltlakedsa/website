@@ -22,8 +22,8 @@
 		var totalXL = 0;
 		var idx = 0;
 		
-		if (locals.data) {
-			data.forEach(function(person) { 
+		if (locals.reqObj) {
+			reqObj.forEach(function(person) { 
 			total += person.cart.totalQty;
 			totalPrice += person.cart.totalPrice;
 			

@@ -90,3 +90,30 @@
   });
 
 })(jQuery); // End of use strict
+
+
+$(document).ready(function() {
+	for(var n in txt){
+		$("#"+n).html(txt[n][$("#lang_select").val()]);
+	}
+});
+
+$("#lang_select").change(function(){
+	for(var n in txt){
+		$("#"+n).html(txt[n][$("#lang_select").val()]);
+	}
+	$.ajax({
+		url: '/saveLanguage/'+$("#lang_select").val(),
+		type: 'POST',
+		success: function () {
+			console.log('df');
+		},
+		error: function (jqXHR, textStatus, errorThrown) {
+			console.log('er');
+		}
+	});
+		
+		
+})
+
+

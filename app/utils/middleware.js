@@ -2,14 +2,14 @@ const { Blog } = require('../models/index.js');
 const initData = require('./initBlog.json');
 function ensureAdmin(req, res, next) {
 	if (!req.isAuthenticated() || !req.user || !req.user.admin) {
-		return res.redirect('/login')
+		return res.redirect('/userinfo')
 	} else {
 		return next()
 	} 
 }
 function ensureAuthenticated(req, res, next) {
 	if (!req.isAuthenticated()) {
-		return res.redirect('/login')
+		return res.redirect('/userinfo')
 	} else {
 		req.session.user = req.user;
 		return next()

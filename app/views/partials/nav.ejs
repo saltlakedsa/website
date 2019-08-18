@@ -1,5 +1,6 @@
 
 <!-- Navigation -->
+		
 <nav class="navbar  navbar-dark fixed-top" id="mainNav" lang="ejs">
 	<div class="container">
 	
@@ -12,6 +13,10 @@
 		
 		
 		<div class="d-flex flex-row">
+		
+		
+		
+		
 		<a class="nav-icon nav-link px-1" href="/userinfo"><i class="fas fa-1x fa-user"></i>
 		
 	
@@ -28,6 +33,11 @@
 		
 	
 	 </a>
+	 
+	 <select id="lang_select" class="selectpicker">
+			<option value="en">English</option>
+			<option value="sp" <%= (locals.lang == "sp") ? selected="selected" : "" %>>Espanol</option>
+		</select>
 			
 		<button id="mainNav-toggler" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>

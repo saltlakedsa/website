@@ -15,14 +15,15 @@ const { ensureAdmin, ensureAuthenticated } = require('../utils/middleware.js');
 dotenv.load();
 
 router
-.all('/*', ensureAdmin)
-.get('/dstryCptlsm', (req, res, next) => {
+.all('*', ensureAdmin)
+.get('/salesList', (req, res, next) => {
 	var Order = require('../models/order.js');
 	Order.find({}).lean().exec(function(err, data){
 		if (err) {
 			next(err);
 		}
-		res.render('pages/list',{"data":data});
+		req.data = data;
+		next();
 	});
 })
 
