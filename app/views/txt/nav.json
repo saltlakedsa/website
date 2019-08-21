@@ -1,0 +1,32 @@
+var txt = [{
+	nav1:{
+			en:"New Members",
+			sp:"Nuevo Miembros"
+		}
+	},
+	{
+	nav2:{
+			en:"Calendar",
+			sp:"Calendario"
+		}
+	},
+	{
+	nav3:{
+			en:"Committees",
+			sp:"sp"
+		}
+	},
+	{
+	nav4:{
+			en:"Donate",
+			sp:"Calendario"
+		}
+	},
+	{
+	nav5:{
+			en:"Shop",
+			sp:"Calendario"
+		}
+	}
+	
+	];

@@ -93,17 +93,27 @@
 
 
 $(document).ready(function() {
+	var lang = $("#lang_selected").attr("data-language");
+	$("#lang_selected").html($("#"+lang).html());
+	
 	for(var n in txt){
-		$("#"+n).html(txt[n][$("#lang_select").val()]);
+		var key = Object.keys(txt[n])[0];
+		var val = txt[n][key][lang];
+		$("#"+key).html(val);
 	}
 });
 
-$("#lang_select").change(function(){
+
+$(".selectLang").click(function(){
+	$("#lang_selected").html($(this).html());
 	for(var n in txt){
-		$("#"+n).html(txt[n][$("#lang_select").val()]);
+		var key = Object.keys(txt[n])[0];
+		var val = txt[n][key][this.id];
+		$("#"+key).html(val);
 	}
-	$.ajax({
-		url: '/saveLanguage/'+$("#lang_select").val(),
+
+$.ajax({
+		url: '/saveLanguage/'+this.id,
 		type: 'POST',
 		success: function () {
 			console.log('df');
@@ -112,8 +122,26 @@ $("#lang_select").change(function(){
 			console.log('er');
 		}
 	});
-		
-		
-})
+
+});
+
+
+$("#mainNav-toggler").click(function() {
+	console.log("sdf");
+	$("#langResponsive").collapse("hide");
+});
+
+$("#lang-toggler").click(function() {
+	console.log("sdf");
+	$("#navbarResponsive").collapse("hide");
+});
+
+
+
+
+
+
+
+
 
 

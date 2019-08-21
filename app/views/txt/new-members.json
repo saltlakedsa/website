@@ -1,0 +1,10 @@
+	txt.push({
+		text_1:{
+			en:"NEW MEMBERS HANDBOOK",
+			sp:"manual para nuevos miembros"
+		}},{
+		text_2:{
+			en:"For a life worth living",
+			sp:"Por una vida que valga la pena vivir"
+		}
+	});

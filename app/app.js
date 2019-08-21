@@ -143,6 +143,7 @@ app
 .set('views', ['views','views/partials'])
 .use(favicon(path.join(__dirname, 'public/img', 'favicon.ico')))
 .use('/static',express.static(path.join(__dirname, 'public')))
+.use('/txt',express.static(path.join(__dirname, 'views/txt')))
 .use(session(sess))
 .use('/uploadedImages',
 	express.static(path.join(__dirname, uploadedImages)),
