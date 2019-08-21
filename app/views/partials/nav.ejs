@@ -8,7 +8,7 @@
 	<a href="/">
 		<img class="nav-image" src="/static/img/SLCDSA1.png" alt="DSA Logo">
 		<div class="navbar-brand longer-text">Salt Lake DSA</div>
-		<div class="navbar-brand shorten-text">SL DSA</div>
+		<div class="navbar-brand shorten-text"></div>
 		
 	</a>
 		
@@ -18,7 +18,7 @@
 		
 		
 		
-		<a class="nav-icon nav-link px-1" href="/userinfo"><i class="fas fa-1x fa-user"></i>
+		<a class="nav-icon nav-link px-0" href="/userinfo"><i class="fas fa-1x fa-user"></i>
 		
 	
 		
@@ -26,7 +26,7 @@
 		
 		</a>
 		
-		<a class="nav-icon nav-link px-1" href="/shop/cart"><i class="fas fa-1x fa-shopping-cart"></i>
+		<a class="nav-icon nav-link px-0" href="/shop/cart"><i class="fas fa-1x fa-shopping-cart"></i>
 		
 		
 		<% var cartNum = locals.alertCart ? alertCart.totalQty : 0%>
@@ -36,7 +36,7 @@
 	 </a>
 	 
 	 
-		<button id="lang-toggler" class="navbar-toggler lang-button-style px-1 pr-3" type="button" data-toggle="collapse" data-target="#langResponsive" aria-controls="langResponsive" aria-expanded="false" aria-label="Toggle Language">
+		<button id="lang-toggler" class="navbar-toggler lang-button-style px-0 pr-2" type="button" data-toggle="collapse" data-target="#langResponsive" aria-controls="langResponsive" aria-expanded="false" aria-label="Toggle Language">
 			<span id="lang_selected" data-language=<%= locals.lang %>></span> <i class="fas fa-caret-down"></i> 
 		</button>
 			
