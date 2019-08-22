@@ -1,10 +1,176 @@
-	txt.push({
-		text_1:{
-			en:"NEW MEMBERS HANDBOOK",
-			sp:"manual para nuevos miembros"
-		}},{
-		text_2:{
-			en:"For a life worth living",
-			sp:"Por una vida que valga la pena vivir"
-		}
-	});
+txt.push({
+	text_1: {
+		en: "NEW MEMBERS HANDBOOK",
+		sp: "manual para nuevos miembros"
+	}
+}, {
+	text_2: {
+		en: "GET STARTED",
+		sp: "COMIENZO"
+	}
+}, {
+	text_3: {
+		en: "Welcome to Salt Lake DSA",
+		sp: "Bienvenido a Salt Lake DSA"
+	}
+}, {
+	text_4: {
+		en: "We’re glad you’re here. Whether you’re brand new to activism or you’re a long term organizer, we welcome your ideas and your energy.",
+		sp: "Nos alegra tu visita! Tanto si eres nuevo al activismo como si eres un organizador desde hace mucho tiempo, tus ideas y  energía son bienvenidas."
+	}
+}, {
+	text_5: {
+		en: "Democratic Socialists of America - Salt Lake Chapter seeks to create a system based on justice and equality for all people. We believe everyone deserves to live their own life with dignity. We work to equalize political and economic power, because true democracy cannot coexist with inequality. We urgently fight to stop the many crises facing our most powerless members of society.",
+		sp: "Socialistas Democráticos de América - Filial de Salt Lake busca crear un sistema basado en la justicia y la igualdad para todas las personas. Creemos que todos merecen vivir su propia vida con dignidad. Trabajamos para igualar el poder político y económico, porque la verdadera democracia no puede coexistir con la desigualdad. Luchamos con urgencia para detener las muchas crisis que enfrentan los miembros más vulnerables e impotentes de nuestra sociedad."
+	}
+}, {
+	text_6: {
+		en: "We are not a political party. We are a coalition of people, united to create a more powerful front against the worst that capitalism has to offer.",
+		sp: "No somos un partido político. Somos una coalición de personas, unidas para crear un frente más poderoso contra lo peor que el capitalismo tiene para ofrecer."
+	}
+}, {
+	text_7: {
+		en: "DSA strives to be the left-wing counterpart to mainstream politics. Together, we educate the public about democratic socialism and provide a supportive community for people who question capitalism and seek to find an alternative. And, of course, we 'join the fights' as activists, too!",
+		sp: "La meta de la DSA es ser el contrapeso izquierdista principal al partido político dominante. Juntos, educamos al público sobre el socialismo democrático y le brindamos apoyo para las personas que cuestionan el capitalismo, quienes buscan una alternativa. Y, por supuesto, ¡también nos 'unimos a la lucha' como activistas!"
+	}
+}, {
+	text_8: {
+		en: "This handbook is meant to answer the questions we hear frequently from new members. How do I get started? How do I vote? Where can I find out what the chapter is doing?",
+		sp: "Este manual está destinado a responder las preguntas que escuchamos con frecuencia de los nuevos miembros. ¿Cómo empiezo? ¿Cómo voto? ¿Dónde puedo averiguar qué está haciendo la filial?"
+	}
+}, {
+	text_9: {
+		en: "HOW TO BECOME A MEMBER",
+		sp: "CÓMO LLEGAR A SER UN MIEMBRO"
+	}
+}, {
+	text_back: {
+		en: "BACK TO THE BEGINNING",
+		sp: "VOLVER AL COMIENZO"
+	}
+}, {
+	text_11: {
+		en: "How to Become a Member",
+		sp: "Cómo llegar a ser un miembro"
+	}
+}, {
+	text_12: {
+		en: "As a democratic, grassroots organization, DSA is continuing the political revolution for the long term. By paying dues, DSA members self-fund our own tools for liberation. No one is turned away for lack of funds. We invite you to join us today! ",
+		sp: "Como organización de base democrática, DSA continúa la revolución política a largo plazo. Al pagar las cuotas, los miembros de DSA auto-financiamos nuestras propias herramientas para la liberación. Nadie es rechazado por falta de fondos. ¡Te invitamos a unirte a nosotros hoy! "
+	}
+}, {
+	text_13: {
+		en: "<strong>How to pay your dues</strong>" +
+		"<ol class='pt-3'>" +
+		"<li>Visit " +
+		"<a href='https://act.dsausa.org/donate/membership/'>https://act.dsausa.org/donate/membership/</a></li>" +
+		"<li>Be sure to put in an email address you use regularly. You will get a confirmation email right away with downloadable member resources.</li>" +
+		"<li>Dues are good for ONE YEAR. You need renew every year, or you can sign up for monthly dues.</li>" +
+		"</ol>" +
+		"<strong>Dues Levels</strong>" +
+		"<div class='d-flex justify-content-between pt-3'>" +
+		"<div>" +
+		"<p>Introductory" +
+		"<p>Regular" +
+		"<p>Sponsor" +
+		"<p>Family" +
+		"<p>Sustainer" +
+		"<p>Student/Young Democratic Socialists" +
+		"<p>Low Income" +
+		"<p>Lifetime for 50 Years" +
+		"</div>" +
+		"<div>" +
+		"<p>$45.00" +
+		"<p>$60.00" +
+		"<p>$85.00" +
+		"<p>$110.00" +
+		"<p>$175.00" +
+		"<p>$20.00" +
+		"<p>$27.00" +
+		"<p>$750.00" +
+		"</div>" +
+		"</div>",
+		sp: "<strong>Cómo pagar tus cuotas</strong>" +
+		"<ol class='pt-3'>" +
+		"<li>Visite  " +
+		"<a href='https://act.dsausa.org/donate/membership/'>https://act.dsausa.org/donate/membership/</a></li>" +
+		"<li>Asegúrate de ingresar una dirección de correo electrónico que usas regularmente. Recibirás un correo electrónico de confirmación de inmediato con recursos descargables para miembros.</li>" +
+		"<li>Las cuotas son válidas por UN AÑO. Puedes renovar todos los años, o inscribirte para pagar cuotas mensuales.</li>" +
+		"</ol>" +
+		"<strong>Niveles de cuotas</strong>" +
+		"<div class='d-flex justify-content-between pt-3'>" +
+		"<div>" +
+		"<p>Introductorio" +
+		"<p>Regular" +
+		"<p>Patrocinador" +
+		"<p>Familia" +
+		"<p>Sustentador" +
+		"<p>Estudiante / Jóvenes socialistas demócratas" +
+		"<p>Bajos ingresos" +
+		"<p>Vida útil por 50 años" +
+		"</div>" +
+		"<div>" +
+		"<p>$45.00" +
+		"<p>$60.00" +
+		"<p>$85.00" +
+		"<p>$110.00" +
+		"<p>$175.00" +
+		"<p>$20.00" +
+		"<p>$27.00" +
+		"<p>$750.00" +
+		"</div>" +
+		"</div>"
+	}
+}, {
+	text_14: {
+		en: "ADVICE FOR NEW MEMBERS",
+		sp: "CONSEJOS PARA NUEVOS MIEMBROS"
+	}
+}, {
+	text_back2: {
+		en: "BACK TO THE BEGINNING",
+		sp: "VOLVER AL COMIENZO"
+	}
+}, {
+	text_15: {
+		en: "Advice for New Members",
+		sp: "Consejos para nuevos miembros"
+	}
+}, {
+	text_16: {
+		en: "<p><strong>Visit our <a href='https://saltlakedsa.org'>website</a>.</strong> If you never pay your dues you can still show up for SL DSA events. We have a public calendar and everyone (even non-members) are welcome to attend any of our events,  actions, committee meetings."+
+
+		"<p><strong>Sign up and read our newsletter.</strong> This is the most reliable way to find out news, events, actions, and volunteer opportunities. You can sign up here: <a href='https://saltlakedsa.org/newsletter'>https://saltlakedsa.org/newsletter</a>."+
+					
+		"<p><strong>Read announcements and participate in our Slack Channel.</strong> Slack is a messaging application that can be accessed on a mobile phone or a computer. When you become a dues paying member you will be added to the Slack Channel. If you have not yet been added please email <a href='mailto:saltlakedsa.cc@gmail.com'>saltlakedsa.cc@gmail.com</a> and ask for an invite."+
+					
+		"<p><strong>Attend General Meetings.</strong> We have a general meeting every month. This is where you can get updated on all the work the different committees are working on, participate in democratic decision making and meet Socialists in Salt Lake."+
+					
+		"<p><strong>Join or form a committee.</strong>  <a href='https://www.saltlakedsa.org/committees'>Committees</a>  are where activists in our chapter plan events, actions, and more. It’s where the action happens. You can email any committee to find out about where and when they meet, if no committee is working on the issue that you are passionate about, you can form your own. Just find 4 other activists interested in forming the committee and you can start a new committee."+
+
+		"<p><strong>Bonus!</strong> Follow us on Social Media."+
+		"<ul>"+
+		"<li><a href='https://www.facebook.com/slcdsa/'>Facebook</a></li>"+
+		"<li><a href='https://www.instagram.com/slcdsa/'>Instagram</a></li>"+
+		"<li><a href='https://twitter.com/slcDSA'>Twitter</a></li>"+
+		"</ul>",
+		sp: "<p><strong>Visita nuestro <a href='https://saltlakedsa.org'>sitio web.</a>.</strong> Si nunca paga sus cuotas, todavía puede presentarse para los eventos SL DSA. Tenemos un calendario público y todos (incluso los que no son miembros) pueden asistir a cualquiera de nuestros eventos, acciones, reuniones de comités."+
+
+		"<p><strong>Regístrese y lea nuestro boletín. </strong>Esta es la forma más confiable de descubrir noticias, eventos, acciones y oportunidades de voluntariado. Puede registrarse aquí: <a href='https://saltlakedsa.org/newsletter'>https://saltlakedsa.org/newsletter</a>."+
+					
+		"<p><strong>Lea los anuncios y participe en nuestro Slack Channel. </strong> Slack es una aplicación de mensajería a la que se puede acceder desde un teléfono móvil o una computadora. Cuando se convierta en miembro que paga cuotas, se lo agregará al Slack Channel. Si aún no lo han agregado, envíe un correo electrónico a <a href='mailto:saltlakedsa.cc@gmail.com'>saltlakedsa.cc@gmail.com</a> y solicite una invitación."+
+					
+		"<p><strong>Asista a las reuniones generales.</strong>  Tenemos una reunión general todos los meses. Aquí es donde puede actualizarse sobre todo el trabajo en el que están trabajando los diferentes comités, participar en la toma de decisiones democráticas y reunirse con los socialistas en Salt Lake."+
+					
+		"<p><strong>Únase o forme un comité.</strong>  <a href='https://www.saltlakedsa.org/committees'>Los comités</a>  son donde los activistas en nuestro capítulo planean eventos, acciones y más. Es donde sucede la acción. Puede enviar un correo electrónico a cualquier comité para averiguar dónde y cuándo se reúnen, si ningún comité está trabajando en el tema que le apasiona, puede formar el suyo propio. Simplemente encuentre otros 4 activistas interesados ​​en formar el comité y podrá comenzar un nuevo comité."+
+
+		"<p><strong>¡Prima!</strong> Síguenos en las redes sociales."+
+		"<ul>"+
+		"<li><a href='https://www.facebook.com/slcdsa/'>Facebook</a></li>"+
+		"<li><a href='https://www.instagram.com/slcdsa/'>Instagram</a></li>"+
+		"<li><a href='https://twitter.com/slcDSA'>Twitter</a></li>"+
+		"</ul>"
+	}
+}
+
+	);

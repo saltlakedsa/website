@@ -1,0 +1,36 @@
+txt.push({
+	text_1: {
+		en: "SLC-DSA is a local chapter of the Democratic Socialists of America",
+		sp: "SLC-DSA es un capítulo local de los Socialistas Democráticos de América"
+	}
+}, {
+	text_2: {
+		en: "CONTACT US",
+		sp: "CONTÁCTANOS"
+	}
+}, {
+	text_3: {
+		en: "ABOUT",
+		sp: "AVERIGUAR"
+	}
+}, {
+	text_4: {
+		en: "DONATE",
+		sp: "DONACIONES"
+	}
+}, {
+	text_5: {
+		en: "CALENDAR",
+		sp: "CALENDARIO"
+	}
+}, {
+	text_6: {
+		en: "You can join DSA by visiting the national Democratic Socialists of America!",
+		sp: "¡Puedes unirte a DSA visitando a los socialistas democráticos nacionales de América!"
+	}
+}, {
+	text_7: {
+		en: "¡Puedes unirte a DSA visitando a los socialistas democráticos nacionales de América!",
+		sp: "¡Únete a DSA!"
+	}
+});
