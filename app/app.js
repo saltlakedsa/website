@@ -139,6 +139,12 @@ function logger(req, res, next) {
 }
 
 app
+.post('/saveLanguage/:lang', function(req, res, next){
+	var lang = decodeURIComponent(req.params.lang);
+	console.log(lang);
+	session.lang = lang;
+	res.end();
+})
 .set('view engine', 'ejs')
 .set('views', ['views','views/partials'])
 .use(favicon(path.join(__dirname, 'public/img', 'favicon.ico')))
@@ -152,12 +158,6 @@ app
 	passport.session(),
 	cookieParser(sess.secret),
 	logger)
-.post('/saveLanguage/:lang', function(req, res, next){
-	var lang = decodeURIComponent(req.params.lang);
-	console.log(lang);
-	session.lang = lang;
-	
-})
 .get('/committees', ensureBlogData)
 .get('/logout', function(req, res){
   req.logout();

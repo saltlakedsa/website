@@ -116,10 +116,11 @@ $.ajax({
 		url: '/saveLanguage/'+this.id,
 		type: 'POST',
 		success: function () {
-			console.log('df');
+			console.log('success');
 		},
 		error: function (jqXHR, textStatus, errorThrown) {
-			console.log('er');
+			console.log('err');
+			console.log(errorThrown);
 		}
 	});
 
@@ -127,12 +128,10 @@ $.ajax({
 
 
 $("#mainNav-toggler").click(function() {
-	console.log("sdf");
 	$("#langResponsive").collapse("hide");
 });
 
 $("#lang-toggler").click(function() {
-	console.log("sdf");
 	$("#navbarResponsive").collapse("hide");
 });
 

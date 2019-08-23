@@ -13,19 +13,19 @@ var txt = [{
 	{
 	nav3:{
 			en:"Committees",
-			sp:"sp"
+			sp:"Comités"
 		}
 	},
 	{
 	nav4:{
 			en:"Donate",
-			sp:"Calendario"
+			sp:"Donaciones"
 		}
 	},
 	{
 	nav5:{
 			en:"Shop",
-			sp:"Calendario"
+			sp:"Tienda"
 		}
 	}
 	
