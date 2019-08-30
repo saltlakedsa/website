@@ -1,3 +1,5 @@
+
+
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
@@ -5,10 +7,10 @@ const upload = multer();
 const fs = require('fs');
 const sharp = require('sharp');
 const config = require('../utils/config.js');
-var uploadedPosts  = '../../uploads/posts/';
-var uploadedImages = '../../uploads/img/';
-// const uploadedPosts  = (config.env === 'production' ? config.uploadedFiles : config.uploadedFilesDev);
-// const uploadedImages = (config.env === 'production' ? config.uploadedImages : config.uploadedImagesDev);
+//var uploadedPosts  = '../../uploads/posts/';
+//var uploadedImages = 'A:\\mnt\\web_images\\img\\';
+var uploadedImages = config.mount_path;
+
 const { ensureAdmin, ensureAuthenticated, ensureBlogDocument, ensureBlogData } = require('../utils/middleware.js');
 const { User, Blog } = require('../models/index.js');
 const marked = require('marked');
@@ -46,8 +48,9 @@ var curly = function(str){
 
 var storage = multer.diskStorage({
 	destination: async (req, file, cb) => {
-		var p = (path.join(__dirname, uploadedImages) + req.params.bid);
-		var exists = await fs.existsSync(p);//.catch((err) => console.log(err));
+		var p = uploadedImages + req.params.bid;
+		console.log(p);
+		var exists = await fs.existsSync(p);
 		if (!exists) {
 			mkdirp(p, (err) => {
 				if (err) {
@@ -64,7 +67,7 @@ var storage = multer.diskStorage({
 		var newPath = file.originalname.replace(/\.(tiff|jpg|jpeg)$/, '.png');
 		cb(null, newPath) //Appending extension
 	}
-})
+});
 
 var uploadmedia = multer({ storage: storage });
 
@@ -81,28 +84,7 @@ router
 		if (err) {
 			return next(err)
 		} else {
-		/**
-		if (doc && doc.author) {
-			User.findById(doc.author).lean().exec((err, author) => {
-				if (err) {
-					console.log(err)
-				} else {
-					return res.render('pages/blog', {
-						user: (!req.user ? req.session.user : req.user),
-						doc: doc,//JSON.parse(JSON.stringify(doc)),//JSON.stringify(doc),
-						vDoc: JSON.stringify(doc),
-						author: author
-				  });
-				}
-			})
-		} else {
-			// console.log(doc)
-			/**return res.render('pages/blog', {
-				user: (!req.user ? req.session.user : req.user),
-				vDoc: JSON.stringify(doc),
-				doc: doc//JSON.parse(JSON.stringify(doc))//JSON.stringify(doc)
-			});
-			**/
+
 			req.doc = doc;
 		next();
 		}
@@ -138,16 +120,7 @@ router
 	const doc = await Blog.findById(req.params.bid).lean().then((doc) => doc).catch((err) => next(err));
 	let author;
 	if (doc) author = await User.findById(doc.author).lean().then((author) => author).catch((err) => next(err));
-	/**res.render('pages/createpost', {
-		doc: doc,
-		vDoc: JSON.stringify(doc),
-		csrfToken: req.csrfToken(),
-		user: req.user,
-		author: author,
-		edit: true
-	});
-	
-	**/
+
 	req.vDoc = JSON.stringify(doc);
 	req.pageDisplay = '/b/createPost';
 	next();
@@ -182,8 +155,11 @@ router
 	})
 })
 // todo add csrfToken to ajax formData in the createpost.ejs Vue instance
-.post('/edit/uploadimg/:bid', uploadmedia.single('img'), parseBody/*, csrfProtection*/, (req, res, next) => {
-	const imagePath = req.file.path;
+.post('/edit/uploadimg/:bid', uploadmedia.single('img'), parseBody, (req, res, next) => {
+	
+	
+	
+	/*const imagePath = req.file.path;
 	const thumbPath = req.file.path.replace(/\.(png)$/, '.thumb.png');
 	sharp(req.file.path).resize({ height: 200 }).toFile(thumbPath)
 	.then(function(newFileInfo) {
@@ -194,20 +170,49 @@ router
 		console.log("resize error occured");
 		console.log(err)
 	});
+	*/
 	const media = {
 		image: '/uploadedImages/'+req.params.bid+'/'+req.file.filename,
-		image_abs: req.file.path,
-		thumb: '/uploadedImages/'+req.params.bid+'/'+req.file.filename.replace(/\.(png)$/, '.thumb.png'),
-		thumb_abs: thumbPath,
-		caption: 'Edit me'
+		//image_abs: req.file.path,
+		//thumb: '/uploadedImages/'+req.params.bid+'/'+req.file.filename.replace(/\.(png)$/, '.thumb.png'),
+		//thumb_abs: thumbPath,
+		caption: req.param('caption')
 	}
-	Blog.findOneAndUpdate({_id: req.params.bid}, {$push: {media: media}}, {safe: true, upsert: false, new: true}, (err, doc) => {
+	Blog.findOne({_id: req.params.bid}, (err, doc) => {
+		console.log(doc['media'][0]._id);
+		doc['media'] = media;
+		doc.save(function(err){
+			if (err) {
+			return next(err)
+		} else {
+			console.log(err);
+			return res.status(200).send(doc)
+		}
+		});
+	})
+	/*
+	Blog.findOne({_id: req.params.bid}, {$push: {media: media}}, {safe: true, upsert: false, new: true}, (err, doc) => {
 		if (err) {
 			return next(err)
 		} else {
+			console.log(err);
 			return res.status(200).send(doc)
 		}
 	})
+	*/
+	/*
+	console.log(media.image);
+	scpclient.scp(__dirname+'/../../uploads/img/' +req.params.bid+'/'+req.file.filename,'root:rosawas#1@45.79.98.14:/mnt/web_images/img/'+media.image,function(err){
+		
+		console.log(err);
+		fs.unlink(__dirname+'/../../uploads/img/' +req.params.bid+'/'+req.file.filename, (err) => {
+			if (err) {
+				console.error(err)
+			return
+			}
+		})
+	});
+	*/
 })
 .post('/edit/deleteentry/:bid', async function(req, res, next) {
 	var outputPath = url.parse(req.url).pathname;

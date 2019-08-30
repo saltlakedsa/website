@@ -1,6 +1,7 @@
 'use strict';
 
-require('dotenv').config();
+//require('dotenv').config();
+
 
 var favicon = require('serve-favicon');
 var path = require('path');
@@ -30,8 +31,7 @@ const stripe = require("stripe")(
 );
 
 var port           = (new RegExp('production').test(config.env) ? 80 : 3111);
-var uploadedPosts  = '../uploads/posts/';
-var uploadedImages = '../uploads/img/';
+var uploadedImages = config.mount_path;
 const csrfProtection = csrf({ cookie: true });
 const parseForm = bodyParser.urlencoded({ extended: false });
 const parseJSONBody = bodyParser.json();
@@ -151,9 +151,7 @@ app
 .use('/static',express.static(path.join(__dirname, 'public')))
 .use('/txt',express.static(path.join(__dirname, 'views/txt')))
 .use(session(sess))
-.use('/uploadedImages',
-	express.static(path.join(__dirname, uploadedImages)),
-	(req, res, next) => {return next("Image Not Found "+req.url)})
+.use('/uploadedImages', express.static(uploadedImages))
 .use(passport.initialize(),
 	passport.session(),
 	cookieParser(sess.secret),

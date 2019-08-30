@@ -9,7 +9,6 @@
 	</head>
 	
 	
-
 	<body>
 	<% include ../partials/nav %>
 	
@@ -50,6 +49,9 @@
 						<div class="col-sm-8 form-group" v-for="(key, i) in Object.keys(vDoc)" v-if="key !== 'media' && exclude.indexOf(key) !== -1">
 							<input type="hidden" :id="key" type="text" :name="key" :value="vDoc[key]"/>
 						</div>
+						
+						<!---
+						
 						<div class="col-sm-8 py-4" v-if="vDoc.media.length > 0">
 							<div v-for="(item, j) in vDoc.media">
 								<label class="text-uppercase" :for="('switchimg' + j)" v-text="'switch image ' + (j + 1)"></label>
@@ -60,25 +62,26 @@
 									<label class="text-uppercase" :for="(key + j)" v-text="key + ' ' + (j+1) "></label>
 									<textarea class="form-control" :id="(key + j)" type="text" :name="'media['+j+']['+key+']'" v-html="item[key]"></textarea>
 								</div>
-								<!-- <h5><small v-text="item.caption"></small></h5> -->
+								
 								<a class="btn btn-light btn-block" role="button" @click="initDeleteMedia(vDoc._id, j)" v-text="'Delete image '+ (j+1)"></a>
 								<br>
 								<hr class="py-2" style="max-width:75%;">
 							</div>
 						</div>
+						
+						-->
 						<div class="col-md-12">
-								<div class="progress">
-										<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
-												<span class="sr-only"></span>
-										</div>
-								</div>
+								
 						</div>
 						<hr class="py-2" style="max-width:75%;">
 					</div>
 					<label class="text-uppercase" for="newimg">Add image</label>
-					<input class="form-control" id="newimg" @change="handleFile(vDoc._id, vDoc.media.length, $event)" type="file" style="min-height: 52px;">
+					<input class="form-control" id="newimg" @change="handleFile(vDoc._id, vDoc.media.length, $event)" type="file" style="min-height: 52px;"/>
 					<hr class="py-2" style="max-width:75%;">
 
+					<p>
+					<input class="form-control" id="caption" type="text" name="caption" :value="vDoc['media'][0].caption"/>
+					
 					<br>
 					<input id="submitButton" class="btn btn-primary btn-block" type="submit"  :disabled="progressBar !== null"/>
 					<br>
@@ -219,9 +222,8 @@
 						self.file = e.target.files[0];
 						var formData = new FormData();
 						formData.append('img', self.file, self.file.name);
-						//https://www.codedodle.com/2016/10/nodejs-image-uploader-using-express-and.html
 						$.ajax({
-							url: '/b/edit/uploadimg/'+id+'',
+							url: '/b/edit/uploadimg/'+id+'?caption='+$("#caption").val(),
 							method: 'POST',
 							data: formData,
 							processData: false,

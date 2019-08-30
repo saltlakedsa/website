@@ -40,7 +40,7 @@ if (error) {
 }
 
 const config = {
-  env: envVars.NODE_ENV,
+	env: envVars.NODE_ENV,
 	secret: envVars.SECRET,
 	mongourl: envVars.MONGOURL,
 	slackClientId: envVars.SLACK_CLIENT_ID,
@@ -50,7 +50,8 @@ const config = {
 	storePublishTest: envVars.STORE_PUBLISH_TEST,
 	storeSecret: envVars.STORE_SECRET,
 	storeSecretTest: envVars.STORE_SECRET_TEST,
-	admin: envVars.ADMIN
+	admin: envVars.ADMIN,
+	mount_path: envVars.MOUNT_PATH
 };
 
 module.exports = config;

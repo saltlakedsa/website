@@ -115,15 +115,17 @@ $(".selectLang").click(function(){
 $.ajax({
 		url: '/saveLanguage/'+this.id,
 		type: 'POST',
+		timeout: 3000,
 		success: function () {
 			console.log('success');
+			$(".selectLang").removeClass('active');
 		},
 		error: function (jqXHR, textStatus, errorThrown) {
 			console.log('err');
-			console.log(errorThrown);
+			console.log(textStatus);
 		}
 	});
-
+	
 });
 
 

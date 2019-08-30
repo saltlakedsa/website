@@ -30,7 +30,7 @@ txt.push({
 	}
 }, {
 	foot_7: {
-		en: "¡Puedes unirte a DSA visitando a los socialistas democráticos nacionales de América!",
+		en: "Join DSA!",
 		sp: "¡Únete a DSA!"
 	}
 });
