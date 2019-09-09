@@ -119,7 +119,9 @@ var sess = {
 }
 
 
-function logger(req, res, next) {	
+function logger(req, res, next) {
+	req.parsedURL = urlparser.parse(req.url,'true');
+	//console.log(JSON.stringify(req.parsedURL));
 	var d = new Date().toLocaleString();
 	var u = (req.user != null) ? req.user.username : "NOT LOGGED IN"; 
 	if(!req.session.views) {
@@ -192,18 +194,12 @@ app
 .use('/b', blogRoutes)
 .use('/a', adminRoutes)
 .get('*', (req, res, next) => {
-	var url = req.url.split('?')[0];
-	if (url === '/') {
-		url = '/index'
-	};
-	if (url.includes('/b/')) {
-		url = '/b/blog';
-		console.log(url);
-	};
-	if (req.pageDisplay) {
-		url = req.pageDisplay;
-		console.log(url);
-	}
+	//var url = req.url.split('?')[0];
+	req.parsedURL.pathname += (req.parsedURL.pathname.endsWith('/')) ? 'index': '';
+	
+	var url = req.parsedURL.pathname;
+	console.log("asdfsdfsadfsd:  "+url);
+	
 	fs.stat('views/pages'+url+'.ejs',(err,stats) => {
 		if (err) {
 			if (err.code === 'ENOENT') {

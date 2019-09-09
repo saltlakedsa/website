@@ -1,5 +1,5 @@
 
-
+const adminRoutes = require('./admin.js');
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
@@ -7,8 +7,6 @@ const upload = multer();
 const fs = require('fs');
 const sharp = require('sharp');
 const config = require('../utils/config.js');
-//var uploadedPosts  = '../../uploads/posts/';
-//var uploadedImages = 'A:\\mnt\\web_images\\img\\';
 var uploadedImages = config.mount_path;
 
 const { ensureAdmin, ensureAuthenticated, ensureBlogDocument, ensureBlogData } = require('../utils/middleware.js');
@@ -22,7 +20,7 @@ const parseJSONBody = bodyParser.json();
 const parseBody = [parseJSONBody, parseForm];
 const mkdirp = require('mkdirp');
 const path = require('path');
-// typographer's quotes
+
 var curly = function(str){
 	if (!str || typeof str.replace !== 'function'){
 		return ''
@@ -71,32 +69,25 @@ var storage = multer.diskStorage({
 
 var uploadmedia = multer({ storage: storage });
 
-// router.param('bid', ensureBlogDocument);
-// router.all('/*', middleware.ensureBlogData);
-router.all('/edit', ensureAuthenticated);
+
+
+
 
 router
+.all('/edit/*', adminRoutes)
 .get('/:bid', (req, res, next) => {
-	// console.log(req.doc)
-	// const doc = await Blog.findById(req.params.bid).lean().then((doc) => doc).catch((err) => console.log(err))
-	// console.log(doc)
+	req.parsedURL.pathname = req.parsedURL.pathname.replace(req.params.bid,''); //<- maybe this should go elsewhere
 	Blog.findById(req.params.bid).lean().exec((err, doc) => {
 		if (err) {
 			return next(err)
 		} else {
 
 			req.doc = doc;
+			
 		next();
 		}
 	})
 	
-})
-.get('/', ensureBlogData, (req, res, next) => {
-	// const data = Blog.find({}).lean().exec((data) => data).catch((err) => next(err));
-  return res.render('pages/blogRoll', {
-		data: req.featuredblogs,
-		vData: JSON.stringify(req.featuredblogs)
-  })
 })
 .post('/edit/createNew', upload.array(), parseBody, csrfProtection, (req, res) => {
 	var media = req.body.media || []
@@ -117,16 +108,35 @@ router
 	return res.redirect('/b/'+post._id);
 })
 .get('/edit/:bid', csrfProtection, async (req, res, next) => {
-	const doc = await Blog.findById(req.params.bid).lean().then((doc) => doc).catch((err) => next(err));
-	let author;
-	if (doc) author = await User.findById(doc.author).lean().then((author) => author).catch((err) => next(err));
-
-	req.vDoc = JSON.stringify(doc);
-	req.pageDisplay = '/b/createPost';
-	next();
+	req.parsedURL.pathname = req.parsedURL.pathname.replace(req.params.bid,'');//removes :bid so that index can be returned
+	if (req.params.bid === 'new') {
+		const newBlog = new Blog({
+			author: req.user._id,
+			lede: "type here",
+			type: "type here",
+			title: "type here",
+			category: "type here",
+			description: "type here",
+			date: new Date(),
+			media: "",
+			tags: ""
+		});
+		req.vDoc = JSON.stringify(newBlog);
+		next();
+	} else {
+		const doc = await Blog.findById(req.params.bid).lean().then((doc) => doc).catch((err) => next(err));
+		/** what is this?
+		let author;
+		if (doc) author = await User.findById(doc.author).lean().then((author) => author).catch((err) => next(err));
+		**/
+		req.vDoc = JSON.stringify(doc);
+		next();
+	}
 })
-.post('/edit/:bid', upload.array(), parseBody, csrfProtection, (req, res, next) => {
+//.post('/edit/:bid', upload.array(), parseBody, csrfProtection, (req, res, next) => {
+.post('/edit/:bid', parseBody, (req, res, next) => {
 	Blog.findOne({_id: req.params.bid}, async (err, doc) => {
+	if (doc==null) {console.log('need to create new');var doc=new Blog};
 		var keys = Object.keys(req.body);
 		await keys.forEach((key) => {
 			if (key !== 'media') {
