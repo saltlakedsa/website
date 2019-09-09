@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<% include ../partials/head %>
+		
+		<script type="text/javascript" src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=yb2pwtctf7qznwdoo61w3kyj127j61gch5uhhzneop9mfkg7"></script> 
+
+	</head>
+	<p>Blog ID: 
+	<%= JSON.parse(vDoc)._id %>
+	
+	<body>
+	<% include ../partials/nav %>
+	
+		<div class="container">
+			<section id="blogedit" lang="ejs">
+				<div id="page-top" v-if="modal">
+					<div class="modal" tabindex="-1" role="dialog" id="confirmdelete" :style="{display: (!modal ? 'none' : 'block')}">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title">Confirm delete</h5>
+								</div>
+								<div class="modal-body">
+									<p v-text="message"></p>
+								</div>
+								<div class="modal-footer row">
+									<a role="button" class="col-sm-4 btn btn-primary block" @click="recordYes">Delete</a>
+									<div class="col-sm-1"></div>
+									<a role="button" class="col-sm-4 btn btn-primary block" @click="recordNo">Cancel</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<form class="container" method="POST" id="form" enctype="multipart/form-data" :action="(!vDoc ? '' : ('/b/edit/'+vDoc._id))">
+
+					<% if (locals.csrfToken) { %>
+						<input type="hidden" name="_csrf" value="<%= csrfToken %>">
+					<% } %>
+
+					<div class="row" v-if="vDoc">
+
+						<div class="col-sm-8 form-group" v-for="(key, i) in Object.keys(vDoc)" v-if="key !== 'media' && exclude.indexOf(key) === -1">
+							<label class="text-uppercase" :for="key" v-text="key"></label>
+							<input class="form-control" v-if="key !== 'description'" :id="key" type="text" :name="key" :value="vDoc[key]"/>
+							<div v-if="key === 'description'" id="description" name="description" v-html="vDoc.description"></div>
+						</div>
+						<div class="col-sm-8 form-group" v-for="(key, i) in Object.keys(vDoc)" v-if="key !== 'media' && exclude.indexOf(key) !== -1">
+							<input type="hidden" :id="key" type="text" :name="key" :value="vDoc[key]"/>
+						</div>
+						
+						<!---
+						
+						<div class="col-sm-8 py-4" v-if="vDoc.media.length > 0">
+							<div v-for="(item, j) in vDoc.media">
+								<label class="text-uppercase" :for="('switchimg' + j)" v-text="'switch image ' + (j + 1)"></label>
+								<input class="form-control" :id="('switchimg' + j)" @change="handleFile(vDoc._id, j, $event)" type="file" style="min-height: 52px;">
+								<img :src="item.image+'?version='+Math.random()" style="width: 100%"></img>
+								<div class="form-group" v-for="(key, k) in Object.keys(item)" v-if="exclude.indexOf(key) === -1">
+									<br>
+									<label class="text-uppercase" :for="(key + j)" v-text="key + ' ' + (j+1) "></label>
+									<textarea class="form-control" :id="(key + j)" type="text" :name="'media['+j+']['+key+']'" v-html="item[key]"></textarea>
+								</div>
+								
+								<a class="btn btn-light btn-block" role="button" @click="initDeleteMedia(vDoc._id, j)" v-text="'Delete image '+ (j+1)"></a>
+								<br>
+								<hr class="py-2" style="max-width:75%;">
+							</div>
+						</div>
+						
+						-->
+						<div class="col-md-12">
+								
+						</div>
+						<hr class="py-2" style="max-width:75%;">
+					</div>
+					<label class="text-uppercase" for="newimg">Add image</label>
+					<input class="form-control" id="newimg" @change="handleFile(vDoc._id, vDoc.media.length, $event)" type="file" style="min-height: 52px;"/>
+					<hr class="py-2" style="max-width:75%;">
+
+					<p>
+					<input class="form-control" id="caption" type="text" name="caption" :value="vDoc['media'][0].caption"/>
+					
+					<br>
+					<input id="submitButton" class="btn btn-primary btn-block" type="submit"  :disabled="progressBar !== null"/>
+					<br>
+					<br>
+					<br>
+					<!--
+					<h4>Danger: This cannot be undone:</h4>
+					<a class="btn btn-warning btn-block" role="button" @click="initDeleteEntry(vDoc._id)">Delete this entry</a>
+					-->
+
+				</form>
+				
+			</section>
+			
+		</div>
+		<% include ../partials/socialmedia %>
+		<% include ../partials/footer %>
+		
+		
+		<script type="text/javascript">
+		if (typeof tinymce === 'object') {
+			Vue.prototype.tinymce = tinymce;
+			if (typeof $ === 'object') Vue.prototype.$ = $;
+			new Vue({ 
+				el: '#blogedit',
+				data() {
+					return { 
+						user: '',
+						author: '',
+						vDoc: this.parseObj(
+							<%- vDoc %>
+							// !{JSON.stringify(vDoc)}
+						),
+						file: null,
+						//items to hide in the viewer
+						exclude: ['_id', '__v', 'date', 'image', 'image_abs', 'thumb', 'thumb_abs', 'author', 'tags'],
+						tinymce: null,
+						progressBar: null,
+						message: '',
+						modal: false,
+						deleteWhich: '',
+						confirmed: false
+					}
+				},
+				
+				mounted(){
+					var self = this;
+					var editable = $('#description')[0]//document.getElementById('description')[0];
+					console.log(editable)
+					if (self.tinymce === '' && editable) {
+						self.loadTinyMCE()
+					} else {
+						setTimeout(function(){
+							self.loadTinyMCE()
+						}, 2000)
+					}
+				},
+				methods: {
+					parseObj(obj) {
+						if (!obj) return '';
+						return obj;
+					},
+					loadTinyMCE() {
+						var self = this;
+						self.tinymce = tinymce.init({
+							menubar: false,
+							statusbar: false,
+							// theme: 'inlite',
+							// inline: true,
+							selector: "#description",
+							plugins: 'lists, link',
+							valid_elements: '*[*]',
+							toolbar: 'bold italic underline strikethrough | bullist numlist | outdent indent blockquote | subscript superscript | link',
+							default_link_target: '_blank'
+						});
+					},
+					recordYes() {
+						var self = this;
+						if (!isNaN(parseInt(self.deleteWhich, 10))) {
+							$.post('/b/edit/deletemedia/'+self.vDoc._id+'/'+self.deleteWhich+'')
+							.then((result)=>{
+								console.log(result);
+								self.vDoc = result;
+								self.recordNo();
+							})
+							.catch((err)=>console.log(err))
+						} else if (self.deleteWhich.title) {
+							$.post('/b/edit/deleteentry/'+self.deleteWhich._id)
+							.then((result)=>{
+								console.log(result);
+								// self.recordNo();
+								window.location.href = '/b'
+							})
+							.catch((err)=>console.log(err))
+						}
+					},
+					recordNo() {
+						this.confirmed = false;
+						this.deleteWhich = '';
+						this.modal = false;
+						this.message = '';
+					},
+					initDeleteEntry(id) {
+						var self = this;
+						self.modal = true;
+						self.message = 'Are you sure you want to delete this blog entry? This action will delete all information and images for the blog entry, titled '+
+							self.vDoc.title +'.';
+						self.deleteWhich = self.vDoc;
+					},
+					initDeleteMedia(id, i) {
+						var self = this;
+						self.modal = true;
+						self.message = 'Are you sure you want to delete this image? This action is not reversible. ';
+						self.deleteWhich = i;
+					},
+					deletemedia(id, i) {
+						var self = this;
+						$.post('/b/edit/deletemedia/'+id+'/'+i+'')
+						.then((result) => {
+							console.log(result)
+						})
+						.catch((err) => {
+							console.log(err)
+						})
+					},
+					deleteentry(id) {
+						var self = this;
+						$.post('/b/edit/deleteentry/'+id+'')
+						.then((result) => {
+							console.log(result)
+						})
+						.catch((err) => {
+							console.log(err)
+						})
+					},
+					handleFile(id, i, e) {
+						var self = this;
+						self.file = e.target.files[0];
+						var formData = new FormData();
+						formData.append('img', self.file, self.file.name);
+						$.ajax({
+							url: '/b/edit/uploadimg/'+id+'?caption='+$("#caption").val(),
+							method: 'POST',
+							data: formData,
+							processData: false,
+							contentType: false,
+							xhr: function () {
+								var xhr = new XMLHttpRequest();
+
+								// Add progress event listener to the upload.
+								xhr.upload.addEventListener('progress', function (event) {
+									self.progressBar = $('.progress-bar');
+
+									if (event.lengthComputable) {
+										var percent = (event.loaded / event.total) * 100;
+										self.progressBar.width(percent + '%');
+
+										if (percent === 100) {
+											self.progressBar.removeClass('active');
+										}
+									}
+								});
+								return xhr;
+							}
+						}).done((result) => {
+							console.log(result)
+							self.vDoc = result;
+							self.progressBar.removeClass('active');
+							self.progressBar.width('0%');
+							self.progressBar = null;
+						}).fail(function (xhr, status) {
+							alert(status);
+						})
+					}
+				}
+			})
+		}
+		</script>
+	</body>
+</html>
