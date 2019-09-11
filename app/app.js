@@ -132,10 +132,10 @@ function logger(req, res, next) {
 		console.log('home');
 	} else {
 		console.log("\n\n"+req.url+" \n"+req.method+" \nIP: "+req.ip+"  \n"+d+" \nusr: "+u);
-		console.log('visited: '+JSON.stringify(req.session.views,null,2));
-		console.log('errors: '+JSON.stringify(req.session.errors,null,2));
-		console.log('cart: '+JSON.stringify(req.session.cart,null,2));
-		console.log('user: '+JSON.stringify(req.session.user,null,2));
+		//console.log('visited: '+JSON.stringify(req.session.views,null,2));
+		//console.log('errors: '+JSON.stringify(req.session.errors,null,2));
+		//console.log('cart: '+JSON.stringify(req.session.cart,null,2));
+		//console.log('user: '+JSON.stringify(req.session.user,null,2));
 	}
 	next();
 }
@@ -194,11 +194,9 @@ app
 .use('/b', blogRoutes)
 .use('/a', adminRoutes)
 .get('*', (req, res, next) => {
-	//var url = req.url.split('?')[0];
 	req.parsedURL.pathname += (req.parsedURL.pathname.endsWith('/')) ? 'index': '';
-	
 	var url = req.parsedURL.pathname;
-	console.log("asdfsdfsadfsd:  "+url);
+	console.log("looking up:  "+url);
 	
 	fs.stat('views/pages'+url+'.ejs',(err,stats) => {
 		if (err) {
@@ -216,7 +214,6 @@ app
 				order: (req.order ? req.order : null),
 				ship: (req.isShip ? req.isShip : null),			
 				doc: (req.doc ? req.doc : null),
-				vDoc: (req.vDoc ? req.vDoc : null),
 				pk: process.env.NODE_ENV === 'production' ? process.env.STORE_PUBLISH : process.env.STORE_PUBLISH_TEST,
 				content: (req.content ? req.content : null),
 				vContent: (req.vContent ? req.vContent : null),

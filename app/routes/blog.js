@@ -2,8 +2,8 @@
 const adminRoutes = require('./admin.js');
 const express = require('express');
 const router = express.Router();
-const multer = require('multer');
-const upload = multer();
+var multer = require('multer');
+var upload = multer({ dest: './'}).single('newimg');
 const fs = require('fs');
 const sharp = require('sharp');
 const config = require('../utils/config.js');
@@ -15,11 +15,12 @@ const marked = require('marked');
 const bodyParser = require("body-parser");
 const csrf = require('csurf'); 
 const csrfProtection = csrf({ cookie: true });
-const parseForm = bodyParser.urlencoded({ extended: false });
-const parseJSONBody = bodyParser.json();
-const parseBody = [parseJSONBody, parseForm];
+//const parseForm = bodyParser.urlencoded({ extended: false });
+//const parseJSONBody = bodyParser.json();
+//const parseBody = [parseJSONBody, parseForm];
 const mkdirp = require('mkdirp');
 const path = require('path');
+
 
 var curly = function(str){
 	if (!str || typeof str.replace !== 'function'){
@@ -75,40 +76,38 @@ var uploadmedia = multer({ storage: storage });
 
 router
 .all('/edit/*', adminRoutes)
-.get('/:bid', (req, res, next) => {
-	req.parsedURL.pathname = req.parsedURL.pathname.replace(req.params.bid,''); //<- maybe this should go elsewhere
-	Blog.findById(req.params.bid).lean().exec((err, doc) => {
-		if (err) {
-			return next(err)
-		} else {
-
-			req.doc = doc;
-			
+.get('/*/:bid', (req, res, next) => {
+	req.parsedURL.pathname = req.parsedURL.pathname.replace(req.params.bid,''); // remove bid
+	if (req.params.bid === 'new') {
+		const doc = new Blog({
+			author: req.user._id,
+			lede: "type here",
+			type: "type here",
+			title: "type here",
+			category: "blog",
+			description: "type here",
+			date: new Date(),
+			media: "",
+			tags: ""
+		});
+		req.doc = doc;
 		next();
-		}
-	})
+	} else {
+		Blog.findById(req.params.bid).lean().exec((err, doc) => {
+			if (err) { 
+				return next(err); 
+			} 
+			else {
+				//console.log('found it')
+				req.doc = doc;
+				next();
+			}
+		})
+	}
 	
 })
-.post('/edit/createNew', upload.array(), parseBody, csrfProtection, (req, res) => {
-	var media = req.body.media || []
-	const post = new Blog({
-		author: req.user._id,
-		lede: req.body.lede,
-		type: req.body.type,
-		title: req.body.title,
-		category: req.body.category,
-		description: req.body.description,
-		date: new Date(),
-		media: media,
-		tags: req.body.tags
-  });
-	post.save((err) => {
-		if (err) return next(err)
-	});
-	return res.redirect('/b/'+post._id);
-})
 .get('/edit/:bid', csrfProtection, async (req, res, next) => {
-	req.parsedURL.pathname = req.parsedURL.pathname.replace(req.params.bid,'');//removes :bid so that index can be returned
+	//req.parsedURL.pathname = req.parsedURL.pathname.replace(req.params.bid,'');
 	if (req.params.bid === 'new') {
 		const newBlog = new Blog({
 			author: req.user._id,
@@ -133,10 +132,38 @@ router
 		next();
 	}
 })
+
+/**
+// parseBody
+.post('/edit/createNew', upload.array(), csrfProtection, (req, res) => {
+	var media = req.body.media || []
+	const post = new Blog({
+		author: req.user._id,
+		lede: req.body.lede,
+		type: req.body.type,
+		title: req.body.title,
+		category: req.body.category,
+		description: req.body.description,
+		date: new Date(),
+		media: media,
+		tags: req.body.tags
+  });
+	post.save((err) => {
+		if (err) return next(err)
+	});
+	return res.redirect('/b/'+post._id);
+})
+**/
 //.post('/edit/:bid', upload.array(), parseBody, csrfProtection, (req, res, next) => {
-.post('/edit/:bid', parseBody, (req, res, next) => {
+.post('/edit/:bid', bodyParser.urlencoded({ extended: true }), (req, res, next) => {
+	 res.send('You sent the name "' + JSON.stringify(req.body) + '".');
+	/**
 	Blog.findOne({_id: req.params.bid}, async (err, doc) => {
-	if (doc==null) {console.log('need to create new');var doc=new Blog};
+		if (doc==null) {
+			//console.log('need to create new');
+			var doc=new Blog
+		};
+		console.log(JSON.stringify(req.body));
 		var keys = Object.keys(req.body);
 		await keys.forEach((key) => {
 			if (key !== 'media') {
@@ -159,16 +186,27 @@ router
 			if (err) {
 				return next(err)
 			} else {
-				return res.redirect('/b/'+doc._id);
+				return res.redirect('/b/view/'+doc._id);
 			}
 		})
 	})
+	**/
 })
 // todo add csrfToken to ajax formData in the createpost.ejs Vue instance
-.post('/edit/uploadimg/:bid', uploadmedia.single('img'), parseBody, (req, res, next) => {
+// was using parseBody
+.post('/edits/uploadimg', (req, res, next) => {
 	
 	
-	
+	console.log('sadf');
+	upload(req, res, function (err) {
+		if (err instanceof multer.MulterError) {
+		console.log(err);
+		} else if (err) {
+		console.log(err);
+		}
+ 
+    console.log(req.file);
+  })
 	/*const imagePath = req.file.path;
 	const thumbPath = req.file.path.replace(/\.(png)$/, '.thumb.png');
 	sharp(req.file.path).resize({ height: 200 }).toFile(thumbPath)
@@ -181,6 +219,11 @@ router
 		console.log(err)
 	});
 	*/
+	
+	
+	
+	next();
+	/**
 	const media = {
 		image: '/uploadedImages/'+req.params.bid+'/'+req.file.filename,
 		//image_abs: req.file.path,
