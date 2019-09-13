@@ -8,13 +8,25 @@
 		tinymce.init({
 				menubar: false,
 				statusbar: false,			
-				selector: "#tinymce",
+				selector: "#description",
 				plugins: 'lists, link',
 				valid_elements: '*[*]',
 				toolbar: 'bold italic underline strikethrough | bullist numlist | outdent indent blockquote | subscript superscript | link',
 				default_link_target: '_blank'
 		});
 		</script>
+		<style>
+			.box{
+				position: relative;
+				margin: auto;
+				display: block;
+				margin-top: 2%;
+				margin-bottom: 2%;
+				width: 100%;
+				min-height: 200px;
+				background: Gray;
+			}
+		</style>
 
 	</head>
  	
@@ -29,49 +41,13 @@
 		<div class="col-lg-12">
 		
 		
-		<form id="imageForm" enctype="multipart/form-data">
+		<form class="d-none" id="imageForm" enctype="multipart/form-data">
 			<label for="newimg">Add image</label>
 			<input class="form-control" id="newimg" type="file" name="newimg">
 		</form>
 		
-		<form method="POST" id="form" action=<%= "/b/edit/" +  doc._id %> >
-			<div class="form-group">
-			
-			
-				
-				
-					<hr class="py-2" style="max-width:75%;">
-			
-				<label for="title">Title</label> 
-				<input type="text" class="form-control" id="title" name="title" value="<%= doc.title %>">
-			
-				<label for="category">Category</label> 
-				<input type="text" class="form-control" id="category" name="category" value="<%= doc.category %>">
-				
-				<label for="lede">Lede</label> 
-				<input type="text" class="form-control" id="lede" name="lede" value="<%= doc.lede %>">
-			
-			<p>Blog ID: <%= doc._id %></p>
-			<p>Last Updated: <%= doc.date %>
-			<p>Blog Ver: <%= doc.__v %>
-			<p>Author ID: <%= doc.author %>
-			
-			
-			<div class="form-group">
-				
-			</div>
-			
-			<p>Author: <%= doc.Author_Name %>
-			<p>Author_BIO: <%= doc.Author_Bio %>
-			<p>Contents:
-			
-				<div id="tinymce" name="tinymce"><%- doc.description %></div>
-			
-			
-			
-			
-			
-			<%
+		
+		<%
 			if (doc.media[0]) {
 				var image_temp = doc.media[0].image;
 				var caption_temp = doc.media[0].caption;
@@ -79,11 +55,108 @@
 				var image_temp = "";
 				var caption_temp = "";
 			}
-			%>
-			<p>Media: <%= image_temp %>
-			<img class="figure-img img-fluid rounded" src="<%= image_temp %>"></img>
-			<p>Caption: <%= caption_temp %>
+		%>
+		
+		<form method="POST" id="form" action=<%= "/b/edit/" +  doc._id %> >
+			<div class="form-group">				
+				
+				<label for="title">Title</label> 
+				<input type="text" class="form-control" id="title" name="title" value="<%= doc.title %>">
+			
 			</div>
+			<div class="form-group">
+			
+				<label for="category">Category</label> 
+				<select class="form-control" id="category" name="category">
+					<option value="none">Choose...</option>
+					<option value="Blog" <%= (doc.category == "Blog") ? "Selected" : "" %>>Blog</option>
+					<option value="Committee" <%= (doc.category == "Committee") ? "Selected" : "" %>>Committee</option>
+				</select>
+				<small class="form-text text-muted">This determines whether to display as a committee report on the committee page.</small>
+				
+			</div>
+			<div class="form-group">
+			
+				<label for="lede">Lede</label> 
+				<input type="text" class="form-control" id="lede" name="lede" value="<%= doc.lede %>">
+			
+			</div>
+			<div class="form-group">
+			
+				<label for="AuthorName">Author</label> 
+				<input type="text" class="form-control" id="AuthorName" name="Author_Name" value="<%= doc.Author_Name %>">
+			
+			</div>
+			<div class="form-group">
+			
+				<label for="AuthorBIO">Author BIO</label> 
+				<input type="text" class="form-control" id="AuthorBIO" name="Author_Bio" value="<%= doc.Author_Bio %>">
+			
+			</div>
+			<div class="form-group">
+			
+				Image Information
+				<div class="border container py-2">
+				<div class="row">
+					<div class="col-sm-3 align-self-center">
+					<button id="imageSelect" type="button" class="btn btn-danger w-100">Change Image</button>
+					</div>
+				
+					<div class="col-sm-9">
+					<img class="figure-img img-fluid rounded box" src="<%= image_temp %>" id="media_display"></img>
+				
+					<div class="form-group">
+						<label for="caption">Caption</label> 
+						<input type="text" class="form-control" id="caption" name="caption" value="<%= caption_temp %>">
+					</div>
+					</div>
+					
+				</div>
+				</div>
+				</div>
+				
+				<div class="form-group">
+				
+					<label for="description">Contents</label>
+					<div id="description"><%- doc.description %></div>
+					
+				</div>
+			
+				Meta-Data
+				<small>
+				<div class="container border my-2 py-2 bg-light"><div class="row">
+				
+				<div class="col-sm-6">
+				<div class="form-group">
+				<label for="_id">Blog ID: </label>
+				<input id="_id" name="_id" class="form-control form-control-sm border-0" value="<%= doc._id %>" readonly>
+				</div>
+				
+				<div class="form-group">
+				<label for="date">Last Updated: </label>
+				<input id="date" name="date" class="form-control form-control-sm border-0" value="<%= doc.date %>" readonly>
+				</div>
+				
+				<div class="form-group">
+				<label for="version">Version: </label>
+				<input id="version" name="__v" class="form-control form-control-sm border-0" value="<%= doc.__v %>" readonly>
+				</div>
+				</div>
+				
+				<div class="col-sm-6">
+				<div class="form-group">
+				<label for="media">Media: </label>
+				<input id="media" name="media" class="form-control form-control-sm border-0" value="<%= image_temp %>" readonly>
+				</div>
+				
+				<div class="form-group">
+				<label for="AuthorID">Author ID: </label>
+				<input id="AuthorID" name="author" class="form-control form-control-sm border-0" value="<%= doc.author %>" readonly>
+				</div>
+				</div>
+				</div></div>
+				</small>
+				
 			<input type="submit" class="btn btn-primary" type="Submit" />
 		</form>
 			
@@ -95,17 +168,19 @@
 		<% include ../partials/footer %>
 		
 	</body>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
 	<script>
 	$(document).ready(function () {
-		$("#newimg").change(function(){
-			alert('sdf');
-			var formData = new FormData();
-			FormData.append("newimg",
-			$.ajax({
+		$("#newimg").change(function(){	
+			$("#imageForm").ajaxSubmit({
 				method: 'POST',
-				url: '/b/edits/uploadimg',
-				data: $("#imageForm"),
+				url: '/b/edit/uploadimg',
+				data: {title: $("#newimg").val()},
+				dataType: 'json',
+				contentType: 'application/json',
 				success: function (data) {
+					$("#media").val('/uploadedImages/'+data.fn);
+					$("#media_display").attr('src','/uploadedImages/'+data.fn);
 					console.log('Submission was successful.');
 					console.log(data);
 				},
@@ -115,48 +190,12 @@
 				},
 			});
 		});
+		
+		$("#imageSelect").click(function(){
+			$("#newimg").trigger("click");
+		});
+		
 	});
-	/**
-	handleFile(id, i, e) {
-						var self = this;
-						self.file = e.target.files[0];
-						var formData = new FormData();
-						formData.append('img', self.file, self.file.name);
-						$.ajax({
-							url: '/b/edit/uploadimg/'+id+'?caption='+$("#caption").val(),
-							method: 'POST',
-							data: formData,
-							processData: false,
-							contentType: false,
-							xhr: function () {
-								var xhr = new XMLHttpRequest();
-
-								// Add progress event listener to the upload.
-								xhr.upload.addEventListener('progress', function (event) {
-									self.progressBar = $('.progress-bar');
-
-									if (event.lengthComputable) {
-										var percent = (event.loaded / event.total) * 100;
-										self.progressBar.width(percent + '%');
-
-										if (percent === 100) {
-											self.progressBar.removeClass('active');
-										}
-									}
-								});
-								return xhr;
-							}
-						}).done((result) => {
-							console.log(result)
-							self.vDoc = result;
-							self.progressBar.removeClass('active');
-							self.progressBar.width('0%');
-							self.progressBar = null;
-						}).fail(function (xhr, status) {
-							alert(status);
-						})
-					}
-		**/
 	</script>
 	
 </html>

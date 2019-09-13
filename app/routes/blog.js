@@ -3,12 +3,12 @@ const adminRoutes = require('./admin.js');
 const express = require('express');
 const router = express.Router();
 var multer = require('multer');
-var upload = multer({ dest: './'}).single('newimg');
+
 const fs = require('fs');
 const sharp = require('sharp');
 const config = require('../utils/config.js');
 var uploadedImages = config.mount_path;
-
+var upload = multer({ dest: uploadedImages});
 const { ensureAdmin, ensureAuthenticated, ensureBlogDocument, ensureBlogData } = require('../utils/middleware.js');
 const { User, Blog } = require('../models/index.js');
 const marked = require('marked');
@@ -155,13 +155,41 @@ router
 })
 **/
 //.post('/edit/:bid', upload.array(), parseBody, csrfProtection, (req, res, next) => {
+	
+/**
 .post('/edit/:bid', bodyParser.urlencoded({ extended: true }), (req, res, next) => {
 	 res.send('You sent the name "' + JSON.stringify(req.body) + '".');
+	 })
+----
+	
 	/**
-	Blog.findOne({_id: req.params.bid}, async (err, doc) => {
+	
+	**/
+
+// todo add csrfToken to ajax formData in the createpost.ejs Vue instance
+// was using parseBody
+.post('/edit/:bid',
+	upload.single('newimg'),
+	bodyParser.urlencoded({ extended: true }), 
+	(req, res, next) => {
+	if (req.params.bid === 'uploadimg') {
+		console.log('uploading image');
+		console.log(req.file.filename);
+		var fn = req.file.filename;
+		fs.rename(uploadedImages+fn, uploadedImages+fn+'.jpg', function (err) {
+			if (err) {console.log('error renaming');}
+			fn += ".jpg";
+			res.write(JSON.stringify({"fn":fn}));
+			res.end();
+		});
+	} else {
+		
+		//res.send('You sent the name: "' + JSON.stringify(req.body) + '".');
+		//res.end();
+		
+		Blog.findOne({_id: req.params.bid}, async (err, doc) => {
 		if (doc==null) {
-			//console.log('need to create new');
-			var doc=new Blog
+			var doc=new Blog //create new blog
 		};
 		console.log(JSON.stringify(req.body));
 		var keys = Object.keys(req.body);
@@ -169,12 +197,17 @@ router
 			if (key !== 'media') {
 				doc[key] = req.body[key]
 			} else {
+				doc.media[0] = {"image":req.body.media,"caption":req.body.caption};
+				/**
 				doc.media.forEach((item, i) => {
+					
 					var ks = Object.keys(req.body.media[i]);
 					ks.forEach((k) => {
 						doc.media[i][k] = req.body.media[i][k]
 					})
+					
 				})
+				**/
 			}
 		});
 		var d = new Date();
@@ -190,23 +223,9 @@ router
 			}
 		})
 	})
-	**/
+		
+	}
 })
-// todo add csrfToken to ajax formData in the createpost.ejs Vue instance
-// was using parseBody
-.post('/edits/uploadimg', (req, res, next) => {
-	
-	
-	console.log('sadf');
-	upload(req, res, function (err) {
-		if (err instanceof multer.MulterError) {
-		console.log(err);
-		} else if (err) {
-		console.log(err);
-		}
- 
-    console.log(req.file);
-  })
 	/*const imagePath = req.file.path;
 	const thumbPath = req.file.path.replace(/\.(png)$/, '.thumb.png');
 	sharp(req.file.path).resize({ height: 200 }).toFile(thumbPath)
@@ -222,7 +241,6 @@ router
 	
 	
 	
-	next();
 	/**
 	const media = {
 		image: '/uploadedImages/'+req.params.bid+'/'+req.file.filename,
@@ -266,7 +284,7 @@ router
 		})
 	});
 	*/
-})
+
 .post('/edit/deleteentry/:bid', async function(req, res, next) {
 	var outputPath = url.parse(req.url).pathname;
 	console.log(outputPath)

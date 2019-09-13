@@ -1,5 +1,5 @@
 const { Blog } = require('../models/index.js');
-const initData = require('./initBlog.json');
+//const initData = require('./initBlog.json');
 function ensureAdmin(req, res, next) {
 	if (!req.isAuthenticated() || !req.user || !req.user.admin) {
 		return res.redirect('/userinfo')
@@ -26,6 +26,7 @@ const ensureBlogDocument = async (req, res, next, val) => {
 }
 // TODO: there is currently only one document per-category, but later when blog fills up, we need to
 // aggregate one document per category. See commented code below for failed attempt;
+/**
 function aggregateData(distinct, cb) {
 	Blog.find({}).lean().exec((err, data)=>{
 		cb(err, data)
@@ -63,11 +64,21 @@ function aggregateData(distinct, cb) {
 	// }
 }
 
+*/
+
 function ensureBlogData(req, res, next) {
-	Blog.distinct('category', (err, distinct) => {
+	Blog.find({'category':'Committee'}, (err, data) => {
 		if (err) return next(err);
+		req.featuredblogs = data;
+		console.log(data);
+		next();
+	});
+}
+		//console.log(distinct);
+		/**
 		if (!distinct || distinct.length === 0) {
-			
+			return next();
+			/**
 			var data = initData.map((doc) => {
 				var entry = {
 					title: 'About the '+doc.category+'',
@@ -84,6 +95,7 @@ function ensureBlogData(req, res, next) {
 			// data = await Blog.find({}).lean().then((data)=>data).catch((err)=>next(err));
 			if (data && data.length > 0) req.featuredblogs = data;
 			return next();
+			
 
 		} else {
 			aggregateData(distinct, (err, data)=>{
@@ -94,7 +106,7 @@ function ensureBlogData(req, res, next) {
 		}
 	})
 	// .catch((err) => next(err));
-	
+	*/
 
-}
+
 module.exports = { ensureAdmin, ensureAuthenticated, ensureBlogDocument, ensureBlogData }
