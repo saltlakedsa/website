@@ -65,7 +65,23 @@
 			</div>
 			
 			<h5>Links</h5>
-			<a href="/a/salesList" ariaDescription="Authenticate with Slack" style="display:inline-block;height:auto;">Sales List</a>
+			<p>
+			<a href="/b/edit/new" style="display:inline-block;height:auto;">Create New Blog</a>
+			
+			
+			
+			<h5>Blogs you are an author or</h5>
+			<% 
+			data.forEach(function(blog){
+			%>
+				<p><a href="/b/view/<%= blog._id %>"><%= blog.title %></a>
+			<%
+			});
+			%>
+			
+			<hr>
+			<p>
+			<a href="/a/salesList" style="display:inline-block;height:auto;">Sales List</a>
 			
 			</div>
 			

@@ -5,7 +5,7 @@ const router = express.Router();
 var multer = require('multer');
 
 const fs = require('fs');
-const sharp = require('sharp');
+//const sharp = require('sharp');
 const config = require('../utils/config.js');
 var uploadedImages = config.mount_path;
 var upload = multer({ dest: uploadedImages});
@@ -44,7 +44,7 @@ var curly = function(str){
 	}
 }
 
-
+/*
 var storage = multer.diskStorage({
 	destination: async (req, file, cb) => {
 		var p = uploadedImages + req.params.bid;
@@ -70,7 +70,7 @@ var storage = multer.diskStorage({
 
 var uploadmedia = multer({ storage: storage });
 
-
+*/
 
 
 

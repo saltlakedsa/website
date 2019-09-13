@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<% include ../partials/head %>
+		
+	</head>
+	<body>
+		<!-- Navigation -->
+		<% include ../partials/nav %>
+		<!-- Page Content -->
+		<div id="page-top">
+			<section id="intro">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-12">
+							<h1 class="section-heading text-left" style="text-align:center;">BLOG</h1>
+							<hr class="my-1" style="max-width:100%"/>
+							
+							<% 
+							
+							data.forEach(function(blog){
+							
+							%>
+							
+								<div class="container py-4">
+								
+								<div class="row">
+								<div class="col-md-4">
+								<% var dt=new Date(blog.date);
+									var monthNames = ["January", "February", "March","April", "May", "June", "July","August", "September", "October", "November", "December"];
+
+									var day = dt.getDate();
+									var monthIndex = dt.getMonth();
+									var year = dt.getFullYear();
+									var blogdate = day + ' ' + monthNames[monthIndex] + ' ' + year;
+
+								%>
+								<p class="font-weight-bold"><%= blogdate %></p>
+								</div>
+								<div class="col-md-8">
+								<p class="font-weight-bold"><%= blog.Author_Name %></p>
+								</div>
+								</div>
+								
+								<div class="row">
+								<div class="col-md-4">
+								<a href="/b/view/<%= blog._id %>">
+								<img src="<%= blog.media[0].image %>" width="100%">
+								</a>
+								</div>
+								<div class="col-md-8">
+								<a href="/b/view/<%= blog._id %>" style="color:Black;">
+								<h2 class="display-4"><%= blog.title %></h1>
+								<p>
+								<p class="lead"><%= blog.lede %></p>
+								</a>
+								</div>
+								</div>
+								
+								</div>
+								<hr class="my-1" style="max-width:100%"/>
+							<%
+							});
+							%>
+							
+
+						</div>
+					</div>
+				</div>
+			</section>
+						
+			<% include ../partials/socialmedia %>
+		</div>
+		<!-- /.container -->
+		<% include ../partials/footer %>
+	</body>
+</html>

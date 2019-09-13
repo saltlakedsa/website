@@ -158,7 +158,15 @@ app
 	passport.session(),
 	cookieParser(sess.secret),
 	logger)
-.get('/committees', ensureBlogData)
+.get('/committees', (req, res, next) => {req.blogQuery = {'category':'Committee'};next()}, ensureBlogData)
+.get('/blog', (req, res, next) => {req.blogQuery = {'category':'Blog'};next()},
+ensureBlogData)
+.get('/userinfo', (req, res, next) => {
+	var qq = (req.user) ? req.user._id : "";
+	//console.log(qq);
+	req.blogQuery = {'author':qq};
+	next()},
+ensureBlogData)
 .get('/logout', function(req, res){
   req.logout();
 	req.session.destroy((err) => {
