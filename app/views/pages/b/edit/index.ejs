@@ -1,53 +1,54 @@
 <!DOCTYPE html>
 
 <html lang="en">
-	<head>
-		<% include ../partials/head %>
-		<script type="text/javascript" src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=yb2pwtctf7qznwdoo61w3kyj127j61gch5uhhzneop9mfkg7"></script>
-		<script>
-		tinymce.init({
-				menubar: false,
-				statusbar: false,			
-				selector: "#description",
-				plugins: 'lists, link',
-				valid_elements: '*[*]',
-				toolbar: 'bold italic underline strikethrough | bullist numlist | outdent indent blockquote | subscript superscript | link',
-				default_link_target: '_blank'
-		});
-		</script>
-		<style>
-			.box{
-				position: relative;
-				margin: auto;
-				display: block;
-				margin-top: 2%;
-				margin-bottom: 2%;
-				width: 100%;
-				min-height: 200px;
-				background: Gray;
-			}
-		</style>
 
-	</head>
- 	
-	<body>
+<head>
+	<% include ../partials/head %>
+	<script type="text/javascript" src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=yb2pwtctf7qznwdoo61w3kyj127j61gch5uhhzneop9mfkg7"></script>
+	<script>
+		tinymce.init({
+			menubar: false,
+			statusbar: false,
+			selector: "#description",
+			plugins: 'lists, link',
+			valid_elements: '*[*]',
+			toolbar: 'bold italic underline strikethrough | bullist numlist | outdent indent blockquote | subscript superscript | link',
+			default_link_target: '_blank'
+		});
+	</script>
+	<style>
+		.box {
+			position: relative;
+			margin: auto;
+			display: block;
+			margin-top: 2%;
+			margin-bottom: 2%;
+			width: 100%;
+			min-height: 200px;
+			background: Gray;
+		}
+	</style>
+
+</head>
+
+<body>
 	<% include ../partials/nav %>
 	<div id="page-top">
-	<section id="intro">
-	<h1 class="section-heading" style="text-align:center;">Edit Blog</h1>
-	<hr class="my-4"/>
-		<div class="container">
-		<div class="row">
-		<div class="col-lg-12">
-		
-		
-		<form class="d-none" id="imageForm" enctype="multipart/form-data">
-			<label for="newimg">Add image</label>
-			<input class="form-control" id="newimg" type="file" name="newimg">
-		</form>
-		
-		
-		<%
+		<section id="intro">
+			<h1 class="section-heading" style="text-align:center;">Edit Blog</h1>
+			<hr class="my-4" />
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12">
+
+
+						<form class="d-none" id="imageForm" enctype="multipart/form-data">
+							<label for="newimg">Add image</label>
+							<input class="form-control" id="newimg" type="file" name="newimg">
+						</form>
+
+
+						<%
 			if (doc.media[0]) {
 				var image_temp = doc.media[0].image;
 				var caption_temp = doc.media[0].caption;
@@ -56,147 +57,188 @@
 				var caption_temp = "";
 			}
 		%>
-		
-		<form method="POST" id="form" action=<%= "/b/edit/" +  doc._id %> >
-			<div class="form-group">				
-				
-				<label for="title">Title</label> 
-				<input type="text" class="form-control" id="title" name="title" value="<%= doc.title %>">
-			
-			</div>
-			<div class="form-group">
-			
-				<label for="category">Category</label> 
-				<select class="form-control" id="category" name="category">
-					<option value="none">Choose...</option>
-					<option value="Blog" <%= (doc.category == "Blog") ? "Selected" : "" %>>Blog</option>
-					<option value="Committee" <%= (doc.category == "Committee") ? "Selected" : "" %>>Committee</option>
-					<option value="Draft" <%= (doc.category == "Draft") ? "Selected" : "" %>>Draft</option>
-				</select>
-				<small class="form-text text-muted">This determines whether to display as a committee report on the committee page.</small>
-				
-			</div>
-			<div class="form-group">
-			
-				<label for="lede">Lede</label> 
-				<input type="text" class="form-control" id="lede" name="lede" value="<%= doc.lede %>">
-			
-			</div>
-			<div class="form-group">
-			
-				<label for="AuthorName">Author</label> 
-				<input type="text" class="form-control" id="AuthorName" name="Author_Name" value="<%= doc.Author_Name %>">
-			
-			</div>
-			<div class="form-group">
-			
-				<label for="AuthorBIO">Author BIO</label> 
-				<input type="text" class="form-control" id="AuthorBIO" name="Author_Bio" value="<%= doc.Author_Bio %>">
-			
-			</div>
-			<div class="form-group">
-			
-				Image Information
-				<div class="border container py-2">
-				<div class="row">
-					<div class="col-sm-3 align-self-center">
-					<button id="imageSelect" type="button" class="btn btn-danger w-100">Change Image</button>
+
+						<form method="POST" id="form" action=<%= "/b/edit/" +  doc._id %>>
+							<div class="form-group">
+
+								<label for="title">Title</label>
+								<input type="text" class="form-control" id="title" name="title" value="<%= doc.title %>">
+
+							</div>
+							<div class="form-group">
+
+								<label for="category">Category</label>
+								<select class="form-control" id="category" name="category">
+									<option value="none">Choose...</option>
+									<option value="Blog" <%= (doc.category == "Blog") ? "Selected" : "" %>>Blog</option>
+									<option value="Committee" <%= (doc.category == "Committee") ? "Selected" : "" %>>Committee</option>
+									<option value="Draft" <%= (doc.category == "Draft") ? "Selected" : "" %>>Draft</option>
+								</select>
+								<small class="form-text text-muted">This determines whether to display as a committee report on the committee page.</small>
+
+							</div>
+							<div class="form-group">
+
+								<label for="lede">Lede</label>
+								<input type="text" class="form-control" id="lede" name="lede" value="<%= doc.lede %>">
+
+							</div>
+							<div class="form-group">
+
+								<label for="AuthorName">Author</label>
+								<input type="text" class="form-control" id="AuthorName" name="Author_Name" value="<%= doc.Author_Name %>">
+
+							</div>
+							<div class="form-group">
+
+								<label for="AuthorBIO">Author BIO</label>
+								<input type="text" class="form-control" id="AuthorBIO" name="Author_Bio" value="<%= doc.Author_Bio %>">
+
+							</div>
+							<div class="form-group">
+
+								Image Information
+								<div class="border container py-2">
+									<div class="row">
+										<div class="col-sm-3 align-self-center">
+											<button id="imageSelect" type="button" class="btn btn-danger w-100">Change Image</button>
+										</div>
+
+										<div class="col-sm-9">
+											<img class="figure-img img-fluid rounded box" src="<%= image_temp %>" id="media_display"></img>
+
+											<div class="form-group">
+												<label for="caption">Caption</label>
+												<input type="text" class="form-control" id="caption" name="caption" value="<%= caption_temp %>">
+											</div>
+										</div>
+
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group">
+
+								<label for="description">Contents</label>
+								<div id="description"><%- doc.description %></div>
+
+							</div>
+							<h5>Meta-Data</h5>
+							<small>
+								<div class="container border my-2 py-2 bg-light">
+									<div class="row">
+
+										<div class="col-sm-6">
+											<div class="form-group">
+												<label for="_id">Blog ID: </label>
+												<input id="_id" name="_id" class="form-control form-control-sm border-0" value="<%= doc._id %>" readonly>
+											</div>
+										</div>
+
+										<div class="col-sm-6">
+											<div class="form-group">
+												<label for="date">Last Updated: </label>
+												<input id="date" name="date" class="form-control form-control-sm border-0" value="<%= doc.date %>" readonly>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-sm-6">
+											<div class="form-group">
+												<label for="version">Version: </label>
+												<input id="version" name="__v" class="form-control form-control-sm border-0" value="<%= doc.__v %>" readonly>
+											</div>
+										</div>
+
+
+										<div class="col-sm-6">
+											<div class="form-group">
+												<label for="media">Media: </label>
+												<input id="media" name="media" class="form-control form-control-sm border-0" value="<%= image_temp %>" readonly>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-sm-6">
+											<div class="form-group">
+												<label for="AuthorID">Author ID: </label>
+												<input id="AuthorID" name="author" class="form-control form-control-sm border-0" value="<%= doc.author %>" readonly>
+											</div>
+										</div>
+
+										<div class="col-sm-6">
+											<div class="form-group">
+												<label for="creationAuthor">Creation ID: </label>
+												<input id="creationAuthor" name="creationAuthor" class="form-control form-control-sm border-0" value="<%= doc.creationAuthor %>" readonly>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-sm-6">
+											<div class="form-group">
+												<label for="URI">URI: </label>
+												<input id="URI" name="uri" class="form-control form-control-sm border-0" value="<%= doc.uri %>" readonly>
+											</div>
+										</div>
+
+										<div class="col-sm-6">
+											<div class="form-group">
+												<label for="creationDate">Creation Date: </label>
+												<input id="creationDate" name="creationDate" class="form-control form-control-sm border-0" value="<%= doc.creationDate %>" readonly>
+											</div>
+										</div>
+									</div>
+
+								</div>
+							</small>
+
+							<input type="submit" class="btn btn-primary" type="Submit" />
+
+						</form>
+
+
 					</div>
-				
-					<div class="col-sm-9">
-					<img class="figure-img img-fluid rounded box" src="<%= image_temp %>" id="media_display"></img>
-				
-					<div class="form-group">
-						<label for="caption">Caption</label> 
-						<input type="text" class="form-control" id="caption" name="caption" value="<%= caption_temp %>">
-					</div>
-					</div>
-					
 				</div>
-				</div>
-				</div>
-				
-				<div class="form-group">
-				
-					<label for="description">Contents</label>
-					<div id="description"><%- doc.description %></div>
-					
-				</div>
-			
-				Meta-Data
-				<small>
-				<div class="container border my-2 py-2 bg-light"><div class="row">
-				
-				<div class="col-sm-6">
-				<div class="form-group">
-				<label for="_id">Blog ID: </label>
-				<input id="_id" name="_id" class="form-control form-control-sm border-0" value="<%= doc._id %>" readonly>
-				</div>
-				
-				<div class="form-group">
-				<label for="date">Last Updated: </label>
-				<input id="date" name="date" class="form-control form-control-sm border-0" value="<%= doc.date %>" readonly>
-				</div>
-				
-				<div class="form-group">
-				<label for="version">Version: </label>
-				<input id="version" name="__v" class="form-control form-control-sm border-0" value="<%= doc.__v %>" readonly>
-				</div>
-				</div>
-				
-				<div class="col-sm-6">
-				<div class="form-group">
-				<label for="media">Media: </label>
-				<input id="media" name="media" class="form-control form-control-sm border-0" value="<%= image_temp %>" readonly>
-				</div>
-				
-				<div class="form-group">
-				<label for="AuthorID">Author ID: </label>
-				<input id="AuthorID" name="author" class="form-control form-control-sm border-0" value="<%= doc.author %>" readonly>
-				</div>
-				</div>
-				</div></div>
-				</small>
-				
-			<input type="submit" class="btn btn-primary" type="Submit" />
-		</form>
-			
-			
-		</div></div></div>
+			</div>
 		</section>
-		</div>
-		<% include ../partials/socialmedia %>
-		<% include ../partials/footer %>
-		
-	</body>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
-	<script>
-	$(document).ready(function () {
-		$("#newimg").change(function(){	
+	</div>
+	<% include ../partials/socialmedia %>
+	<% include ../partials/footer %>
+
+</body>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
+<script>
+	$(document).ready(function() {
+		$("#newimg").change(function() {
 			$("#imageForm").ajaxSubmit({
 				method: 'POST',
 				url: '/b/edit/uploadimg',
-				data: {title: $("#newimg").val()},
+				data: {
+					title: $("#newimg").val()
+				},
 				dataType: 'json',
 				contentType: 'application/json',
-				success: function (data) {
-					$("#media").val('/uploadedImages/'+data.fn);
-					$("#media_display").attr('src','/uploadedImages/'+data.fn);
+				success: function(data) {
+					$("#media").val('/uploadedImages/' + data.fn);
+					$("#media_display").attr('src', '/uploadedImages/' + data.fn);
 					console.log('Submission was successful.');
 					console.log(data);
 				},
-				error: function (data) {
+				error: function(data) {
 					console.log('An error occurred.');
 					console.log(data);
 				},
 			});
 		});
-		
-		$("#imageSelect").click(function(){
+
+		$("#imageSelect").click(function() {
 			$("#newimg").trigger("click");
 		});
-		
+
 	});
-	</script>
-	
+</script>
+
 </html>

@@ -1,99 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
+<head>
 
-	<% include ../partials/head %>
+  <% include ../partials/head %>
 
-  </head>
+</head>
 
-  <body>
+<body>
 
-    <!-- Navigation -->
-    
-	<% include ../partials/nav %>
+  <!-- Navigation -->
 
-    <!-- Page Content -->
-    <div id="page-top">
-	<section id="blog">
-	
-	<div class="container">
-	
-	<div class="row"><div class="col-lg-12">
-	<% if (locals.user) { %> 
-				<a href="/b/edit/<%= doc._id %>"><i class="fas fa-1x fa-edit"></i><span> Edit</span></a>			<% } %></div></div>
-				
-	
-		<div class="row">
-			<div class="col-lg-6">
-	
-				<h1 class="py-4"><%= doc.title %></h1>
-				
-					
-	
-				<p class="text-muted my-0">By</p>
-				<h4><%= (doc.Author_Name)? doc.Author_Name:"Anonymous" %></h4>
-	
-				<% var dt=new Date(doc.date);
-				 var monthNames = [
-    "January", "February", "March",
-    "April", "May", "June", "July",
-    "August", "September", "October",
-    "November", "December"
-  ];
+  <% include ../partials/nav %>
 
-  var day = dt.getDate();
-  var monthIndex = dt.getMonth();
-  var year = dt.getFullYear();
-  var blogdate = day + ' ' + monthNames[monthIndex] + ' ' + year;
+  <!-- Page Content -->
+  <div id="page-top">
+    <section id="blog">
 
-				%>
-				<p class="text-muted my-0"><%= blogdate %></p>
-				
-				
-				<h5 class="py-3"><small><%= doc.lede %></small></h5>
-			</div>
-	
-	
-	
-	
-			<div class="col-lg-6 py-4">
-			
-				<% if (doc.media[0]) { %>
-				<img src="<%= doc.media[0].image %>" style="width:100%;">
-				<h5><small><%= doc.media[0].caption %></small></h5>
-				<% } %>
-				
-			
-			</div>
-	
-		</div>
-	
-	<hr class="py-2" style="max-width:75%;">
+      <div class="container">
 
-	
-	<div class="dropCaps" id="content"><%- doc.description %></div>
-	
-	<hr class="py-2" style="max-width:75%;">
-	
-	<p class="text-muted my-2">ABOUT THE AUTHOR</p>
-				<h5><small><%= doc.Author_Bio %></small></h5>
-				
-		
-	
-	</div>
+        <div class="row">
+          <div class="col-lg-12">
+            <% if (locals.user) { %>
+            <a href="/b/edit/<%= doc._id %>"><i class="fas fa-1x fa-edit"></i><span> Edit</span></a> <% } %></div>
+        </div>
+
+
+        <div class="row">
+          <div class="col-lg-6">
+
+            <h1 class="py-4"><%= doc.title %></h1>
+
+
+
+            <p class="text-muted my-0">By</p>
+            <h4><%= (doc.Author_Name)? doc.Author_Name:"Anonymous" %></h4>
+
+            <%
+            var dt=new Date(doc.date);
+            var monthNames = [
+            "January", "February", "March","April", "May", "June", "July","August", "September", "October","November", "December"
+            ];
+
+            var day = dt.getDate();
+            var monthIndex = dt.getMonth();
+            var year = dt.getFullYear();
+            var blogdate = day + ' ' + monthNames[monthIndex] + ' ' + year;
+
+				   %>
+            <p class="text-muted my-0"><%= blogdate %></p>
+
+
+            <h5 class="py-3"><small><%= doc.lede %></small></h5>
+          </div>
+
+
+
+
+          <div class="col-lg-6 py-4">
+
+            <% if (doc.media[0]) { %>
+            <img src="<%= doc.media[0].image %>" style="width:100%;">
+            <h5><small><%= doc.media[0].caption %></small></h5>
+            <% } %>
+
+
+          </div>
+
+        </div>
+
+        <hr class="py-2" style="max-width:75%;">
+
+
+        <div class="dropCaps" id="content"><%- doc.description %></div>
+
+        <hr class="py-2" style="max-width:75%;">
+
+        <p class="text-muted my-2">ABOUT THE AUTHOR</p>
+        <h5><small><%= doc.Author_Bio %></small></h5>
+
+
+
+      </div>
     </section>
-    
-	<% include ../partials/socialmedia %>
-	  
-    </div>
-    <!-- /.container -->
 
-    <% include ../partials/footer %>
-	<script>
-	$("#content").html($("#content").html().replace(/(?:\r\n|\r|\n)/g, '<p>'));
-	</script>
+    <% include ../partials/socialmedia %>
 
-  </body>
+  </div>
+  <!-- /.container -->
+
+  <% include ../partials/footer %>
+  <script>
+    $("#content").html($("#content").html().replace(/(?:\r\n|\r|\n)/g, '<p>'));
+  </script>
+
+</body>
 
 </html>
