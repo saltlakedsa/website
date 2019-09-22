@@ -160,55 +160,13 @@ router
     })
 
   .post('/edit/deleteentry/:bid', async function(req, res, next) {
-    var outputPath = url.parse(req.url).pathname;
-    console.log(outputPath)
-    var id = req.params.bid;
-    Blog.findById(id).lean().exec(async (err, doc) => {
-      if (err) {
-        return next(err)
-      }
-      var item = doc.media[0]
-      var existsImg = await fs.existsSync(item.image_abs);
-      if (existsImg) {
-        var p = (path.join(__dirname, uploadedImages) + id);
-        await fs.rmdirSync(p);
-      }
-      return res.status(200).send('ok');
-    })
-  })
-  .post('/edit/deletemedia/:bid/:index', function(req, res, next) {
-    var id = req.params.bid;
-    var index = parseInt(req.params.index, 10);
-    Blog.findOne({
-      _id: id
-    }).lean().exec(async function(err, thisdoc) {
-      if (err) {
-        return next(err)
-      }
-      var oip = (!thisdoc.media[index] || !thisdoc.media[index].image_abs ? null : thisdoc.media[index].image_abs);
-      var otp = (!thisdoc.media[index] || !thisdoc.media[index].thumb_abs ? null : thisdoc.media[index].thumb_abs);
-      var existsImg = await fs.existsSync(oip);
-      var existsThumb = await fs.existsSync(otp);
-      if (existsImg) await fs.unlinkSync(oip);
-      if (existsThumb) await fs.unlinkSync(otp);
-      Blog.findOneAndUpdate({
-        _id: id
-      }, {
-        $pull: {
-          media: {
-            _id: thisdoc.media[index]._id
-          }
-        }
-      }, {
-        multi: false,
-        new: true
-      }, function(err, doc) {
-        if (err) {
-          return next(err)
-        }
-        return res.status(200).send(doc);
-      })
+    console.log(req.params.bid)
+    Blog.deleteOne({_id:req.params.bid}, function (err) {
+      if(err) next(err);
+      res.send('deleted');
+      res.end();
     })
   });
+
 
 module.exports = router;

@@ -197,10 +197,10 @@
 							<div class="container">
 								<div class="row">
 									<div class="col-lg-6 text-center">
-										<input type="submit" class="btn btn-primary w-75 py-4" type="Submit" />
+										<input type="submit" class="btn btn-primary w-75 py-4 my-2" type="Submit" />
 									</div>
 									<div class="col-lg-6 text-center">
-										<button id="delete" type="button" class="btn btn-warning w-75 py-4">Delete</button>
+										<button id="delete" type="button" class="btn btn-warning w-75 py-4 my-2">Delete</button>
 									</div>
 								</div>
 							</div>
@@ -246,7 +246,17 @@
 		});
 
 		$("#delete").click(function() {
-		
+			if (confirm("Do you really want to delete?")) {
+				$.ajax({
+					method: 'POST',
+					url: '<%= '/b/edit/deleteentry/'+  doc._id %>',
+					success: function(result) {
+						console.log(result);
+						alert('This Post has been deleted');
+						window.location.href = '/';
+					}
+				});
+			}
 
 		});
 
