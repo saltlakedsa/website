@@ -197,6 +197,11 @@ app
       next()
     },
     ensureBlogData)
+  .get('/see-all', (req, res, next) => {
+      req.blogQuery = {};
+      next()
+    },
+    ensureBlogData)
   .get('/userinfo', (req, res, next) => {
       var qq = (req.user) ? req.user._id : "";
       req.blogQuery = {
@@ -282,13 +287,10 @@ app
     });
   })
   .use(function(err, req, res, next) {
+
     console.log("!!!ERR0R!!!")
     console.log(err)
 
-    if (!req.session.errors) {
-      req.session.errors = {}
-    }
-    req.session.errors[err] = (req.session.errors[err] || 0) + 1;
 
     res.status(err.status || 500);
     res.render('pages/error', {
@@ -296,6 +298,7 @@ app
       user: null,
       error: {}
     });
+
 
   });
 

@@ -194,9 +194,16 @@
 
 								</div>
 							</small>
-
-							<input type="submit" class="btn btn-primary" type="Submit" />
-
+							<div class="container">
+								<div class="row">
+									<div class="col-lg-6 text-center">
+										<input type="submit" class="btn btn-primary w-75 py-4" type="Submit" />
+									</div>
+									<div class="col-lg-6 text-center">
+										<button id="delete" type="button" class="btn btn-warning w-75 py-4">Delete</button>
+									</div>
+								</div>
+							</div>
 						</form>
 
 
@@ -236,6 +243,11 @@
 
 		$("#imageSelect").click(function() {
 			$("#newimg").trigger("click");
+		});
+
+		$("#delete").click(function() {
+		
+
 		});
 
 	});

@@ -82,7 +82,7 @@ router
         if (!doc) {
           //if no uri look by _id
           Blog.findById(req.params.bid).lean().exec((err, doc) => {
-            if (err) next(err);
+            if (err) return next(err);
             if (!doc) next('NOT A BLOG')
             req.doc = doc;
             req.vDoc = JSON.stringify(doc); //this can maybe be deleted only one page needs it
