@@ -10,7 +10,7 @@ txt.push({
 	}
 }, {
 	text_3: {
-		en: "Welcome to Salt Lake DSA",
+		en: "Welcome to Democratic Socialists of Salt Lake",
 		sp: "Bienvenido a Salt Lake DSA"
 	}
 }, {
@@ -141,11 +141,11 @@ txt.push({
 		en: "<p><strong>Visit our <a href='https://saltlakedsa.org'>website</a>.</strong> If you never pay your dues you can still show up for SL DSA events. We have a public calendar and everyone (even non-members) are welcome to attend any of our events,  actions, committee meetings."+
 
 		"<p><strong>Sign up and read our newsletter.</strong> This is the most reliable way to find out news, events, actions, and volunteer opportunities. You can sign up here: <a href='https://saltlakedsa.org/newsletter'>https://saltlakedsa.org/newsletter</a>."+
-					
+
 		"<p><strong>Read announcements and participate in our Slack Channel.</strong> Slack is a messaging application that can be accessed on a mobile phone or a computer. When you become a dues paying member you will be added to the Slack Channel. If you have not yet been added please email <a href='mailto:saltlakedsa.cc@gmail.com'>saltlakedsa.cc@gmail.com</a> and ask for an invite."+
-					
+
 		"<p><strong>Attend General Meetings.</strong> We have a general meeting every month. This is where you can get updated on all the work the different committees are working on, participate in democratic decision making and meet Socialists in Salt Lake."+
-					
+
 		"<p><strong>Join or form a committee.</strong>  <a href='https://www.saltlakedsa.org/committees'>Committees</a>  are where activists in our chapter plan events, actions, and more. It’s where the action happens. You can email any committee to find out about where and when they meet, if no committee is working on the issue that you are passionate about, you can form your own. Just find 4 other activists interested in forming the committee and you can start a new committee."+
 
 		"<p><strong>Bonus!</strong> Follow us on Social Media."+
@@ -157,11 +157,11 @@ txt.push({
 		sp: "<p><strong>Visita nuestro <a href='https://saltlakedsa.org'>sitio web.</a>.</strong> Si nunca paga sus cuotas, todavía puede presentarse para los eventos SL DSA. Tenemos un calendario público y todos (incluso los que no son miembros) pueden asistir a cualquiera de nuestros eventos, acciones, reuniones de comités."+
 
 		"<p><strong>Regístrese y lea nuestro boletín. </strong>Esta es la forma más confiable de descubrir noticias, eventos, acciones y oportunidades de voluntariado. Puede registrarse aquí: <a href='https://saltlakedsa.org/newsletter'>https://saltlakedsa.org/newsletter</a>."+
-					
+
 		"<p><strong>Lea los anuncios y participe en nuestro Slack Channel. </strong> Slack es una aplicación de mensajería a la que se puede acceder desde un teléfono móvil o una computadora. Cuando se convierta en miembro que paga cuotas, se lo agregará al Slack Channel. Si aún no lo han agregado, envíe un correo electrónico a <a href='mailto:saltlakedsa.cc@gmail.com'>saltlakedsa.cc@gmail.com</a> y solicite una invitación."+
-					
+
 		"<p><strong>Asista a las reuniones generales.</strong>  Tenemos una reunión general todos los meses. Aquí es donde puede actualizarse sobre todo el trabajo en el que están trabajando los diferentes comités, participar en la toma de decisiones democráticas y reunirse con los socialistas en Salt Lake."+
-					
+
 		"<p><strong>Únase o forme un comité.</strong>  <a href='https://www.saltlakedsa.org/committees'>Los comités</a>  son donde los activistas en nuestro capítulo planean eventos, acciones y más. Es donde sucede la acción. Puede enviar un correo electrónico a cualquier comité para averiguar dónde y cuándo se reúnen, si ningún comité está trabajando en el tema que le apasiona, puede formar el suyo propio. Simplemente encuentre otros 4 activistas interesados ​​en formar el comité y podrá comenzar un nuevo comité."+
 
 		"<p><strong>¡Prima!</strong> Síguenos en las redes sociales."+
@@ -189,49 +189,49 @@ txt.push({
 }, {
 	text_20: {
 		en: "<p>"+
-			"You’re already an expert on talking about Socialism. Think about why you, personally, are a socialist. What made you realize you were a socialist? What have you seen or learned that has crystallized the need for Socialism and made it real to you? <p>The most effective way to talk about socialism happens in 2 parts:"+ 
-					
+			"You’re already an expert on talking about Socialism. Think about why you, personally, are a socialist. What made you realize you were a socialist? What have you seen or learned that has crystallized the need for Socialism and made it real to you? <p>The most effective way to talk about socialism happens in 2 parts:"+
+
 			"<ol>"+
 			"<li>A personal story about a problem caused by capitalism. </li>"+
 			"<li>The socialist antidote to the problem. </li>"+
 			"</ol>"+
 			"<p>Here are some examples:<ul><li><p>"+
 			"<strong>Personal story</strong>: I’m a Socialist because I was volunteering in a free clinic and realized that I could be there for ten years and there will be even more people who can’t afford co-pays then than now. I still do it, but we have to change the capitalist system."+
-					
+
 			"<p><strong>Socialist antidote</strong>: In a socialist society, health care, along with other basic needs like housing and education would be a right that everyone enjoyed, not something only the very rich can afford."+
-			"</li><li><p><strong>Personal story</strong>: I’m a socialist because of my student loans. I’ve paid about $27,000 in interest on my student loans, but only $3,000 towards the principal. I’ve been paying for 10 years. I feel like an indentured servant that will never be free from my debt."+ 
-					
+			"</li><li><p><strong>Personal story</strong>: I’m a socialist because of my student loans. I’ve paid about $27,000 in interest on my student loans, but only $3,000 towards the principal. I’ve been paying for 10 years. I feel like an indentured servant that will never be free from my debt."+
+
 			"<p><strong>Socialist antidote</strong>: In a Socialist society, education would be seen as a right and available to everyone without needing to go into enormous debt.</li></ul>"+
 			"<p>Sometimes you’ll get folks with honest misconceptions about socialism asking a question you don’t know the answer to. Or bad faith folks  might try to “red bait” you by asking something like “but what about Venezuela?” Here’s are some great lines that set you up to share your vision for a better society."+
-					
+
 			"<ul><li>“I don’t know about that but I’m a Socialist because…”</li>"+
 			"<li>“I hadn’t considered that but here’s my personal experience trying to survive under our current capitalist system…”</li>"+
 			"</ul>",
 		sp: "<p>"+
-			"Ya eres un experto en hablar sobre socialismo. Piensa por qué tú, personalmente, eres socialista. ¿Qué te hizo darte cuenta de que eras socialista? ¿Qué has visto o aprendido que ha cristalizado la necesidad del socialismo y te lo ha hecho realidad?<p>La forma más efectiva de hablar sobre socialismo ocurre en 2 partes:"+ 
-					
+			"Ya eres un experto en hablar sobre socialismo. Piensa por qué tú, personalmente, eres socialista. ¿Qué te hizo darte cuenta de que eras socialista? ¿Qué has visto o aprendido que ha cristalizado la necesidad del socialismo y te lo ha hecho realidad?<p>La forma más efectiva de hablar sobre socialismo ocurre en 2 partes:"+
+
 			"<ol>"+
 			"<li>Una historia personal sobre un problema causado por el capitalismo. </li>"+
 			"<li>El antídoto socialista al problema.</li>"+
 			"</ol>"+
 			"<p>Aquí hay unos ejemplos:<ul><li><p>"+
 			"<strong>Historia personal</strong>: soy socialista porque era voluntario en una clínica gratuita y me di cuenta de que podría estar allí durante diez años y que habrá incluso más personas que no pueden pagar los copagos que ahora. Todavía lo hago, pero tenemos que cambiar el sistema capitalista."+
-					
+
 			"<p><strong>Antídoto socialista</strong>: en una sociedad socialista, la atención médica, junto con otras necesidades básicas como la vivienda y la educación, sería un derecho que todos disfrutarían, no algo que solo los muy ricos puedan permitirse."+
-			"</li><li><p><strong>Historia personal</strong>: soy socialista por mis préstamos estudiantiles. Pagué unos $ 27,000 en intereses por mis préstamos estudiantiles, pero solo $ 3,000 para el director."+ 
-					
+			"</li><li><p><strong>Historia personal</strong>: soy socialista por mis préstamos estudiantiles. Pagué unos $ 27,000 en intereses por mis préstamos estudiantiles, pero solo $ 3,000 para el director."+
+
 			"<p><strong>Antídoto socialista</strong>: en una sociedad socialista, la educación sería vista como un derecho y disponible para todos sin necesidad de endeudarse enormemente.</li></ul>"+
 			"<p>A veces, la gente con ideas falsas y sinceras sobre el socialismo hace una pregunta para la que no sabes la respuesta. O la gente de mala fe podría tratar de 'engañarlo' preguntándole algo como 'pero ¿qué pasa con Venezuela?' Aquí hay algunas líneas geniales que lo prepararon para compartir su visión de una sociedad mejor."+
-					
+
 			"<ul><li>“No sé sobre eso, pero soy socialista porque …”</li>"+
 			"<li>“No lo había considerado, pero aquí está mi experiencia personal tratando de sobrevivir bajo nuestro actual sistema capitalista...”</li>"+
 			"</ul>"
-	}	
+	}
 }, {
 	text_21: {
 		en: "Talking about DSA",
 		sp: "HABLANDO SOBRE DSA"
-	}	
+	}
 }, {
 	text_22: {
 		en: "Back to the Beginning",
@@ -245,28 +245,28 @@ txt.push({
 }, {
 	text_24: {
 		en: "<p>You’re talking to some socialist curious friends and they ask you why you joined DSA. Don’t panic - you’re already an expert on talking about socialism. Here’s a quick explainer about what DSA is."+
-					
+
 		"<ul><li>DSA is the largest socialist organization in the United States. We’re an activist organization, not a political party. It’s a big tent which welcomes many different anti-capitalist perspectives. We use a variety of tactics, from legislative to direct action to win a better world for working people.</li></ul>"+
-					
+
 		"<p>After that, a really natural place to is talk about how you first heard about DSA and why you joined. Here are some common examples:"+
-					
+
 		"<ul><li>I knew about DSA for awhile but I was really impressed with their fight to win a universal right to counsel for all tenants in San Francisco. I joined because I wanted to work on things that make life easier for working people.</li>"+
-					
+
 		"<li>I heard about DSA from a friend. I used to think that socialism was a good idea, but impractical because the United States seems so conservative. Then I saw Alexandria Ocasio Cortez win her primary on a socialist platform and I decided that I wanted to get involved.</li>"+
-					
+
 		"<li>I heard about DSA because someone was canvassing for Medicare 4 all. Talking with them made me feel like we can win universal healthcare in the United States. I joined and started volunteering after that.</li>"+
 		"<li>I saw a DSA contingent at a rally. It was refreshing to see a lot of people my age organizing and I started going to meetings to see what I could do to get involved.</li></ul>",
-		
+
 		sp: "<p>Estás hablando con algunos amigos socialistas curiosos y te preguntan por qué te uniste a DSA. No se asuste: ya es un experto en hablar sobre socialismo. Aquí hay una explicación rápida sobre lo que es DSA."+
-					
+
 		"<ul><li>DSA es la organización socialista más grande de los Estados Unidos. Somos una organización activista, no un partido político. Es una gran carpa que acoge muchas perspectivas anticapitalistas diferentes. Utilizamos una variedad de tácticas, desde la acción legislativa hasta la directa, para ganar un mundo mejor para los trabajadores.</li></ul>"+
-					
+
 		"<p>Después de eso, un lugar realmente natural es hablar sobre cómo escuchó por primera vez sobre DSA y por qué se unió. Aquí hay algunos ejemplos comunes:"+
-					
+
 		"<ul><li>Sabía sobre DSA por un tiempo, pero estaba realmente impresionado con su lucha para ganar un derecho universal de asesoramiento para todos los inquilinos en San Francisco. Me uní porque quería trabajar en cosas que hacen la vida más fácil para la gente trabajadora.</li>"+
-					
+
 		"<li>Escuché sobre DSA de un amigo. Solía ​​pensar que el socialismo era una buena idea, pero poco práctico porque Estados Unidos parece muy conservador. Luego vi a Alexandria Ocasio Cortez ganar su primaria en una plataforma socialista y decidí que quería involucrarme.</li>"+
-					
+
 		"<li>Escuché sobre DSA porque alguien estaba buscando Medicare 4 para todos. Hablar con ellos me hizo sentir que podemos ganar atención médica universal en los Estados Unidos. Me uní y comencé a ser voluntario después de eso.</li>"+
 		"<li>Vi un contingente de DSA en un mitin. Fue refrescante ver a muchas personas de mi edad organizarse y comencé a ir a las reuniones para ver qué podía hacer para involucrarme..</li></ul>"
 	}
@@ -288,30 +288,30 @@ txt.push({
 }, {
 	text_28: {
 		sp: "<p><strong>¿Puedo votar?</strong>"+
-					
+
 			"<p>Puedes votar si:"+
-					
+
 			"<ul><li>Usted es un miembro que paga las cuotas y sus cuotas están al día.</li></ul>"+
-					
+
 			"<p><strong>¿Sobre qué votamos?</strong>"+
-					
+
 			"<p>Algunos ejemplos de lo que votamos: enmiendas a los estatutos, Comité de Coordinación, posiciones de delegado, Funcionarios de reclamos, si patrocinamos un evento y endosos para medidas de votación y candidatos."+
-			
+
 			"<p><strong>Votación en línea</strong>"+
-					
+
 			"<p>Usamos la votación en línea para artículos urgentes y menos polémicos, como patrocinios y patrocinios de eventos.",
 		en: "<p><strong>Can I Vote?</strong>"+
-					
+
 			"<p>You can vote if:"+
-					
+
 			"<ul><li>You are a dues paying member and your dues are current.</li></ul>"+
-					
+
 			"<p><strong>What do we vote on?</strong>"+
-					
+
 			"<p>Some examples of what we vote on: bylaws amendments, Coordinating Committee, delegate positions, Grievance Officer(s), whether we sponsor an event, and endorsements for ballot measures and candidates."+
-			
+
 			"<p><strong>Online voting</strong>"+
-					
+
 			"<p>We use online voting for time-sensitive and less contentious items like event endorsements and sponsorship."
 	}
 }, {

@@ -1,6 +1,6 @@
 txt.push({
 	text_1: {
-		en: "SALT LAKE<br> DEMOCRATIC SOCIALISTS OF AMERICA",
+		en: "Democratic Socialists <br> of Salt Lake",
 		sp: "SALT LAKE<br> SOCIALISTAS DEMOCRÁTICOS DE AMÉRICA"
 	}
 }, {
@@ -30,12 +30,12 @@ txt.push({
 	}
 }, {
 	text_7: {
-		en: "Welcome to SLDSA!",
+		en: "Welcome to DSSL!",
 		sp: "Bienvenido a SLDSA!"
 	}
 }, {
 	text_8: {
-		en: "Salt Lake Democratic Socialists is a local of Democratic Socialists of America, the largest socialist organization in the United States with about 49,000 members (as of August 2018). SLC DSA is run by its members and activists who are working together to build a democratic socialist organization in Utah.",
+		en: "The Democratic Socialists of Salt Lake is a local of Democratic Socialists of America, the largest socialist organization in the United States with about 49,000 members (as of August 2018). DSSL is run by its members and activists who are working together to build a democratic socialist organization in Utah.",
 		sp: "SOCIALISTAS DEMOCRÁTICOS DE AMÉRICA en Salt Lake City (SL-DSA) es una filial de los Socialistas Democráticos de América (DSA), la organización socialista más grande de los Estados Unidos la cual la forman aproximadamente 49,000 miembros (dato de agosto de 2018). SLC- DSA está dirigido por sus miembros y activistas que trabajan juntos para construir una organización socialista democrática en Utah."
 	}
 }, {
