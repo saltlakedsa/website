@@ -1,95 +1,100 @@
-
 <!-- Navigation -->
 <script src="/txt/nav.json"></script>
 
 <nav class="navbar  navbar-dark fixed-top" id="mainNav" lang="ejs">
-	<div class="container">
+  <div class="container">
 
-	<a href="/">
-		<img class="nav-image" src="/static/img/SLCDSA1.png" alt="DSA Logo">
-		<div class="navbar-brand longer-text">Democratic Socialists of Salt Lake</div>
-		<div class="navbar-brand shorten-text"></div>
+    <a href="/">
+      <img class="nav-image" src="/static/img/SLCDSA1.png" alt="DSA Logo">
+      <div class="navbar-brand longer-text">Democratic Socialists of Salt Lake</div>
+      <div class="navbar-brand shorten-text"></div>
 
-	</a>
-
-
-		<div class="d-flex flex-row">
+    </a>
 
 
-
-
-		<a class="nav-icon nav-link px-0" href="/userinfo"><i class="fas fa-1x fa-user"></i>
+    <div class="d-flex flex-row">
 
 
 
-		<small class="text-center" style="display: inline-block; width: 18px; height: 18px; color:#f5f4f4; background-color: rgba(10, 6, 6, 1);  border-radius: 50%; transform: translate(-10px, -10px); opacity:<%= (user) ? 1 :0%>;">✓</small>
 
-		</a>
-
-		<a class="nav-icon nav-link px-0" href="/shop/cart"><i class="fas fa-1x fa-shopping-cart"></i>
-
-
-		<% var cartNum = locals.alertCart ? alertCart.totalQty : 0%>
-		<small class="text-center" style="display: inline-block; width: 18px; height: 18px; color:#f5f4f4; background-color: rgba(10, 6, 6, 1);  border-radius: 50%; transform: translate(-10px, -10px); opacity:<%= cartNum>0 ? 1 : 0%>;"><%= cartNum%></small>
-
-
-	 </a>
-
-
-		<button id="lang-toggler" class="navbar-toggler lang-button-style px-0 pr-2" type="button" data-toggle="collapse" data-target="#langResponsive" aria-controls="langResponsive" aria-expanded="false" aria-label="Toggle Language">
-			<span id="lang_selected" data-language=<%= locals.lang %>></span> <i class="fas fa-caret-down"></i>
-		</button>
-
-		<button id="mainNav-toggler" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-	</div>
-
-		<div class="collapse navbar-collapse" id="langResponsive">
-
-			<ul class="navbar-nav ml-auto">
-				<li class="nav-item active">
-					<a class="nav-link selectLang" id="en" data-toggle="collapse" data-target="#langResponsive">English</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link selectLang" id="sp" data-toggle="collapse" data-target="#langResponsive">Español</a>
-				</li>
-
-			</ul>
+      <a class="nav-icon nav-link px-0" href="/userinfo"><i class="fas fa-1x fa-user"></i>
 
 
 
-		</div>
+        <small class="text-center" style="display: inline-block; width: 18px; height: 18px; color:#f5f4f4; background-color: rgba(10, 6, 6, 1);  border-radius: 50%; transform: translate(-10px, -10px); opacity:<%= (user) ? 1 :0%>;">✓</small>
+
+      </a>
+
+      <a class="nav-icon nav-link px-0" href="/shop/cart"><i class="fas fa-1x fa-shopping-cart"></i>
 
 
-		<div class="collapse navbar-collapse" id="navbarResponsive">
-			<ul class="navbar-nav ml-auto">
-				<li class="nav-item active">
-					<a class="nav-link" href="/new-members"><span id="nav1"></span>
-					</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="/calendar"><span id="nav2"></a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="/committees"><span id="nav3"></a>
-				</li>
-
-				<li class="nav-item">
-					<a class="nav-link" href="/donate"><span id="nav4"></a>
-				</li>
+        <% var cartNum = locals.alertCart ? alertCart.totalQty : 0%>
+        <small class="text-center"
+          style="display: inline-block; width: 18px; height: 18px; color:#f5f4f4; background-color: rgba(10, 6, 6, 1);  border-radius: 50%; transform: translate(-10px, -10px); opacity:<%= cartNum>0 ? 1 : 0%>;"><%= cartNum%></small>
 
 
-				<li class="nav-item">
-					<a class="nav-link" href="/shop/inventory"><span id="nav5"></a>
-				</li>
+      </a>
 
-				<li class="nav-item">
-					<a class="nav-link" href="https://housing.saltlakedsa.org">Salt Lake Renters</a>
-				</li>
 
-			</ul>
-		</div>
+      <button id="lang-toggler" class="navbar-toggler lang-button-style px-0 pr-2" type="button" data-toggle="collapse" data-target="#langResponsive" aria-controls="langResponsive" aria-expanded="false" aria-label="Toggle Language">
+        <span id="lang_selected" data-language=<%= locals.lang %>></span> <i class="fas fa-caret-down"></i>
+      </button>
 
-	</div>
+      <button id="mainNav-toggler" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+
+    <div class="collapse navbar-collapse" id="langResponsive">
+
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item active">
+          <a class="nav-link selectLang" id="en" data-toggle="collapse" data-target="#langResponsive">English</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link selectLang" id="sp" data-toggle="collapse" data-target="#langResponsive">Español</a>
+        </li>
+
+      </ul>
+
+
+
+    </div>
+
+
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="/new-members"><span id="nav1"></span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/calendar"><span id="nav2"></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/committees"><span id="nav3"></a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/donate"><span id="nav4"></a>
+        </li>
+
+
+        <li class="nav-item">
+          <a class="nav-link" href="/shop/inventory"><span id="nav5"></a>
+        </li>
+
+
+        <li class="nav-item">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="https://housing.saltlakedsa.org">Salt Lake Renters</a>
+        </li>
+
+      </ul>
+    </div>
+
+  </div>
 </nav>
